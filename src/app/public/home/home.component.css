@@ -1,0 +1,49 @@
+/* Efecto hover para los botones */
+.hover-scale {
+  transition: transform 0.3s ease;
+}
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+/* Cambiar color nav-link activo y al pasar el mouse */
+.nav-link.active,
+.nav-link:hover {
+  background-color: #0d6efd;
+  color: white !important;
+}
+
+
+/* Reduce el espacio vertical entre número y texto en los botones */
+.btn > div.text-start > div {
+  margin-bottom: 0; /* elimina margen inferior por defecto */
+  line-height: 1; /* reduce la altura de línea para estar más compacto */
+}
+
+.btn > div.text-start > div:first-child {
+  margin-bottom: 0.1rem; /* un pequeño espacio debajo del número */
+}
+
+.ticket-card {
+    min-width: 180px;
+    background-color: #fff;
+    transition: all 0.3s ease;
+    border: 1px solid #e0e0e0;
+  }
+
+  .ticket-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    cursor: pointer;
+  }
+
+  .ticket-card.bg-primary:hover {
+    box-shadow: 0 12px 30px rgba(0, 123, 255, 0.4);
+  }
+
+  @media (max-width: 576px) {
+    .ticket-card {
+      width: 100%;
+      justify-content: center;
+    }
+  }
