@@ -15,7 +15,10 @@ export class LoginService {
   login(data: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/login`, data).pipe(
       tap((response: any) => {
-        localStorage.setItem('authToken', response.token);
+        const token = response.respuesta?.token;
+        if (token) {
+          localStorage.setItem('authToken', token);
+        }
       })
     );
   }

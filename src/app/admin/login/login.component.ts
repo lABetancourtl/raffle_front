@@ -6,7 +6,7 @@ import { LoginService } from '../../services/login.service';
 
 @Component({
   selector: 'app-login',
-  standalone: true, // ✅ standalone activado
+  standalone: true, 
   imports: [
     CommonModule,
     FormsModule,
@@ -50,7 +50,7 @@ export class LoginComponent {
           setTimeout(() => {
             this.isLoading = false;
             if (rol === 'ROLE_ADMIN') {
-              this.router.navigate(['/home']);
+              this.router.navigate(['/dashboard']);
             } else {
               this.router.navigate(['/dashboard']);
             }

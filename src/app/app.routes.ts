@@ -1,10 +1,18 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './public/home/home.component';
 import { LoginComponent } from './admin/login/login.component';
+import { DashboardComponent } from './admin/dashboard/dashboard.component';
+import { NewRaffleComponent } from './admin/dashboard/pages/new-raffle/new-raffle.component';
+import { RafflesComponent } from './admin/dashboard/pages/raffles/raffles.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' }, 
     { path: 'home', component: HomeComponent },
     { path: 'login', component: LoginComponent },
+    { path: 'dashboard', component: DashboardComponent, children: [
+        { path: '', redirectTo: 'newraffle', pathMatch: 'full' },
+        { path: 'newraffle', component: NewRaffleComponent }, 
+        { path: 'raffles', component: RafflesComponent }, 
+    ] },
     { path: '**', redirectTo: 'home' }
 ];

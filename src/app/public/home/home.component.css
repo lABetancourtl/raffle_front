@@ -1,4 +1,4 @@
-/* Efecto hover para los botones */
+/* Hover para escalado general */
 .hover-scale {
   transition: transform 0.3s ease;
 }
@@ -6,44 +6,128 @@
   transform: scale(1.05);
 }
 
-/* Cambiar color nav-link activo y al pasar el mouse */
+/* Nav-link mejora visual */
 .nav-link.active,
 .nav-link:hover {
   background-color: #0d6efd;
   color: white !important;
 }
 
-
-/* Reduce el espacio vertical entre número y texto en los botones */
-.btn > div.text-start > div {
-  margin-bottom: 0; /* elimina margen inferior por defecto */
-  line-height: 1; /* reduce la altura de línea para estar más compacto */
-}
-
-.btn > div.text-start > div:first-child {
-  margin-bottom: 0.1rem; /* un pequeño espacio debajo del número */
-}
-
+/* Estilos para tarjetas de boletas */
 .ticket-card {
-    min-width: 180px;
-    background-color: #fff;
-    transition: all 0.3s ease;
-    border: 1px solid #e0e0e0;
-  }
+  min-width: 180px;
+  background-color: #fff;
+  transition: all 0.3s ease;
+  border: 1px solid #e0e0e0;
+  cursor: pointer;
+}
+.ticket-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
 
-  .ticket-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
-    cursor: pointer;
-  }
+/* Indicador de selección */
+.selection-indicator {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid #dee2e6;
+  background-color: white;
+  transition: all 0.3s ease;
+}
+.selection-indicator.selected {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+}
 
-  .ticket-card.bg-primary:hover {
-    box-shadow: 0 12px 30px rgba(0, 123, 255, 0.4);
-  }
+/* Paquete seleccionado */
+.ticket-card.selected-package {
+  border: 2px solid var(--bs-primary);
+  background-color: rgba(13, 110, 253, 0.05);
+}
 
-  @media (max-width: 576px) {
-    .ticket-card {
-      width: 100%;
-      justify-content: center;
-    }
+/* Responsive */
+@media (max-width: 576px) {
+  .ticket-card {
+    width: 100%;
   }
+  .row.g-3 {
+    flex-direction: column !important;
+  }
+  .row.g-3 > .col-6 {
+    width: 100% !important;
+    max-width: 100%;
+  }
+}
+
+/* Botón deshabilitado */
+.btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* Barra de progreso con animación y gradiente en movimiento */
+.progress-bar {
+  background: linear-gradient(90deg,
+    #0d6efd 0%,
+    #1fa2ff 30%,
+    #12d8fa 60%,
+    #a6ffcb 100%);
+  background-size: 200% 100%;
+  animation: gradientAnimation 2s linear infinite;
+  transition: width 0.8s ease-in-out;
+  border-radius: 4px;
+}
+
+
+.progress-bar-animated {
+  animation: gradientAnimation 2s linear infinite;
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+
+
+.raffle-img {
+  width: 100%;
+  height: 500px;
+  object-fit: contain;
+  background-color: #f8f9fa; /* fondo neutro si la imagen no llena todo */
+}
+
+@media (max-width: 768px) {
+  .raffle-img {
+    height: auto;
+    max-height: 400px;
+  }
+}
+
+.card {
+  padding: 0;
+  margin: 0;
+  overflow: hidden; /* Evita que algo sobresalga */
+  border-radius: 0; /* Opcional: quita bordes redondeados si molesta */
+}
+
+.card-img-top {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Para que no recorte la imagen */
+}
+
+
+
