@@ -190,6 +190,8 @@
   }
 }
 
+
+
 /* Tarjetas en general */
 .card {
   padding: 0;
@@ -383,6 +385,44 @@ header {
 @keyframes fadeIn {
   to {
     opacity: 1;
+  }
+}
+
+/* Ajustes específicos para el espacio header-imagen en móviles */
+@media (max-width: 768px) {
+  /* Reduce el padding del header */
+  header.bg-dark {
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+  }
+  
+  /* Reduce el margen superior del main container */
+  main.container.my-5 {
+    margin-top: 0.5rem !important;
+  }
+  
+  /* Elimina márgenes extra del row contenedor */
+  .row.g-5.align-items-center {
+    --bs-gutter-y: 1rem !important;
+    margin-top: 0 !important;
+  }
+  
+  /* Ajusta específicamente el espacio sobre la imagen */
+  .col-12.col-lg-6:first-child {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+  }
+  
+  /* Reduce el tamaño de la imagen en móviles */
+  .raffle-img {
+    max-height: 280px;
+    margin-top: 0;
+  }
+  
+  /* Ajusta el título del header */
+  header h2.display-6 {
+    font-size: 1.4rem;
+    margin-bottom: 0.25rem !important;
   }
 }
 
