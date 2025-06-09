@@ -2,6 +2,7 @@ import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { RaffleService } from '../../services/raffle.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
+import { enviroments } from '../../../enviroments/enviroments';
 
 @Component({
   selector: 'app-home',
@@ -14,6 +15,7 @@ import { FormsModule, NgForm } from '@angular/forms';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit, AfterViewInit {
+  instagramUrl = enviroments.instagramUrl;
   raffle: any = null;
   selectedPackage: number | null = null;
   testimonials: any;

@@ -77,17 +77,66 @@
   margin-top: 0.5rem;
 }
 
-/* Responsive */
+/* Responsive para paquetes de boletos */
+.packages-row {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  margin-left: -5px;
+  margin-right: -5px;
+}
+
+.packages-row > .col-4 {
+  flex: 0 0 auto;
+  width: 33.333333%;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+/* Ajustes para pantallas muy pequeñas */
+@media (max-width: 400px) {
+  .packages-row > .col-4 {
+    min-width: 110px;
+  }
+}
+
+/* Eliminar scroll horizontal en pantallas más grandes */
+@media (min-width: 576px) {
+  .packages-row {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    margin-left: -12px;
+    margin-right: -12px;
+  }
+  
+  .packages-row > .col-4 {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+}
+
+/* Asegurar que las tarjetas mantengan su tamaño */
+.ticket-card {
+  min-width: 0; /* Resetear min-width para evitar desbordamiento */
+}
+
+/* Mejorar visibilidad en móviles */
 @media (max-width: 576px) {
   .ticket-card {
-    width: 100%;
+    padding: 1rem;
   }
-  .row.g-3 {
-    flex-direction: column !important;
+  
+  .ticket-card .fs-2 {
+    font-size: 1.75rem;
   }
-  .row.g-3 > .col-6 {
-    width: 100% !important;
-    max-width: 100%;
+  
+  .ticket-card .text-muted {
+    font-size: 0.75rem;
+  }
+  
+  .ticket-card .fw-bold:last-child {
+    font-size: 0.875rem;
   }
 }
 
@@ -156,7 +205,6 @@
   object-fit: contain;
 }
 
-
 header {
   position: sticky;
   top: 0;
@@ -195,5 +243,154 @@ header {
   padding: 8px 0;
   user-select: text;
 }
+
+/* Estilos para compartir en redes sociales */
+.social-share {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.btn-facebook {
+  background-color: #3b5998;
+  color: white;
+}
+
+.btn-whatsapp {
+  background-color: #25D366;
+  color: white;
+}
+
+/* Estilos para el modal */
+.modal-content {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.modal-header {
+  border-bottom: none;
+}
+
+.modal-footer {
+  border-top: none;
+}
+
+/* Ajustes generales de espaciado */
+.container.my-5 {
+  padding-bottom: 2rem;
+}
+
+/* Mejoras de accesibilidad */
+:focus {
+  outline: 2px solid #0d6efd;
+  outline-offset: 2px;
+}
+
+
+
+
+
+.btn-comprar-2 {
+  background: linear-gradient(135deg, #0d6efd, #4a8df0);
+  color: #fff;
+  border: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+  padding: 0.9rem 1.2rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+  transition: all 0.25s ease-in-out;
+  width: 100%;
+  text-align: center;
+}
+
+.btn-comprar-2:hover:enabled {
+  background: linear-gradient(135deg, #0b5ed7, #3a7ce0);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+  transform: translateY(-1px);
+}
+
+.btn-comprar-2:disabled {
+  background: #c0c0c0;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Responsivo para pantallas pequeñas */
+@media (max-width: 576px) {
+  .btn-comprar-2 {
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+  }
+}
+
+
+.btn-comprar-2:active:enabled {
+  background: linear-gradient(135deg, #0a58ca, #336ecf);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+  transform: scale(0.98);
+}
+
+
+.instagram-float {
+  position: fixed;
+  bottom: 30px;
+  right: 20px;
+  /* Quitar dimensiones y fondo */
+  width: auto;
+  height: auto;
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  cursor: pointer;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.3s ease;
+  padding: 10px;
+  opacity: 0;
+  animation: fadeIn 1s forwards;
+}
+
+.instagram-float i {
+  color: #9B59B6; /* color base */
+  font-size: 28px;
+  text-shadow:
+    0 0 5px #9B59B6,
+    0 0 10px #8E44AD,
+    0 0 20px #8E44AD;
+  animation: neon-glow-purple 3s linear infinite;
+  filter: hue-rotate(0deg);
+  transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.instagram-float:hover i {
+  filter: hue-rotate(360deg);
+  transform: scale(1.2);
+}
+
+@keyframes neon-glow-purple {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  100% {
+    filter: hue-rotate(360deg);
+  }
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+
+
+
+
+
+
 
 
