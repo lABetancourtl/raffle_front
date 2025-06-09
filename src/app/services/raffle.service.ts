@@ -22,9 +22,14 @@ getAllRaffles(): Observable<any[]> {
 }
 
 getRaffleActiva(): Observable<any> {
-
-
-    return this.http.get<any>(`${this.apiUrl}/raffle/activa`);
+  return this.http.get<any>(`${this.apiUrl}/raffle/activa`);
 }
+
+obtenerNumerosPorEmail(email: string): Observable<string[]> {
+  return this.http.get<string[]>(`${this.apiUrl}/raffle/numerosPorEmail/soloNumeros?email=${email}`);
+}
+
+
+
 
 }
