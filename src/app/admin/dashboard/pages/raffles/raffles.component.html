@@ -1,0 +1,49 @@
+<div class="p-3">
+  <h2 class="mb-4">Listado de Eventos</h2>
+
+  <!-- Vista tabla para desktop -->
+  <div class="table-responsive d-none d-md-block">
+    <table class="table table-striped table-bordered table-hover align-middle">
+      <thead class="table-primary">
+        <tr>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Inicio</th>
+          <th>Fin</th>
+          <th>Estado</th>
+          <th>Precio</th>
+          <th>Dígitos</th>
+          <th>Mínimo Compra</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let raffle of raffles">
+          <td>{{ raffle.nameRaffle }}</td>
+          <td>{{ raffle.description }}</td>
+          <td>{{ raffle.startdate | date:'mediumDate' }}</td>
+          <td>{{ raffle.endDate | date:'mediumDate' }}</td>
+          <td>{{ raffle.stateRaffle }}</td>
+          <td>${{ raffle.priceNumber }}</td>
+          <td>{{ raffle.digitLength }}</td>
+          <td>{{ raffle.minPurchase }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Vista tipo card para móviles -->
+  <div class="d-md-none">
+    <div *ngFor="let raffle of raffles" class="card mb-3 shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">{{ raffle.nameRaffle }}</h5>
+        <p class="card-text">{{ raffle.description }}</p>
+        <p><strong>Inicio:</strong> {{ raffle.startdate | date:'mediumDate' }}</p>
+        <p><strong>Fin:</strong> {{ raffle.endDate | date:'mediumDate' }}</p>
+        <p><strong>Estado:</strong> {{ raffle.stateRaffle }}</p>
+        <p><strong>Precio:</strong> ${{ raffle.priceNumber }}</p>
+        <p><strong>Dígitos:</strong> {{ raffle.digitLength }}</p>
+        <p><strong>Mínimo Compra:</strong> {{ raffle.minPurchase }}</p>
+      </div>
+    </div>
+  </div>
+</div>

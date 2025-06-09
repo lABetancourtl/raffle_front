@@ -1,0 +1,210 @@
+<!-- Raffle.component.html -->
+<header class="bg-dark text-white py-3 shadow-sm">
+  <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
+    <h2 class="mb-3 mb-md-0 fw-bold display-6">Raffle</h2>
+    <nav class="nav nav-pills">
+      <a href="#" class="nav-link text-white px-3">Inicio</a>
+<a href="#" class="nav-link text-white px-3" data-bs-toggle="modal" data-bs-target="#emailModal">
+  Mis Fondos
+</a>
+
+      <a href="#" class="nav-link text-white px-3">Metodología</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container my-5" *ngIf="raffle; else loading">
+  
+      <!-- Compartir redes sociales -->
+  <div class="social-share">
+    <button class="btn btn-sm btn-facebook">
+      <i class="bi bi-facebook"></i> Compartir
+    </button>
+    <button class="btn btn-sm btn-whatsapp">
+      <i class="bi bi-whatsapp"></i> Compartir
+    </button>
+  </div>
+
+  <div class="row g-5 align-items-center">
+    <!-- Imagen del producto -->
+    <div class="col-12 col-lg-6">
+      <div class="card shadow-lg border-0 rounded-4 overflow-hidden hover-scale">
+        <img [src]="raffle.urlImagen" alt="{{ raffle.nameRaffle }}" class="card-img-top img-fluid raffle-img" />
+
+        <div class="card-img-overlay d-flex align-items-end p-0">
+          <div class="bg-gradient-dark w-100 p-3 text-white">
+            <h5 class="mb-0 fw-light">Disponibles: {{ raffle.availableTickets }} boletas</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detalles y botones -->
+    <div class="col-12 col-lg-6">
+      <div class="ps-lg-4">
+        <div class="mb-3">
+          <span class="badge bg-primary bg-opacity-10 text-primary fs-6 fw-normal">{{ raffle.category }}</span>
+        </div>
+        <h1 class="display-5 fw-bold mb-3">{{ raffle.nameRaffle }}</h1>
+
+        <!-- Rating mejorado -->
+        <div class="d-flex align-items-center gap-2 mb-4">
+          <i class="bi bi-shield-lock-fill text-success fs-4"></i>
+          <span class="fw-semibold">Compra 100% segura y verificada</span>
+        </div>
+
+
+        <!-- Progreso -->
+        <div class="mb-4">
+          <div class="d-flex justify-content-between mb-2">
+            <span class="fw-bold text-black-50">Disponibilidad</span>
+            <span class="fw-bold text-black-50">{{ raffle.porcentajeVendidos }}% vendido</span>
+          </div>
+          <div class="progress" style="height: 8px; border-radius: 4px;">
+          <div class="progress-bar progress-bar-animated"
+              role="progressbar"
+              [style.width.%]="raffle.porcentajeVendidos"
+              [attr.aria-valuenow]="raffle.porcentajeVendidos">
+            </div>
+          </div>
+        </div>
+
+        <!-- Descripción -->
+        <div class="mb-4">
+          <p class="lead text-muted" [innerHTML]="raffle.description"></p>
+          <p class="text-muted mb-0">
+            <i class="bi bi-calendar-event me-2"></i> 
+            Evento activo desde {{ raffle.startdate }} hasta agotar existencia
+          </p>
+        </div>
+
+        <!-- Precio -->
+        <div class="bg-light p-3 rounded-3 mb-4">
+          <div class="d-flex align-items-center justify-content-between">
+            <div>
+              <span class="text-muted">Precio por fondo</span>
+              <h3 class="mb-0 text-primary">{{ raffle.priceNumber | currency:'COP':'symbol':'1.0-0' }}</h3>
+            </div>
+          </div>
+        </div>
+
+<!-- En tu archivo Raffle.component.html -->
+<section class="mt-4">
+  <h5 class="fw-bold mb-3">Selecciona tu paquete</h5>
+  <p class="text-muted small mb-4">
+    <i class="bi bi-info-circle me-2"></i> Tus números serán seleccionados aleatoriamente.
+  </p>
+
+  <div class="row g-3 packages-row">
+    <div class="col-4" *ngFor="let pack of [10, 20, 50]">
+      <div class="ticket-card position-relative text-center p-3 rounded-3 hover-scale"
+        (click)="selectPackage(pack)" 
+        [class.selected-package]="selectedPackage === pack">
+        <div class="selection-indicator" [class.selected]="selectedPackage === pack"></div>
+        <div class="fs-2 fw-bold text-primary">{{ pack }}</div>
+        <div class="text-muted small">Fondos</div>
+        <div class="mt-2 fw-bold">{{ (raffle.priceNumber * pack) | currency:'COP':'symbol':'1.0-0' }}</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+        <!-- Botón de compra -->
+<div class="d-grid mt-4">
+  <button 
+    class="btn btn-comprar-2" 
+    [disabled]="!selectedPackage">
+    <i class="bi bi-cart3 me-2"></i> Comprar ahora
+  </button>
+</div>
+
+        
+      </div>
+    </div>
+  </div>
+
+  
+  
+</main>
+
+<ng-template #loading>
+  <div class="d-flex justify-content-center align-items-center" style="height: 60vh;">
+    <div class="spinner-grow text-primary" role="status" style="width: 3rem; height: 3rem;">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Modal para Mis Fondos (Números de Rifa) -->
+<div class="modal fade" id="emailModal" tabindex="-1" aria-labelledby="emailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="emailModalLabel">Mis Números</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="consultarFondos()" #emailForm="ngForm" novalidate>
+          <div class="mb-3">
+            <label for="emailUser" class="form-label fw-semibold">Correo electrónico</label>
+            <input type="email" 
+                   class="form-control" 
+                   id="emailUser" 
+                   name="emailUser"
+                   [(ngModel)]="emailUser"
+                   required 
+                   email
+                   placeholder="Ingresa tu email" />
+          </div>
+
+          <div *ngIf="errorMsg" class="alert alert-danger py-2" role="alert">
+            {{ errorMsg }}
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100 py-2 fw-bold" >
+            <i class="bi bi-search me-2"></i> Consultar mis fondos
+          </button>
+        </form>
+
+        <hr />
+
+        <!-- Mensaje cuando no hay números -->
+        <div *ngIf="userNumbers.length === 0 && emailForm.submitted && !errorMsg" class="alert alert-info">
+          Aún no tienes fondos asignados para este evento.
+        </div>
+
+        <div *ngIf="userNumbers.length > 0">
+          <h6 class="fw-semibold">Tus fondos asignados:</h6>
+
+          <!-- Contenedor de los tickets -->
+          <div class="d-flex flex-wrap justify-content-center gap-3">
+            <div *ngFor="let num of userNumbers" class="raffle-ticket-card">
+              <img [src]="raffle?.urlImagen" alt="Ticket {{ num }}" class="raffle-ticket-img" />
+              <div class="raffle-ticket-number">{{ num }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<footer class="bg-dark text-white text-center py-4 mt-auto">
+  <p class="mb-1">&copy; 2025 Todos los derechos reservados. Raffle</p>
+  <p class="mb-0">Contáctanos: <a href="mailto:contacto.co" class="text-info text-decoration-none">contacto.co</a></p>
+</footer>
+
+
+
+<!-- En body -->
+<a [href]="instagramUrl" target="_blank" class="instagram-float" id="instagramFloat">
+  <i class="bi bi-instagram"></i>
+</a>
+

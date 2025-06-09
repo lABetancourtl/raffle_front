@@ -1,0 +1,436 @@
+/* Hover para escalado general */
+.hover-scale {
+  transition: transform 0.3s ease;
+}
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+/* Nav-link mejora visual */
+.nav-link.active,
+.nav-link:hover {
+  background-color: #0d6efd;
+  color: white !important;
+}
+
+/* Estilos para tarjetas de boletas - estilo cool glass */
+.ticket-card {
+  position: relative;
+  min-width: 180px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
+  color: #212529;
+  cursor: pointer;
+}
+.ticket-card:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.15);
+}
+
+/* Indicador de selección cool */
+.selection-indicator {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid #dee2e6;
+  background-color: white;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.08);
+}
+.selection-indicator.selected {
+  background: radial-gradient(circle at center, #0d6efd 40%, #0a58ca 100%);
+  border-color: #0d6efd;
+  box-shadow: 0 0 12px rgba(13, 110, 253, 0.4);
+}
+
+/* Paquete seleccionado */
+.ticket-card.selected-package {
+  border: 2px solid var(--bs-primary);
+  background: rgba(13, 110, 253, 0.1);
+  box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.15);
+}
+
+/* Texto dentro de las tarjetas */
+.ticket-card .fs-2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0d6efd;
+}
+
+.ticket-card .text-muted {
+  font-size: 0.875rem;
+  color: #6c757d;
+}
+
+.ticket-card .fw-bold:last-child {
+  font-size: 1rem;
+  color: #212529;
+  margin-top: 0.5rem;
+}
+
+/* Responsive para paquetes de boletos */
+.packages-row {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  margin-left: -5px;
+  margin-right: -5px;
+}
+
+.packages-row > .col-4 {
+  flex: 0 0 auto;
+  width: 33.333333%;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+/* Ajustes para pantallas muy pequeñas */
+@media (max-width: 400px) {
+  .packages-row > .col-4 {
+    min-width: 110px;
+  }
+}
+
+/* Eliminar scroll horizontal en pantallas más grandes */
+@media (min-width: 576px) {
+  .packages-row {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    margin-left: -12px;
+    margin-right: -12px;
+  }
+  
+  .packages-row > .col-4 {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+}
+
+/* Asegurar que las tarjetas mantengan su tamaño */
+.ticket-card {
+  min-width: 0; /* Resetear min-width para evitar desbordamiento */
+}
+
+/* Mejorar visibilidad en móviles */
+@media (max-width: 576px) {
+  .ticket-card {
+    padding: 1rem;
+  }
+  
+  .ticket-card .fs-2 {
+    font-size: 1.75rem;
+  }
+  
+  .ticket-card .text-muted {
+    font-size: 0.75rem;
+  }
+  
+  .ticket-card .fw-bold:last-child {
+    font-size: 0.875rem;
+  }
+}
+
+/* Botón deshabilitado */
+.btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* Barra de progreso con animación y gradiente en movimiento */
+.progress-bar {
+  background: linear-gradient(90deg,
+    #0d6efd 0%,
+    #1fa2ff 30%,
+    #12d8fa 60%,
+    #a6ffcb 100%);
+  background-size: 200% 100%;
+  animation: gradientAnimation 2s linear infinite;
+  transition: width 0.8s ease-in-out;
+  border-radius: 4px;
+}
+
+.progress-bar-animated {
+  animation: gradientAnimation 2s linear infinite;
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Imagen de rifa */
+.raffle-img {
+  width: 100%;
+  height: 500px;
+  object-fit: contain;
+  background-color: #f8f9fa;
+}
+
+@media (max-width: 768px) {
+  .raffle-img {
+    height: auto;
+    max-height: 400px;
+  }
+}
+
+
+
+/* Tarjetas en general */
+.card {
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 0;
+}
+
+.card-img-top {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+}
+
+.raffle-ticket-card {
+  width: 100px;
+  text-align: center;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.15);
+  background: white;
+  overflow: hidden;
+  cursor: default;
+  transition: transform 0.2s ease;
+}
+
+.raffle-ticket-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgb(0 0 0 / 0.25);
+}
+
+.raffle-ticket-img {
+  width: 100%;
+  height: 80px;
+  object-fit: cover;
+  display: block;
+  border-bottom: 2px solid #1a73e8;
+  border-radius: 12px 12px 0 0;
+}
+
+.raffle-ticket-number {
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: #1a73e8;
+  padding: 8px 0;
+  user-select: text;
+}
+
+/* Estilos para compartir en redes sociales */
+.social-share {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.btn-facebook {
+  background-color: #3b5998;
+  color: white;
+}
+
+.btn-whatsapp {
+  background-color: #25D366;
+  color: white;
+}
+
+/* Estilos para el modal */
+.modal-content {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.modal-header {
+  border-bottom: none;
+}
+
+.modal-footer {
+  border-top: none;
+}
+
+/* Ajustes generales de espaciado */
+.container.my-5 {
+  padding-bottom: 2rem;
+}
+
+/* Mejoras de accesibilidad */
+:focus {
+  outline: 2px solid #0d6efd;
+  outline-offset: 2px;
+}
+
+
+
+
+
+.btn-comprar-2 {
+  background: linear-gradient(135deg, #0d6efd, #4a8df0);
+  color: #fff;
+  border: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+  padding: 0.9rem 1.2rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+  transition: all 0.25s ease-in-out;
+  width: 100%;
+  text-align: center;
+}
+
+.btn-comprar-2:hover:enabled {
+  background: linear-gradient(135deg, #0b5ed7, #3a7ce0);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+  transform: translateY(-1px);
+}
+
+.btn-comprar-2:disabled {
+  background: #c0c0c0;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Responsivo para pantallas pequeñas */
+@media (max-width: 576px) {
+  .btn-comprar-2 {
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+  }
+}
+
+
+.btn-comprar-2:active:enabled {
+  background: linear-gradient(135deg, #0a58ca, #336ecf);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+  transform: scale(0.98);
+}
+
+
+.instagram-float {
+  position: fixed;
+  bottom: 30px;
+  right: 20px;
+  /* Quitar dimensiones y fondo */
+  width: auto;
+  height: auto;
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  cursor: pointer;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.3s ease;
+  padding: 10px;
+  opacity: 0;
+  animation: fadeIn 1s forwards;
+}
+
+.instagram-float i {
+  color: #9B59B6; /* color base */
+  font-size: 28px;
+  text-shadow:
+    0 0 5px #9B59B6,
+    0 0 10px #8E44AD,
+    0 0 20px #8E44AD;
+  animation: neon-glow-purple 3s linear infinite;
+  filter: hue-rotate(0deg);
+  transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.instagram-float:hover i {
+  filter: hue-rotate(360deg);
+  transform: scale(1.2);
+}
+
+@keyframes neon-glow-purple {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  100% {
+    filter: hue-rotate(360deg);
+  }
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Ajustes específicos para el espacio header-imagen en móviles */
+@media (max-width: 768px) {
+  /* Reduce el padding del header */
+  header.bg-dark {
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+  }
+  
+  /* Reduce el margen superior del main container */
+  main.container.my-5 {
+    margin-top: 0.5rem !important;
+  }
+  
+  /* Elimina márgenes extra del row contenedor */
+  .row.g-5.align-items-center {
+    --bs-gutter-y: 1rem !important;
+    margin-top: 0 !important;
+  }
+  
+  /* Ajusta específicamente el espacio sobre la imagen */
+  .col-12.col-lg-6:first-child {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+  }
+  
+  /* Reduce el tamaño de la imagen en móviles */
+  .raffle-img {
+    max-height: 280px;
+    margin-top: 0;
+  }
+  
+  /* Ajusta el título del header */
+  header h2.display-6 {
+    font-size: 1.4rem;
+    margin-bottom: 0.25rem !important;
+  }
+}
+
+
+
+
+
+
+
+
+
