@@ -1,0 +1,40 @@
+.btn-warning {
+  background-color: #ffc107 !important;
+  color: #000;
+  border: none;
+}
+
+.btn-success {
+  background-color: #28a745 !important;
+  color: white;
+  border: none;
+}
+
+.btn-secondary {
+  background-color: #6c757d !important;
+  color: white;
+  border: none;
+  cursor: not-allowed;
+}
+
+
+.modal-content {
+  border-radius: 12px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card-title {
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge {
+  font-size: 0.85rem;
+  padding: 0.4em 0.8em;
+  border-radius: 0.5rem;
+}
+
+input.form-control {
+  font-size: 0.9rem;
+}

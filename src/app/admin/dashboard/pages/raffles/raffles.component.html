@@ -14,10 +14,11 @@
           <th>Precio</th>
           <th>Dígitos</th>
           <th>Mínimo Compra</th>
+          <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let raffle of raffles">
+        <tr *ngFor="let raffle of raffles" (dblclick)="abrirModalRifa(raffle)">
           <td>{{ raffle.nameRaffle }}</td>
           <td>{{ raffle.description }}</td>
           <td>{{ raffle.startdate | date:'mediumDate' }}</td>
@@ -26,6 +27,15 @@
           <td>${{ raffle.priceNumber }}</td>
           <td>{{ raffle.digitLength }}</td>
           <td>{{ raffle.minPurchase }}</td>
+          <td>
+            <button class="btn btn-sm"
+                    [ngClass]="raffle.stateRaffle === 'ACTIVO' ? 'btn-warning' : 'btn-success'"
+                    [disabled]="raffle.stateRaffle === 'FINALIZADO'"
+                    (click)="cambiarEstadoRifa(raffle.id, raffle.stateRaffle)">
+              {{ raffle.stateRaffle === 'ACTIVO' ? 'Pausar' :
+                raffle.stateRaffle === 'PAUSA' ? 'Activar' : 'Finalizado' }}
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -33,7 +43,7 @@
 
   <!-- Vista tipo card para móviles -->
   <div class="d-md-none">
-    <div *ngFor="let raffle of raffles" class="card mb-3 shadow-sm">
+    <div *ngFor="let raffle of raffles" class="card mb-3 shadow-sm" (click)="abrirModalRifa(raffle)">
       <div class="card-body">
         <h5 class="card-title">{{ raffle.nameRaffle }}</h5>
         <p class="card-text">{{ raffle.description }}</p>
@@ -43,7 +53,89 @@
         <p><strong>Precio:</strong> ${{ raffle.priceNumber }}</p>
         <p><strong>Dígitos:</strong> {{ raffle.digitLength }}</p>
         <p><strong>Mínimo Compra:</strong> {{ raffle.minPurchase }}</p>
+        <button class="btn btn-sm"
+                [ngClass]="raffle.stateRaffle === 'ACTIVO' ? 'btn-warning' : 'btn-success'"
+                [disabled]="raffle.stateRaffle === 'FINALIZADO'"
+                (click)="cambiarEstadoRifa(raffle.id, raffle.stateRaffle)">
+          {{ raffle.stateRaffle === 'ACTIVO' ? 'Pausar' :
+            raffle.stateRaffle === 'PAUSA' ? 'Reanudar' : 'Finalizado' }}
+        </button>
       </div>
     </div>
   </div>
 </div>
+
+
+<!-- Modal estilo admin profesional -->
+<div class="modal fade" id="detalleRifaModal" tabindex="-1" aria-labelledby="detalleRifaLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content border-0 shadow-sm rounded-3">
+      <div class="modal-header bg-dark text-white rounded-top-3">
+        <h5 class="modal-title fw-semibold" id="detalleRifaLabel">
+          <i class="bi bi-ticket-perforated me-2"></i> {{ rifaSeleccionada?.nameRaffle }}
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+
+      <div class="modal-body bg-light">
+        <div class="row g-4">
+
+          <!-- Información de la Rifa -->
+          <div class="col-md-6">
+            <div class="card border-0 shadow-sm">
+              <div class="card-body">
+                <h6 class="card-title text-primary fw-bold">Información General</h6>
+                <p><strong>Descripción:</strong> {{ rifaSeleccionada?.description }}</p>
+                <p><strong>Inicio:</strong> {{ rifaSeleccionada?.startDate | date: 'mediumDate' }}</p>
+                <p><strong>Fin:</strong> {{ rifaSeleccionada?.endDate | date: 'mediumDate' }}</p>
+                <p><strong>Estado:</strong>
+                  <span class="badge bg-{{ getColorEstado(rifaSeleccionada?.stateRaffle) }}">
+                    {{ rifaSeleccionada?.stateRaffle }}
+                  </span>
+                </p>
+                <p><strong>Precio:</strong> <span class="text-success fw-bold">${{ rifaSeleccionada?.priceNumber }}</span></p>
+                <p><strong>Dígitos:</strong> {{ rifaSeleccionada?.digitLength }}</p>
+                <p><strong>Mínimo de compra:</strong> {{ rifaSeleccionada?.minPurchase }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Consulta Cliente -->
+          <div class="col-md-6">
+            <div class="card border-0 shadow-sm">
+              <div class="card-body">
+                <h6 class="card-title text-primary fw-bold">Consulta de Cliente</h6>
+
+                <div class="input-group mb-3">
+                  <input type="text" class="form-control" [(ngModel)]="numeroCliente" placeholder="Número del cliente">
+                  <button class="btn btn-outline-primary" (click)="consultarCliente(numeroCliente)">
+                    <i class="bi bi-search"></i> Buscar
+                  </button>
+                </div>
+
+                <div *ngIf="mensajeCliente" class="alert alert-warning py-2 px-3">
+                  {{ mensajeCliente }}
+                </div>
+
+                <div *ngIf="cliente">
+                  <p><strong>Nombre:</strong> {{ cliente.nombre }}</p>
+                  <p><strong>Email:</strong> {{ cliente.email }}</p>
+                  <p><strong>Teléfono:</strong> {{ cliente.telefono }}</p>
+                  <p><strong>País:</strong> {{ cliente.pais }}</p>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+

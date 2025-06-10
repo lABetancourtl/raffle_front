@@ -29,6 +29,26 @@ obtenerNumerosPorEmail(email: string): Observable<string[]> {
   return this.http.get<string[]>(`${this.apiUrl}/raffle/numerosPorEmail/soloNumeros?email=${email}`);
 }
 
+cambiarEstadoRifa(dto: { id: string; nuevoEstado: string }) {
+      const token = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+    });
+  return this.http.patch<any>(`${this.apiUrl}/raffle/cambiarEstadoRifa`, dto, { headers });
+}
+
+
+obtenerClientePorNumero(numero: string): Observable<any> {
+  const token = localStorage.getItem('authToken');
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  });
+
+  return this.http.get<any>(`${this.apiUrl}/raffle/clientePorNumero?numero=${numero}`, { headers });
+}
+
 
 
 
