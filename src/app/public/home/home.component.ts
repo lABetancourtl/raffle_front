@@ -3,6 +3,14 @@ import { RaffleService } from '../../services/raffle.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { enviroments } from '../../../enviroments/enviroments';
+import { countries, ICountry } from 'countries-list';
+
+// Define una interfaz para nuestro país personalizado
+interface PaisPersonalizado {
+  nombre: string;
+  prefijo: string;
+  codigo: string;
+}
 
 @Component({
   selector: 'app-home',
@@ -15,7 +23,11 @@ import { enviroments } from '../../../enviroments/enviroments';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit, AfterViewInit {
+  selectedCurrency: string = 'COP'; // Valor por defecto
+
+
   instagramUrl = enviroments.instagramUrl;
+  telegramUrl = enviroments.telegramUrl;
   raffle: any = null;
   selectedPackage: number | null = null;
   testimonials: any;
@@ -27,19 +39,35 @@ export class HomeComponent implements OnInit, AfterViewInit {
   loading: boolean = false;
   formSubmitted: boolean = false;
 
-    buyerData = {
+  // Datos del comprador
+  buyerData = {
     buyerName: '',
     buyerApellido: '',
-    buyerPais: '',
+    buyerPais: 'Colombia', // Valor por defecto
     buyerEmail: '',
     buyerConfirmarEmail: '',
     buyerPrefix: '+57', // Valor por defecto
     buyerPhone: ''
   };
 
+  // Lista de países y prefijos
+  paises: any[] = [];
+  prefijosUnicos: string[] = [];
+
   @ViewChild('emailForm') emailForm!: NgForm;
 
-  constructor(private raffleService: RaffleService) {}
+  constructor(private raffleService: RaffleService) {
+    // Convertir el objeto countries a array y ordenar
+  this.paises = Object.entries(countries)
+    .map(([code, c]) => ({
+      nombre: c.name,
+      prefijo: c.phone,
+      codigo: code
+    }))
+    .sort((a, b) => a.nombre.localeCompare(b.nombre));
+    // Obtener prefijos únicos
+    this.prefijosUnicos = [...new Set(this.paises.map(p => p.prefijo))].sort();
+  }
 
   ngAfterViewInit() {
     const modalElement = document.getElementById('emailModal');
@@ -97,6 +125,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
   }
 
+  // Actualiza el prefijo cuando cambia el país
+  actualizarPrefijo() {
+    const paisSeleccionado = this.paises.find(p => p.nombre === this.buyerData.buyerPais);
+    if (paisSeleccionado) {
+      this.buyerData.buyerPrefix = paisSeleccionado.prefijo;
+    }
+  }
+
   resetModal() {
     this.emailUser = '';
     this.userNumbers = [];
@@ -107,6 +143,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.emailForm.resetForm();
     }
   }
+
+  validarYRealizarPago() {
+  if (!this.selectedPackage || !this.buyerData.buyerName || !this.buyerData.buyerApellido ||
+      !this.buyerData.buyerPais || !this.buyerData.buyerPrefix || !this.buyerData.buyerPhone ||
+      !this.buyerData.buyerEmail || !this.buyerData.buyerConfirmarEmail) {
+    alert('Por favor completa todos los campos requeridos antes de pagar.');
+    return;
+  }
+
+   // Aquí iría tu lógica de pago
+}
 
 
 

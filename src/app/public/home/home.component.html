@@ -224,80 +224,101 @@
             </div>
           </div>
 
+
+
+
           <!-- Formulario de datos del comprador -->
-<div class="mt-4">
-  <h6 class="fw-bold mb-3">Información del Comprador</h6>
-  
-  <div class="row g-3">
-    <!-- Nombre -->
-    <div class="col-md-6">
-      <label for="buyerName" class="form-label">Nombre</label>
-      <input type="text" class="form-control" id="buyerName" 
-             [(ngModel)]="buyerData.buyerName" name="buyerName"
-             required placeholder="Ingresa tu nombre">
-    </div>
-    
-    <!-- Apellido -->
-    <div class="col-md-6">
-      <label for="buyerApellido" class="form-label">Apellido</label>
-      <input type="text" class="form-control" id="buyerApellido" 
-             [(ngModel)]="buyerData.buyerApellido" name="buyerApellido"
-             required placeholder="Ingresa tu apellido">
-    </div>
-    
-    <!-- País -->
-    <div class="col-md-6">
-      <label for="buyerPais" class="form-label">País</label>
-      <select class="form-select" id="buyerPais" 
-              [(ngModel)]="buyerData.buyerPais" name="buyerPais" required>
-        <option value="" disabled selected>Selecciona tu país</option>
-        <option value="Colombia">Colombia</option>
-        <option value="Argentina">Argentina</option>
-        <option value="México">México</option>
-        <option value="España">España</option>
-        <!-- Agrega más países según necesites -->
-      </select>
-    </div>
-    
-   <!-- Prefijo y Teléfono en la misma fila -->
-    <div class="col-md-6">
-      <label for="buyerPhone" class="form-label">Teléfono</label>
-      <div class="input-group">
-        <select class="form-select" style="max-width: 100px;" 
-                [(ngModel)]="buyerData.buyerPrefix" name="buyerPrefix" required>
-          <option value="+57">+57</option>
-          <option value="+54">+54</option>
-          <option value="+52">+52</option>
-          <option value="+34">+34</option>
-          <!-- Agrega más prefijos según necesites -->
-        </select>
-        <input type="tel" class="form-control" id="buyerPhone" 
-               [(ngModel)]="buyerData.buyerPhone" name="buyerPhone"
-               required placeholder="Número de teléfono">
-      </div>
-    </div>
+          <div class="mt-4 border-bottom pb-3 mb-3">
+            <h6 class="fw-bold mb-3">Información del Comprador</h6>
+            
+            <div class="row g-3">
+              <!-- Nombre -->
+              <div class="col-md-6">
+                <label for="buyerName" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="buyerName" 
+                      [(ngModel)]="buyerData.buyerName" name="buyerName"
+                      required placeholder="Ingresa tu nombre">
+              </div>
+              
+              <!-- Apellido -->
+              <div class="col-md-6">
+                <label for="buyerApellido" class="form-label">Apellido</label>
+                <input type="text" class="form-control" id="buyerApellido" 
+                      [(ngModel)]="buyerData.buyerApellido" name="buyerApellido"
+                      required placeholder="Ingresa tu apellido">
+              </div>
+              
+              <!-- País -->
+              <div class="col-md-6">
+                <label for="buyerPais" class="form-label">País</label>
+                <select class="form-select" id="buyerPais" 
+                        [(ngModel)]="buyerData.buyerPais" name="buyerPais" required
+                        (change)="actualizarPrefijo()">
+                  <option value="" disabled>Selecciona tu país</option>
+                  <option *ngFor="let pais of paises" [value]="pais.nombre">
+                    {{ pais.nombre }} ({{ pais.prefijo }})
+                  </option>
+                </select>
+              </div>
+              
+              <!-- Prefijo y Teléfono -->
+              <div class="col-md-6">
+                <label for="buyerPhone" class="form-label">Teléfono</label>
+                <div class="input-group">
+                  <input type="text" class="form-control bg-light" style="max-width: 100px;" 
+                        [value]="buyerData.buyerPrefix" disabled>
 
-    <!-- Email -->
-    <div class="col-md-6">
-      <label for="buyerEmail" class="form-label">Email</label>
-      <input type="email" class="form-control" id="buyerEmail" 
-             [(ngModel)]="buyerData.buyerEmail" name="buyerEmail"
-             required placeholder="tucorreo@example.com">
-    </div>
+                  <input type="tel" class="form-control" id="buyerPhone" 
+                        [(ngModel)]="buyerData.buyerPhone" name="buyerPhone"
+                        required placeholder="Número de teléfono">
+                </div>
+              </div>
 
-    <!-- Confirmar Email -->
-    <div class="col-md-6">
-      <label for="buyerConfirmarEmail" class="form-label">Confirmar Email</label>
-      <input type="email" class="form-control" id="buyerConfirmarEmail" 
-             [(ngModel)]="buyerData.buyerConfirmarEmail" name="buyerConfirmarEmail"
-             required placeholder="Confirma tu correo">
-    </div>
-    
- 
-  </div>
-</div>
+              <!-- Email -->
+              <div class="col-md-6">
+                <label for="buyerEmail" class="form-label">Email</label>
+                <input type="email" class="form-control" id="buyerEmail" 
+                      [(ngModel)]="buyerData.buyerEmail" name="buyerEmail"
+                      required placeholder="tucorreo@example.com">
+              </div>
+
+              <!-- Confirmar Email -->
+              <div class="col-md-6">
+                <label for="buyerConfirmarEmail" class="form-label">Confirmar Email</label>
+                <input type="email" class="form-control" id="buyerConfirmarEmail" 
+                      [(ngModel)]="buyerData.buyerConfirmarEmail" name="buyerConfirmarEmail"
+                      required placeholder="Confirma tu correo">
+              </div>
+            </div>
+          </div>
+
+          <!-- Selección de moneda -->
+          <div class="mt-4">
+            <h6 class="fw-bold mb-2">Pagar en moneda</h6>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" id="monedaCOP" name="moneda"
+                    [(ngModel)]="selectedCurrency" value="COP">
+              <label class="form-check-label" for="monedaCOP">COP</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" id="monedaEUR" name="moneda"
+                    [(ngModel)]="selectedCurrency" value="EUR">
+              <label class="form-check-label" for="monedaEUR">EUR</label>
+            </div>
+            <span class="fw-bold text-primary fs-5">
+            {{ (raffle.priceNumber * selectedPackage) | currency:selectedCurrency:'symbol':'1.0-0' }}
+            </span>
+          </div>
+
+<button 
+  type="button" 
+  class="btn btn-success"
+  (click)="validarYRealizarPago()">
+  <i class="bi bi-credit-card me-2"></i> Pagar
+</button>
+
           
-          <div class="alert alert-info">
+          <div class="alert alert-info mt-3">
             <i class="bi bi-info-circle me-2"></i> Para completar la compra, contacta con nuestro equipo.
           </div>
         </div>
@@ -327,4 +348,9 @@
 <a [href]="instagramUrl" target="_blank" class="instagram-float" id="instagramFloat">
   <i class="bi bi-instagram"></i>
 </a>
+
+<a [href]="telegramUrl" target="_blank" class="telegram-float" id="telegramFloat">
+  <i class="bi bi-telegram"></i>
+</a>
+
 

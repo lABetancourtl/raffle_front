@@ -373,6 +373,40 @@ header {
   transform: scale(1.2);
 }
 
+.telegram-float {
+  position: fixed;
+  bottom: 80px; /* Para que no se solape con Instagram */
+  right: 20px;
+  width: auto;
+  height: auto;
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  cursor: pointer;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.3s ease;
+  padding: 10px;
+  opacity: 0;
+  animation: fadeIn 1s 0.2s forwards; /* Un pequeño delay */
+}
+
+.telegram-float i {
+  color: #0088cc;
+  font-size: 28px;
+  text-shadow: 0 0 4px rgba(0, 136, 204, 0.5);
+  transition: transform 0.3s ease, text-shadow 0.3s ease;
+}
+
+.telegram-float:hover i {
+  transform: scale(1.2);
+  text-shadow: 0 0 6px rgba(0, 170, 255, 0.7);
+}
+
+
+
 @keyframes neon-glow-purple {
   0% {
     filter: hue-rotate(0deg);
@@ -387,6 +421,22 @@ header {
     opacity: 1;
   }
 }
+
+@keyframes neon-glow-blue {
+  0%, 100% {
+    text-shadow:
+      0 0 5px #0088cc,
+      0 0 10px #007ab8,
+      0 0 20px #007ab8;
+  }
+  50% {
+    text-shadow:
+      0 0 10px #00aaff,
+      0 0 20px #00aaff,
+      0 0 30px #00aaff;
+  }
+}
+
 
 /* Ajustes específicos para el espacio header-imagen en móviles */
 @media (max-width: 768px) {
