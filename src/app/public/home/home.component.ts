@@ -27,6 +27,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
   loading: boolean = false;
   formSubmitted: boolean = false;
 
+    buyerData = {
+    buyerName: '',
+    buyerApellido: '',
+    buyerPais: '',
+    buyerEmail: '',
+    buyerConfirmarEmail: '',
+    buyerPrefix: '+57', // Valor por defecto
+    buyerPhone: ''
+  };
+
   @ViewChild('emailForm') emailForm!: NgForm;
 
   constructor(private raffleService: RaffleService) {}
@@ -97,4 +107,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.emailForm.resetForm();
     }
   }
+
+
+
 }

@@ -113,7 +113,9 @@
 <div class="d-grid mt-4">
   <button 
     class="btn btn-comprar-2" 
-    [disabled]="!selectedPackage">
+    [disabled]="!selectedPackage"
+    data-bs-toggle="modal"
+    data-bs-target="#purchaseModal">
     <i class="bi bi-cart3 me-2"></i> Comprar ahora
   </button>
 </div>
@@ -192,6 +194,124 @@
   </div>
 </div>
 
+<!-- Modal de Visualización de Paquete -->
+<div class="modal fade" id="purchaseModal" tabindex="-1" aria-labelledby="purchaseModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="purchaseModalLabel">Detalles del Paquete</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="selectedPackage && raffle">
+          <div class="text-center mb-4">
+            <img [src]="raffle.urlImagen" alt="{{ raffle.nameRaffle }}" class="img-fluid rounded-3" style="max-height: 150px;">
+            <h4 class="mt-3">{{ raffle.nameRaffle }}</h4>
+          </div>
+          
+          <div class="border-bottom pb-3 mb-3">
+            <div class="d-flex justify-content-between mb-2">
+              <span class="text-muted">Paquete seleccionado:</span>
+              <span class="fw-bold">{{ selectedPackage }} fondos</span>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+              <span class="text-muted">Precio por fondo:</span>
+              <span class="fw-bold">{{ raffle.priceNumber | currency:'COP':'symbol':'1.0-0' }}</span>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span class="text-muted">Total:</span>
+              <span class="fw-bold text-primary fs-5">{{ (raffle.priceNumber * selectedPackage) | currency:'COP':'symbol':'1.0-0' }}</span>
+            </div>
+          </div>
+
+          <!-- Formulario de datos del comprador -->
+<div class="mt-4">
+  <h6 class="fw-bold mb-3">Información del Comprador</h6>
+  
+  <div class="row g-3">
+    <!-- Nombre -->
+    <div class="col-md-6">
+      <label for="buyerName" class="form-label">Nombre</label>
+      <input type="text" class="form-control" id="buyerName" 
+             [(ngModel)]="buyerData.buyerName" name="buyerName"
+             required placeholder="Ingresa tu nombre">
+    </div>
+    
+    <!-- Apellido -->
+    <div class="col-md-6">
+      <label for="buyerApellido" class="form-label">Apellido</label>
+      <input type="text" class="form-control" id="buyerApellido" 
+             [(ngModel)]="buyerData.buyerApellido" name="buyerApellido"
+             required placeholder="Ingresa tu apellido">
+    </div>
+    
+    <!-- País -->
+    <div class="col-md-6">
+      <label for="buyerPais" class="form-label">País</label>
+      <select class="form-select" id="buyerPais" 
+              [(ngModel)]="buyerData.buyerPais" name="buyerPais" required>
+        <option value="" disabled selected>Selecciona tu país</option>
+        <option value="Colombia">Colombia</option>
+        <option value="Argentina">Argentina</option>
+        <option value="México">México</option>
+        <option value="España">España</option>
+        <!-- Agrega más países según necesites -->
+      </select>
+    </div>
+    
+   <!-- Prefijo y Teléfono en la misma fila -->
+    <div class="col-md-6">
+      <label for="buyerPhone" class="form-label">Teléfono</label>
+      <div class="input-group">
+        <select class="form-select" style="max-width: 100px;" 
+                [(ngModel)]="buyerData.buyerPrefix" name="buyerPrefix" required>
+          <option value="+57">+57</option>
+          <option value="+54">+54</option>
+          <option value="+52">+52</option>
+          <option value="+34">+34</option>
+          <!-- Agrega más prefijos según necesites -->
+        </select>
+        <input type="tel" class="form-control" id="buyerPhone" 
+               [(ngModel)]="buyerData.buyerPhone" name="buyerPhone"
+               required placeholder="Número de teléfono">
+      </div>
+    </div>
+
+    <!-- Email -->
+    <div class="col-md-6">
+      <label for="buyerEmail" class="form-label">Email</label>
+      <input type="email" class="form-control" id="buyerEmail" 
+             [(ngModel)]="buyerData.buyerEmail" name="buyerEmail"
+             required placeholder="tucorreo@example.com">
+    </div>
+
+    <!-- Confirmar Email -->
+    <div class="col-md-6">
+      <label for="buyerConfirmarEmail" class="form-label">Confirmar Email</label>
+      <input type="email" class="form-control" id="buyerConfirmarEmail" 
+             [(ngModel)]="buyerData.buyerConfirmarEmail" name="buyerConfirmarEmail"
+             required placeholder="Confirma tu correo">
+    </div>
+    
+ 
+  </div>
+</div>
+          
+          <div class="alert alert-info">
+            <i class="bi bi-info-circle me-2"></i> Para completar la compra, contacta con nuestro equipo.
+          </div>
+        </div>
+        
+        <div *ngIf="!selectedPackage" class="alert alert-warning text-center">
+          Por favor selecciona un paquete antes de continuar.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 
