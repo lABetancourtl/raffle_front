@@ -23,8 +23,10 @@ interface PaisPersonalizado {
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit, AfterViewInit {
-  selectedCurrency: string = 'COP'; // Valor por defecto
+  cantidadDisponible: number = 0;
+  mostrarModalReducido: boolean = false;
 
+  selectedCurrency: string = 'COP'; // Valor por defecto
 
   instagramUrl = enviroments.instagramUrl;
   telegramUrl = enviroments.telegramUrl;
@@ -154,6 +156,41 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
    // Aquí iría tu lógica de pago
 }
+
+consultarCantidadNumerosDisponibles(): void {
+  if (!this.raffle || !this.raffle.id || !this.selectedPackage) {
+    return;
+  }
+
+  this.raffleService.obtenerCantidadNumerosDisponibles(this.raffle.id).subscribe({
+    next: (respuesta) => {
+      this.cantidadDisponible = respuesta.respuesta;
+
+      if (this.cantidadDisponible >= this.selectedPackage!) {
+        const modal = new (window as any).bootstrap.Modal(document.getElementById('purchaseModal'));
+        modal.show();
+      } else if (this.cantidadDisponible > 0) {
+        const modalReducido = new (window as any).bootstrap.Modal(document.getElementById('disponibilidadModal'));
+        modalReducido.show();
+      } else {
+        alert('Lo sentimos, ya no hay números disponibles para esta rifa.');
+      }
+    },
+    error: (err) => {
+      console.error('Error al verificar disponibilidad:', err);
+      alert('Hubo un problema al verificar los números disponibles.');
+    }
+  });
+}
+
+confirmarCompraReducida(): void {
+  this.selectedPackage = this.cantidadDisponible;
+  const modal = new (window as any).bootstrap.Modal(document.getElementById('purchaseModal'));
+  modal.show();
+  const modalReducido = (window as any).bootstrap.Modal.getInstance(document.getElementById('disponibilidadModal'));
+  modalReducido.hide();
+}
+
 
 
 

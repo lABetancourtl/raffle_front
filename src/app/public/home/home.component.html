@@ -114,11 +114,11 @@
   <button 
     class="btn btn-comprar-2" 
     [disabled]="!selectedPackage"
-    data-bs-toggle="modal"
-    data-bs-target="#purchaseModal">
+    (click)="consultarCantidadNumerosDisponibles()">
     <i class="bi bi-cart3 me-2"></i> Comprar ahora
   </button>
 </div>
+
 
         
       </div>
@@ -141,7 +141,7 @@
 <div class="modal fade" id="emailModal" tabindex="-1" aria-labelledby="emailModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <div class="modal-header bg-primary text-white">
+      <div class="modal-header bg-dark text-white">
         <h5 class="modal-title" id="emailModalLabel">Mis Números</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
       </div>
@@ -195,10 +195,10 @@
 </div>
 
 <!-- Modal de Visualización de Paquete -->
-<div class="modal fade" id="purchaseModal" tabindex="-1" aria-labelledby="purchaseModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
+<div class="modal fade " id="purchaseModal" tabindex="-1" aria-labelledby="purchaseModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered ">
     <div class="modal-content">
-      <div class="modal-header bg-primary text-white">
+      <div class="modal-header bg-dark text-white">
         <h5 class="modal-title" id="purchaseModalLabel">Detalles del Paquete</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
       </div>
@@ -223,8 +223,6 @@
               <span class="fw-bold text-primary fs-5">{{ (raffle.priceNumber * selectedPackage) | currency:'COP':'symbol':'1.0-0' }}</span>
             </div>
           </div>
-
-
 
 
           <!-- Formulario de datos del comprador -->
@@ -310,14 +308,13 @@
             </span>
           </div>
 
-<button 
-  type="button" 
-  class="btn btn-success"
-  (click)="validarYRealizarPago()">
-  <i class="bi bi-credit-card me-2"></i> Pagar
-</button>
+          <button 
+            type="button" 
+            class="btn btn-success"
+            (click)="validarYRealizarPago()">
+            <i class="bi bi-credit-card me-2"></i> Pagar
+          </button>
 
-          
           <div class="alert alert-info mt-3">
             <i class="bi bi-info-circle me-2"></i> Para completar la compra, contacta con nuestro equipo.
           </div>
@@ -334,6 +331,24 @@
   </div>
 </div>
 
+<!-- Modal de advertencia de disponibilidad -->
+<div class="modal fade" id="disponibilidadModal" tabindex="-1" aria-labelledby="disponibilidadModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-info ">
+        <h5 class="modal-title" id="disponibilidadModalLabel">Disponibilidad limitada</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        Solo quedan <strong>{{ cantidadDisponible }}</strong> fondos disponibles. ¿Deseas continuar con la compra de <strong>{{ cantidadDisponible }}</strong> fondos?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="confirmarCompraReducida()">Sí, continuar</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 

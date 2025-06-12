@@ -21,13 +21,6 @@ getAllRaffles(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/raffle/allRifas`, { headers });
 }
 
-getRaffleActiva(): Observable<any> {
-  return this.http.get<any>(`${this.apiUrl}/raffle/activa`);
-}
-
-obtenerNumerosPorEmail(email: string): Observable<string[]> {
-  return this.http.get<string[]>(`${this.apiUrl}/raffle/numerosPorEmail/soloNumeros?email=${email}`);
-}
 
 cambiarEstadoRifa(dto: { id: string; nuevoEstado: string }) {
       const token = localStorage.getItem('authToken');
@@ -50,6 +43,18 @@ obtenerClientePorNumero(numero: string): Observable<any> {
 }
 
 
+//Llamdo a endpoint desde el home (para clientes)
+getRaffleActiva(): Observable<any> {
+  return this.http.get<any>(`${this.apiUrl}/raffle/activa`);
+}
 
+obtenerNumerosPorEmail(email: string): Observable<string[]> {
+  return this.http.get<string[]>(`${this.apiUrl}/raffle/numerosPorEmail/soloNumeros?email=${email}`);
+}
+
+
+obtenerCantidadNumerosDisponibles(idRaffle: string): Observable<{ error: boolean, respuesta: number }> {
+  return this.http.get<{ error: boolean, respuesta: number }>(`${this.apiUrl}/purchase/cantidadNumerosDisponibles?idRaffle=${idRaffle}`);
+}
 
 }

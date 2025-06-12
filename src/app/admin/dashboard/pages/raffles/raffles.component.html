@@ -100,8 +100,9 @@
             </div>
           </div>
 
-          <!-- Consulta Cliente -->
+          <!-- Consultas -->
           <div class="col-md-6">
+            
             <div class="card border-0 shadow-sm">
               <div class="card-body">
                 <h6 class="card-title text-primary fw-bold">Consulta de Cliente</h6>
@@ -126,7 +127,34 @@
 
               </div>
             </div>
+
+                    <div class="card border-0 shadow-sm">
+              <div class="card-body">
+                <h6 class="card-title text-primary fw-bold">Consulta de Cliente</h6>
+
+                <div class="input-group mb-3">
+                  <input type="text" class="form-control" [(ngModel)]="numeroCliente" placeholder="Número del cliente">
+                  <button class="btn btn-outline-primary" (click)="consultarCliente(numeroCliente)">
+                    <i class="bi bi-search"></i> Buscar
+                  </button>
+                </div>
+
+                <div *ngIf="mensajeCliente" class="alert alert-warning py-2 px-3">
+                  {{ mensajeCliente }}
+                </div>
+
+                <div *ngIf="cliente">
+                  <p><strong>Nombre:</strong> {{ cliente.nombre }}</p>
+                  <p><strong>Email:</strong> {{ cliente.email }}</p>
+                  <p><strong>Teléfono:</strong> {{ cliente.telefono }}</p>
+                  <p><strong>País:</strong> {{ cliente.pais }}</p>
+                </div>
+
+              </div>
+            </div>
           </div>
+
+          
 
         </div>
       </div>
