@@ -315,9 +315,7 @@
             <i class="bi bi-credit-card me-2"></i> Pagar
           </button>
 
-          <div class="alert alert-info mt-3">
-            <i class="bi bi-info-circle me-2"></i> Para completar la compra, contacta con nuestro equipo.
-          </div>
+          <div id="paymentBrick_container"></div> 
         </div>
         
         <div *ngIf="!selectedPackage" class="alert alert-warning text-center">
@@ -330,6 +328,9 @@
     </div>
   </div>
 </div>
+
+
+
 
 <!-- Modal de advertencia de disponibilidad -->
 <div class="modal fade" id="disponibilidadModal" tabindex="-1" aria-labelledby="disponibilidadModalLabel" aria-hidden="true">
