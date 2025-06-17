@@ -25,6 +25,8 @@ interface PaisPersonalizado {
 export class HomeComponent implements OnInit, AfterViewInit {
   cantidadDisponible: number = 0;
   mostrarModalReducido: boolean = false;
+  precioFinal: number = 0;
+
 
   selectedCurrency: string = 'COP'; // Valor por defecto
 
@@ -162,8 +164,9 @@ validarYRealizarPago() {
   let precioPaquete = 0;
   let nombrePaquete = `Paquete de ${this.selectedPackage} números`;
 
-if (this.raffle.priceNumber) {
-  precioPaquete = this.selectedPackage * this.raffle.priceNumber;
+  if (this.raffle.priceNumber) {
+    precioPaquete = this.selectedPackage * this.raffle.priceNumber;
+    this.precioFinal = precioPaquete;
   } else if (this.raffle.packages) {
     const paquete = this.raffle.packages.find((p: any) => p.cantidad === this.selectedPackage);
     if (paquete) {
@@ -172,16 +175,33 @@ if (this.raffle.priceNumber) {
     }
   }
 
-  const datosPago = {
-    descripcion: nombrePaquete,
-    cantidad: 1,
-    precio: precioPaquete,
-    email: this.buyerData.buyerEmail
-  };
+const datosPago = {
+  descripcion: nombrePaquete,
+  cantidad: 1,
+  precio: precioPaquete,
+  email: this.buyerData.buyerEmail,
+
+  buyer: {
+    raffleId: this.raffle.id,
+    quantity: this.selectedPackage,
+    buyerName: this.buyerData.buyerName,
+    buyerApellido: this.buyerData.buyerApellido,
+    buyerPais: this.buyerData.buyerPais,
+    buyerEmail: this.buyerData.buyerEmail,
+    buyerConfirmarEmail: this.buyerData.buyerConfirmarEmail,
+    buyerPrefix: this.buyerData.buyerPrefix,
+    buyerPhone: this.buyerData.buyerPhone,
+  }
+};
+
 
   this.raffleService.crearPreferenciaPago(datosPago).subscribe({
     next: (response) => {
-      this.renderBricks(response.preferenceId);
+      if (response && response.init_point) {
+        window.location.href = response.init_point; // 🔁 Redirige al Checkout Pro
+      } else {
+        alert('Error al obtener enlace de pago.');
+      }
     },
     error: (err) => {
       console.error('Error al crear preferencia de pago:', err);
@@ -190,39 +210,6 @@ if (this.raffle.priceNumber) {
   });
 }
 
-renderBricks(preferenceId: string) {
-  const mp = new window.MercadoPago('TEST-37d4d0c9-8613-487b-adc7-8721548694ec', {
-    locale: 'es-CO'
-  });
-
-  const bricksBuilder = mp.bricks();
-
-  bricksBuilder.create('payment', 'paymentBrick_container', {
-    initialization: {
-      amount: 10000, // reemplaza con el monto real o pásalo como parámetro
-      preferenceId: preferenceId
-    },
-    customization: {
-      paymentMethods: {
-        ticket: 'all', // permite pagos en efectivo
-        bankTransfer: 'all', // permite PSE si aplica
-        creditCard: 'all'
-      }
-    },
-    callbacks: {
-      onReady: () => {
-        console.log('Brick listo');
-      },
-        onSubmit: ({ selectedPaymentMethod, formData }: { selectedPaymentMethod: any, formData: any }) => {
-        console.log('Método:', selectedPaymentMethod);
-        console.log('Datos del formulario:', formData);
-      },
-      onError: (error: any) => {
-        console.error('Error en el Brick:', error);
-      }
-    }
-  });
-}
 
 
 consultarCantidadNumerosDisponibles(): void {
