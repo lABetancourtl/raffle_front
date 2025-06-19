@@ -96,7 +96,7 @@
   </p>
 
   <div class="row g-3 packages-row">
-    <div class="col-4" *ngFor="let pack of [10, 20, 50]">
+    <div class="col-4" *ngFor="let pack of paquetes">
       <div class="ticket-card position-relative text-center p-3 rounded-3 hover-scale"
         (click)="selectPackage(pack)" 
         [class.selected-package]="selectedPackage === pack">

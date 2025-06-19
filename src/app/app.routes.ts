@@ -4,12 +4,14 @@ import { LoginComponent } from './admin/login/login.component';
 import { DashboardComponent } from './admin/dashboard/dashboard.component';
 import { NewRaffleComponent } from './admin/dashboard/pages/new-raffle/new-raffle.component';
 import { RafflesComponent } from './admin/dashboard/pages/raffles/raffles.component';
+import { AuthGuard } from './guards/auth.guard';
+
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' }, 
     { path: 'home', component: HomeComponent },
     { path: 'login', component: LoginComponent },
-    { path: 'dashboard', component: DashboardComponent, children: [
+    { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard], children: [
         { path: '', redirectTo: 'newraffle', pathMatch: 'full' },
         { path: 'newraffle', component: NewRaffleComponent }, 
         { path: 'raffles', component: RafflesComponent }, 

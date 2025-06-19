@@ -21,6 +21,9 @@ export class RafflesComponent {
   mensajeCliente: string = '';
   cliente: any = null;
 
+  paymentOperations: any[] = [];
+  cargandoOperaciones: boolean = false;
+
   constructor(
     private raffleService: RaffleService,
     private http: HttpClient
@@ -38,18 +41,36 @@ export class RafflesComponent {
     });
   }
 
-  abrirModalRifa(raffle: any): void {
-    this.rifaSeleccionada = raffle;
-    this.numeroCliente = '';
-    this.mensajeCliente = '';
-    this.cliente = null;
+abrirModalRifa(raffle: any): void {
+  this.rifaSeleccionada = raffle;
+  this.numeroCliente = '';
+  this.mensajeCliente = '';
+  this.cliente = null;
+  this.paymentOperations = [];
+  this.cargandoOperaciones = true;
+  console.log("Este es el id que se envia al back: ",raffle.id)
 
-    const modalElement = document.getElementById('detalleRifaModal');
-    if (modalElement) {
-      this.modalInstance = new Modal(modalElement);
-      this.modalInstance.show();
+  // Llamar servicio para operaciones de pago
+  this.raffleService.getOperacionesByRaffle(raffle.id).subscribe({
+    next: (operaciones) => {
+      this.paymentOperations = operaciones;
+      this.cargandoOperaciones = false;
+    },
+    error: (err) => {
+      console.error('Error al obtener operaciones de pago:', err);
+      this.paymentOperations = [];
+      this.cargandoOperaciones = false;
     }
+  });
+
+  // Mostrar el modal
+  const modalElement = document.getElementById('detalleRifaModal');
+  if (modalElement) {
+    this.modalInstance = new Modal(modalElement);
+    this.modalInstance.show();
   }
+}
+
 
   consultarCliente(numero: string): void {
     if (!numero) {
@@ -116,5 +137,15 @@ export class RafflesComponent {
     default: return 'secondary';
   }
 }
+
+getColorEstadoPago(status: string): string {
+  switch (status?.toLowerCase()) {
+    case 'approved': return 'success';
+    case 'pending': return 'warning';
+    case 'rejected': return 'danger';
+    default: return 'secondary';
+  }
+}
+
 
 }

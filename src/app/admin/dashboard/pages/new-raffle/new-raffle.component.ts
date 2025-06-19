@@ -19,17 +19,10 @@ export class NewRaffleComponent {
     precio: null,
     compraMinima: 1,
     digitos: 2,
+    paquetes: [null, null, null],
   };
 
   imagenSeleccionada: File | null = null;
-
-
- // estados = [
- //   { valor: 'PAUSA', texto: 'Pausa' },
- //   { valor: 'ACTIVO', texto: 'Activa' },
-  //  { valor: 'FINALIZADO', texto: 'Finalizada' }
- // ];
- 
 
   constructor(
     private adminService: AdminService,
@@ -61,6 +54,7 @@ crearRifa() {
         priceNumber: this.nuevaRifa.precio,
         minPurchase: this.nuevaRifa.compraMinima,
         digitLength: this.nuevaRifa.digitos,
+        paquetes: this.nuevaRifa.paquetes, 
       };
 
 

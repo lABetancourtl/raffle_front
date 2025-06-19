@@ -154,7 +154,62 @@
             </div>
           </div>
 
-          
+                      <!-- Operaciones de Pago -->
+            <div class="card border-0 shadow-sm mt-4">
+              <div class="card-body">
+                <h6 class="card-title text-primary fw-bold">Operaciones de Pago</h6>
+
+                <!-- Spinner -->
+                <div *ngIf="cargandoOperaciones" class="text-center my-2">
+                  <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                  </div>
+                </div>
+
+                <!-- Mensaje si no hay operaciones -->
+                <div *ngIf="!cargandoOperaciones && paymentOperations.length === 0" class="alert alert-info">
+                  No hay operaciones registradas para esta rifa.
+                </div>
+
+                <!-- Tabla de operaciones -->
+                <div *ngIf="paymentOperations.length > 0" class="table-responsive">
+                  <table class="table table-striped table-bordered align-middle text-center">
+                    <thead class="table-primary">
+                      <tr>
+                        <th>Estado</th>
+                        <th>ID Pago</th> 
+                        <th>Monto</th>
+                        <th>Moneda</th>
+                        <th>Método</th>
+                        <th>Cliente</th>
+                        <th>Fecha</th>
+                        <th>Números</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let op of paymentOperations">
+                        <td>
+                          <span class="badge bg-{{ getColorEstadoPago(op.status) }}">{{ op.status }}</span>
+                        </td>
+                        <td>{{ op.paymentId }}</td> 
+                        <td>${{ op.monto }}</td>
+                        <td>{{ op.moneda }}</td>
+                        <td>{{ op.metodoPago }}</td>
+                        <td>
+                          {{ op.compradorNombre }} {{ op.compradorApellido }}<br>
+                          <small class="text-muted">{{ op.compradorEmail }}</small>
+                        </td>
+                        <td>{{ op.fechaPago | date:'short' }}</td>
+                        <td>
+                          <small>{{ op.numerosComprados?.join(', ') }}</small>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+              </div>
+            </div>
 
         </div>
       </div>

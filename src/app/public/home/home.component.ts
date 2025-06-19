@@ -30,6 +30,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   selectedCurrency: string = 'COP'; // Valor por defecto
 
+  paquetes: number[] = [];
+
+
   instagramUrl = enviroments.instagramUrl;
   telegramUrl = enviroments.telegramUrl;
   raffle: any = null;
@@ -82,17 +85,25 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
   }
 
-  ngOnInit(): void {
-    this.raffleService.getRaffleActiva().subscribe({
-      next: (data) => {
-        this.raffle = data;
-        console.log('Rifa activa recibida:', this.raffle);
-      },
-      error: (err) => {
-        console.error('Error al obtener la rifa activa', err);
+ngOnInit(): void {
+  this.raffleService.getRaffleActiva().subscribe({
+    next: (data) => {
+      this.raffle = data;
+      console.log('Rifa activa recibida:', this.raffle);
+
+      // ✅ Extraer paquetes si vienen en la respuesta
+      if (this.raffle && this.raffle.paquetes) {
+        this.paquetes = this.raffle.paquetes;
+      } else {
+        this.paquetes = []; 
       }
-    });
-  }
+    },
+    error: (err) => {
+      console.error('Error al obtener la rifa activa', err);
+    }
+  });
+}
+
 
   selectPackage(quantity: number): void {
     this.selectedPackage = this.selectedPackage === quantity ? null : quantity;

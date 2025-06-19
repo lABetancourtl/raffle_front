@@ -14,15 +14,6 @@
       <textarea class="form-control" id="descripcion" name="descripcion" rows="3" required [(ngModel)]="nuevaRifa.descripcion"></textarea>
     </div>
 
-    <!-- Estado (enum del API) 
-    <div class="mb-3">
-      <label for="estado" class="form-label">Estado</label>
-        <select class="form-select" id="estado" name="estado" required [(ngModel)]="nuevaRifa.estado">
-        <option *ngFor="let estado of estados" [value]="estado.valor">{{ estado.texto }}</option>
-        </select>
-    </div>
-    -->
-
     <!-- Precio por número -->
     <div class="mb-3">
       <label for="precio" class="form-label">Precio por número</label>
@@ -45,6 +36,24 @@
         <option *ngFor="let d of [1,2,3,4,5]" [value]="d">{{ d }}</option>
       </select>
     </div>
+
+    <!-- Paquetes de la rifa -->
+    <div class="mb-3">
+      <label class="form-label">Paquetes</label>
+
+      <div class="input-group mb-2" *ngFor="let p of [0,1,2]; let i = index">
+        <span class="input-group-text">Paquete {{ i + 1 }}</span>
+        <input
+          type="number"
+          class="form-control"
+          name="paquete{{ i }}"
+          [(ngModel)]="nuevaRifa.paquetes[i]"
+          required
+          min="1"
+        />
+      </div>
+    </div>
+
 
     <!-- Subida de imagen -->
     <div class="mb-3">

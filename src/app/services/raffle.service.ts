@@ -58,12 +58,21 @@ obtenerCantidadNumerosDisponibles(idRaffle: string): Observable<{ error: boolean
 }
 
   crearPreferenciaPago(datosPago: any): Observable<any> {
-console.log("Datos enviados al back (stringified):", JSON.stringify(datosPago, null, 2));
     return this.http.post(`${this.apiUrl}/mercadopago/crear-preferencia`, datosPago);
   }
 
   procesarPago(formData: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/mercadopago/procesar-pago`, formData);
   }
+
+  getOperacionesByRaffle(raffleId: string): Observable<any> {
+  const token = localStorage.getItem('authToken');
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  });
+
+  return this.http.get<any>(`${this.apiUrl}/raffle/operaciones/${raffleId}`, { headers });
+}
 
 }
