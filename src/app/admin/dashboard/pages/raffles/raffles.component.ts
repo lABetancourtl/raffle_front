@@ -53,6 +53,7 @@ abrirModalRifa(raffle: any): void {
   // Llamar servicio para operaciones de pago
   this.raffleService.getOperacionesByRaffle(raffle.id).subscribe({
     next: (operaciones) => {
+       console.log('📦 Operaciones recibidas:', operaciones); 
       this.paymentOperations = operaciones;
       this.cargandoOperaciones = false;
     },

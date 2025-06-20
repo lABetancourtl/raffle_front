@@ -190,6 +190,10 @@
                       <tr *ngFor="let op of paymentOperations">
                         <td>
                           <span class="badge bg-{{ getColorEstadoPago(op.status) }}">{{ op.status }}</span>
+                          <i *ngIf="op.expirada" 
+                            class="bi bi-exclamation-triangle-fill text-danger ms-1" 
+                            title="Pago expirado: el usuario pagó fuera del tiempo límite y no se asignaron números.">
+                          </i>
                         </td>
                         <td>{{ op.paymentId }}</td> 
                         <td>${{ op.monto }}</td>
