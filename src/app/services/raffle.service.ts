@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { enviroments } from '../../enviroments/enviroments';
@@ -32,14 +32,22 @@ cambiarEstadoRifa(dto: { id: string; nuevoEstado: string }) {
 }
 
 
-obtenerClientePorNumero(numero: string): Observable<any> {
+
+obtenerClientePorNumero(raffleId: string, numero: string): Observable<any> {
   const token = localStorage.getItem('authToken');
   const headers = new HttpHeaders({
     Authorization: `Bearer ${token}`,
     'Content-Type': 'application/json'
   });
 
-  return this.http.get<any>(`${this.apiUrl}/raffle/clientePorNumero?numero=${numero}`, { headers });
+  const params = new HttpParams()
+    .set('raffleId', raffleId)
+    .set('numero', numero);
+
+  return this.http.get<any>(`${this.apiUrl}/raffle/clientePorNumero`, { 
+    headers, 
+    params 
+  });
 }
 
 
@@ -71,7 +79,6 @@ obtenerCantidadNumerosDisponibles(idRaffle: string): Observable<{ error: boolean
     Authorization: `Bearer ${token}`,
     'Content-Type': 'application/json'
   });
-
   return this.http.get<any>(`${this.apiUrl}/raffle/operaciones/${raffleId}`, { headers });
 }
 

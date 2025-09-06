@@ -24,7 +24,7 @@ export class AuthGuard implements CanActivate {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    const autenticado = this.loginService.isAuthenticated(); // Este método debes tenerlo implementado
+    const autenticado = this.loginService.isAuthenticated(); 
 
     if (autenticado) {
       return true;

@@ -43,7 +43,7 @@ crearRifa() {
   const formData = new FormData();
   formData.append('imagen', this.imagenSeleccionada);
 
-  // ✅ Subimos la imagen usando el servicio
+  //Subimos la imagen usando el servicio
   this.adminService.subirFoto(formData).subscribe({
     next: (res) => {
       const urlImagen = res.url;
@@ -60,18 +60,18 @@ crearRifa() {
 
       this.adminService.crearRifa(payload).subscribe({
         next: (res) => {
-          console.log('✅ Rifa creada:', res);
+          console.log('Rifa creada:', res);
           alert('Rifa creada exitosamente');
-          this.router.navigate(['/dashboard/inicio']);
+          this.router.navigate(['/dashboard/raffles']);
         },
         error: (err) => {
-          console.error('❌ Error al crear rifa:', err);
+          console.error('Error al crear rifa:', err);
           alert('Error al crear la rifa');
         }
       });
     },
     error: (err) => {
-      console.error('❌ Error al subir imagen:', err);
+      console.error('Error al subir imagen:', err);
       alert('Error al subir la imagen');
     }
   });

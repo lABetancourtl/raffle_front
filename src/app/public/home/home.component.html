@@ -1,14 +1,22 @@
 <!-- Raffle.component.html -->
-<header class="bg-dark text-white py-3 shadow-sm">
+<header class=" text-white py-3 shadow-sm">
   <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
     <h2 class="mb-3 mb-md-0 fw-bold display-6">Raffle</h2>
     <nav class="nav nav-pills">
       <a href="#" class="nav-link text-white px-3">Inicio</a>
-<a href="#" class="nav-link text-white px-3" data-bs-toggle="modal" data-bs-target="#emailModal">
-  Mis Fondos
-</a>
-
+      <a href="#" class="nav-link text-white px-3" data-bs-toggle="modal" data-bs-target="#emailModal">Mis Fondos</a>
       <a href="#" class="nav-link text-white px-3">Metodología</a>
+
+      <div class="nav-item dropdown" [class.show]="isDropdownOpen">
+        <a href="#" class="nav-link text-white px-3" (click)="toggleDropdown($event)">
+          <i class="bi bi-person"></i>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end" [class.show]="isDropdownOpen">
+            <li><a class="dropdown-item" (click)="openModal('login')">Login</a></li>
+            <li><a class="dropdown-item" (click)="openModal('register')">Register</a></li>
+        </ul>
+      </div>
+
     </nav>
   </div>
 </header>
@@ -30,10 +38,11 @@
     <div class="col-12 col-lg-6">
       <div class="card shadow-lg border-0 rounded-4 overflow-hidden hover-scale">
         <img [src]="raffle.urlImagen" alt="{{ raffle.nameRaffle }}" class="card-img-top img-fluid raffle-img" />
-
         <div class="card-img-overlay d-flex align-items-end p-0">
-          <div class="bg-gradient-dark w-100 p-3 text-white">
-            <h5 class="mb-0 fw-light">Disponibles: {{ raffle.availableTickets }} boletas</h5>
+          <div class="w-100 p-3" style="background: linear-gradient(to top, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.1) 50%, transparent 100%)">
+            <h5 class="mb-0 fw-bold text-white" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.8); letter-spacing: 0.5px;">
+              Disponibles: {{ raffle.cantidadDisponibles }} Fondos
+            </h5>
           </div>
         </div>
       </div>
@@ -142,7 +151,7 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header bg-dark text-white">
-        <h5 class="modal-title" id="emailModalLabel">Mis Números</h5>
+        <h5 class="modal-title" id="emailModalLabel">Mis Fondos</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
       </div>
       <div class="modal-body">
@@ -328,7 +337,107 @@
   </div>
 </div>
 
+<!-- Modal Login -->
+<div class="modal fade" id="loginModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Login</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Aquí tu formulario de login -->
+        <form>
+          <div class="mb-3">
+            <label>Email</label>
+            <input type="email" class="form-control">
+          </div>
+          <div class="mb-3">
+            <label>Password</label>
+            <input type="password" class="form-control">
+          </div>
+          <button type="submit" class="btn btn-primary">Ingresar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
+<!-- Modal Register -->
+<div class="modal fade" id="registerModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Register</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="registerEmail">Email</label>
+            <input 
+              type="email" 
+              class="form-control" 
+              id="registerEmail"
+              name="registerEmail"
+              [(ngModel)]="registerEmail"
+              required
+              email
+              #emailCtrl="ngModel"
+              placeholder="tucorreo@ejemplo.com">
+            <div *ngIf="emailCtrl.invalid && (emailCtrl.touched || emailCtrl.dirty)" class="text-danger small mt-1">
+              Ingresa un correo electrónico válido.
+            </div>
+          </div>
+          <div class="mb-3">
+            <label>Password</label>
+            <div class="position-relative">
+              <input [type]="showPassword ? 'text' : 'password'" class="form-control" [(ngModel)]="registerPassword" name="registerPassword">
+              <span class="position-absolute top-50 end-0 translate-middle-y me-3" style="cursor:pointer;"
+                    (click)="showPassword = !showPassword">
+                <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'"></i>
+              </span>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label>Confirm Password</label>
+            <div class="position-relative">
+              <input [type]="showConfirmPassword ? 'text' : 'password'" class="form-control" [(ngModel)]="registerConfirmPassword" name="registerConfirmPassword">
+              <span class="position-absolute top-50 end-0 translate-middle-y me-3" style="cursor:pointer;"
+                    (click)="showConfirmPassword = !showConfirmPassword">
+                <i class="bi" [ngClass]="showConfirmPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'"></i>
+              </span>
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <label>Parte frontal de Documento</label>
+            <i class="bi bi-person-vcard ms-2"></i>
+            <input type="file" class="form-control" (change)="onFileSelected($event, 'front')" required>
+          </div> 
+
+          <div class="mb-3">
+            <label>Parte trasera de Documento</label>
+            <i class="bi bi-postcard ms-2"></i>
+            <input type="file" class="form-control" (change)="onFileSelected($event, 'back')" required>
+          </div> 
+
+          <div *ngIf="errorMsg" class="alert alert-danger py-2 small mt-2">
+            {{ errorMsg }}
+          </div>
+
+          <div class="mb-3">
+            <button type="submit" class="btn btn-comprar-2" 
+              (click)="registrarUsuario()">
+               Registrar
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 <!-- Modal de advertencia de disponibilidad -->
@@ -351,11 +460,89 @@
 </div>
 
 
+<!-- OLA SUPERIOR -->
+<div class="footer-wave">
 
-<footer class="bg-dark text-white text-center py-4 mt-auto">
-  <p class="mb-1">&copy; 2025 Todos los derechos reservados. Raffle</p>
-  <p class="mb-0">Contáctanos: <a href="mailto:contacto.co" class="text-info text-decoration-none">contacto.co</a></p>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-content">
+<div class="footer-brand">
+  <svg class="footer-logo" width="40" height="40" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="raffleGradient" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#4facfe"/>
+        <stop offset="1" stop-color="#00f2fe"/>
+      </linearGradient>
+    </defs>
+    <rect x="4" y="4" width="56" height="56" rx="12" fill="url(#raffleGradient)"/>
+    <path d="M20 32c0-6 4-11 9-13v-5h6v5c5 2 9 7 9 13s-4 11-9 13v5h-6v-5c-5-2-9-7-9-13z" fill="#fff"/>
+  </svg>
+  <span class="brand-name">Raffle</span>
+</div>
+
+
+    <div class="footer-links">
+      <div class="footer-section">
+        <h4 class="footer-title">Legal</h4>
+        <ul class="footer-list">
+          <li><a href="#" class="footer-link">Términos y condiciones</a></li>
+          <li><a href="#" class="footer-link">Política de privacidad</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h4 class="footer-title">Contacto</h4>
+        <ul class="footer-list">
+          <li><a href="mailto:contacto@raffle.co" class="footer-link">contactoraffle.co</a></li>
+          <li><a href="tel:+573206091952" class="footer-link">+57 320 6091952</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h4 class="footer-title">Síguenos</h4>
+        <div class="social-icons">
+          <a href="#" class="social-icon"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="social-icon"><i class="bi bi-instagram"></i></a>
+          <a href="#" class="social-icon"><i class="bi bi-twitter-x"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TARJETA DESARROLLADOR -->
+  <div class="developer-card">
+    <div class="developer-photo">
+      <img src="assets/ABA.jpeg" alt="Anderson Betancourt" class="photo">
+    </div>
+    <div class="developer-info">
+      <h4 class="developer-name">Anderson Betancourt A.</h4>
+      <p class="developer-title">Desarrollador</p>
+      <div class="developer-contacts">
+        <a href="mailto:anderson.betancourta@gmail.com" class="contact-link">
+          <i class="bi bi-envelope"></i> {{ 'anderson.betancourta@gmail.com' }}
+        </a>
+        <a href="https://wa.me/573206091952" class="contact-link">
+          <i class="bi bi-whatsapp"></i> +57 320 6091952
+        </a>
+        <div class="developer-social">
+          <a href="#" class="social-link"><i class="bi bi-linkedin"></i></a>
+          <a href="#" class="social-link"><i class="bi bi-github"></i></a>
+          <a href="#" class="social-link"><i class="bi bi-briefcase"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COPYRIGHT -->
+  <div class="footer-bottom">
+    <p class="copyright">
+      &copy;  Raffle. Todos los derechos reservados.
+    </p>
+  </div>
 </footer>
+
 
 
 

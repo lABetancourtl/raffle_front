@@ -1,0 +1,12 @@
+{
+    "html.format.indentHandlebars": false,
+    "debug.hideLauncherWhileDebugging": false,
+    "workbench.list.scrollByPage": false,
+    "workbench.view.showQuietly": {
+        "workbench.panel.output": false
+    },
+    "workbench.editor.wrapTabs": false,
+    "terminal.integrated.allowMnemonics": false,
+    "problems.showCurrentInStatus": false,
+    "html.format.templating": false
+}

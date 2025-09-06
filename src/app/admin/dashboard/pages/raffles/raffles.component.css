@@ -38,3 +38,504 @@
 input.form-control {
   font-size: 0.9rem;
 }
+
+
+.raffle-ticket-card {
+  width: 100px;
+  text-align: center;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.15);
+  background: white;
+  overflow: hidden;
+  cursor: default;
+  transition: transform 0.2s ease;
+}
+
+.raffle-ticket-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgb(0 0 0 / 0.25);
+}
+
+.raffle-ticket-img {
+  width: 100%;
+  height: 80px;
+  object-fit: cover;
+  display: block;
+  border-bottom: 2px solid #1a73e8;
+  border-radius: 12px 12px 0 0;
+}
+
+.raffle-ticket-number {
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: #1a73e8;
+  padding: 8px 0;
+  user-select: text;
+}
+
+/* Barra de progreso con animación y gradiente en movimiento */
+.progress-bar {
+  background: linear-gradient(90deg,
+    #0d6efd 0%,
+    #1fa2ff 30%,
+    #12d8fa 60%,
+    #a6ffcb 100%);
+  background-size: 200% 100%;
+  animation: gradientAnimation 2s linear infinite;
+  transition: width 0.8s ease-in-out;
+  border-radius: 4px;
+}
+
+.progress-bar-animated {
+  animation: gradientAnimation 2s linear infinite;
+}
+
+/* Responsive para paquetes de boletos */
+.packages-row {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  margin-left: -5px;
+  margin-right: -5px;
+}
+
+.packages-row > .col-4 {
+  flex: 0 0 auto;
+  width: 33.333333%;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+/* Ajustes para pantallas muy pequeñas */
+@media (max-width: 400px) {
+  .packages-row > .col-4 {
+    min-width: 110px;
+  }
+}
+
+/* Eliminar scroll horizontal en pantallas más grandes */
+@media (min-width: 576px) {
+  .packages-row {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    margin-left: -12px;
+    margin-right: -12px;
+  }
+  
+  .packages-row > .col-4 {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+}
+
+/* Texto dentro de las tarjetas */
+.ticket-card .fs-2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0d6efd;
+}
+
+.ticket-card .text-muted {
+  font-size: 0.875rem;
+  color: #6c757d;
+}
+
+.ticket-card .fw-bold:last-child {
+  font-size: 1rem;
+  color: #212529;
+  margin-top: 0.5rem;
+}
+
+
+/* Estilos para tarjetas de boletas - estilo cool glass */
+.ticket-card {
+  position: relative;
+  min-width: 180px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
+  color: #212529;
+  cursor: pointer;
+}
+.ticket-card:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.15);
+}
+
+
+
+
+
+/* Estilos específicos para admin */
+.admin-card {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+}
+
+.admin-image-col {
+  min-height: 400px;
+}
+
+.admin-image-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
+  color: white;
+}
+
+.admin-details-col {
+  background: #fff;
+}
+
+.admin-progress {
+  border-radius: 6px;
+  background-color: #f5f7fa;
+}
+
+.admin-progress .progress-bar {
+  border-radius: 6px;
+  background: linear-gradient(90deg, #4a6cf7 0%, #2541b2 100%);
+}
+
+.admin-stat-card {
+  background: #f9fafc;
+  border-radius: 8px;
+  border: 1px solid #eaeef5;
+  transition: all 0.3s ease;
+}
+
+.admin-stat-card:hover {
+  background: #fff;
+  border-color: #d6e0f5;
+  transform: translateY(-2px);
+}
+
+.admin-description-box {
+  background: #f9fafc;
+  border-radius: 8px;
+  border: 1px dashed #d1d7e0;
+}
+
+
+
+
+
+
+/* Estilos minimalistas */
+.minimal-admin-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+}
+
+.minimal-form .form-control {
+  background: transparent;
+  padding-left: 0;
+  box-shadow: none !important;
+}
+
+.minimal-form .form-control:focus {
+  border-color: #000;
+}
+
+.minimal-tickets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 10px;
+}
+
+.minimal-ticket {
+  border: 1px solid #eee;
+  border-radius: 6px;
+  padding: 12px 8px;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.minimal-ticket:hover {
+  border-color: #ddd;
+}
+
+.ticket-number {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #000;
+}
+
+.ticket-raffle {
+  color: #666;
+  font-size: 0.75rem;
+  margin-top: 4px;
+}
+
+/* Efectos sutiles */
+.form-control {
+  transition: border-color 0.3s ease;
+}
+
+.btn-dark {
+  background: #333;
+  letter-spacing: 0.5px;
+  font-weight: 400;
+  padding: 10px;
+  transition: all 0.3s ease;
+}
+
+.btn-dark:hover {
+  background: #000;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .minimal-tickets-grid {
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+  }
+}
+
+
+
+/* Contenedor principal */
+.minimal-operations-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Tarjetas */
+.minimal-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  margin-bottom: 24px;
+  border: none;
+}
+
+/* Búsqueda */
+.minimal-search-container {
+  display: flex;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.minimal-search-container:focus-within {
+  border-color: #333;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
+}
+
+.minimal-search-input {
+  flex: 1;
+  border: none;
+  padding: 10px 15px;
+  font-size: 0.9rem;
+  background: transparent;
+}
+
+.minimal-search-input:focus {
+  outline: none;
+}
+
+.minimal-search-btn {
+  border: none;
+  background: #f5f5f5;
+  padding: 0 15px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.minimal-search-btn:hover {
+  background: #e0e0e0;
+}
+
+/* Alertas */
+.minimal-alert {
+  padding: 10px 15px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.minimal-alert-warning {
+  background: #fff3cd;
+  color: #856404;
+  border-left: 4px solid #ffc107;
+}
+
+.minimal-alert-info {
+  background: #e7f5ff;
+  color: #0c5460;
+  border-left: 4px solid #17a2b8;
+}
+
+/* Información del cliente */
+.minimal-client-info {
+  background: #f9f9f9;
+  border-radius: 6px;
+  padding: 15px;
+}
+
+.info-row {
+  display: flex;
+  margin-bottom: 8px;
+}
+
+.info-label {
+  font-weight: 500;
+  min-width: 80px;
+  color: #666;
+}
+
+.info-value {
+  color: #333;
+}
+
+/* Loading */
+.minimal-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  color: #666;
+}
+
+.loading-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top-color: #333;
+  animation: spin 1s linear infinite;
+  margin-right: 10px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Tabla */
+.minimal-table-container {
+  overflow-x: auto;
+  margin-top: 15px;
+}
+
+.minimal-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.minimal-table th {
+  text-align: left;
+  padding: 12px 15px;
+  font-weight: 500;
+  color: #666;
+  background: #f9f9f9;
+  border-bottom: 1px solid #eee;
+}
+
+.minimal-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.minimal-table-row:hover {
+  background: #f9f9f9;
+}
+
+/* Badges de estado */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.status-approved {
+  background: #e6f7ee;
+  color: #28a745;
+}
+
+.status-pending {
+  background: #fff8e6;
+  color: #ffc107;
+}
+
+.status-rejected {
+  background: #fee;
+  color: #dc3545;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .minimal-table th, 
+  .minimal-table td {
+    padding: 10px 8px;
+    font-size: 0.85rem;
+  }
+  
+  .minimal-search-input {
+    padding: 8px 12px;
+  }
+}
+
+
+
+
+  .admin-tabs-nav {
+    display: flex;
+    gap: 0.5rem;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 0.5rem;
+    position: relative;
+  }
+  
+  .admin-tabs-nav .nav-item {
+    display: flex;
+  }
+  
+  .admin-tab-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1.25rem;
+    border: none;
+    color: #6c757d;
+    font-weight: 500;
+    border-radius: 0.5rem 0.5rem 0 0;
+    transition: all 0.3s ease;
+    background: none;
+  }
+  
+  .admin-tab-button:hover {
+    color: #495057;
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+  
+  .admin-tab-button.active {
+    color: #0d6efd;
+    background-color: rgba(13, 110, 253, 0.1);
+  }
+  
+  .admin-tab-button .active-indicator {
+    position: absolute;
+    bottom: -0.5rem;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: transparent;
+    transition: all 0.3s ease;
+  }
+  
+  .admin-tab-button.active .active-indicator {
+    background-color: #0d6efd;
+  }

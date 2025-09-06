@@ -1,45 +1,49 @@
 <div class="p-3">
   <h2 class="mb-4">Listado de Eventos</h2>
 
-  <!-- Vista tabla para desktop -->
-  <div class="table-responsive d-none d-md-block">
-    <table class="table table-striped table-bordered table-hover align-middle">
-      <thead class="table-primary">
-        <tr>
-          <th>Nombre</th>
-          <th>Descripción</th>
-          <th>Inicio</th>
-          <th>Fin</th>
-          <th>Estado</th>
-          <th>Precio</th>
-          <th>Dígitos</th>
-          <th>Mínimo Compra</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let raffle of raffles" (dblclick)="abrirModalRifa(raffle)">
-          <td>{{ raffle.nameRaffle }}</td>
-          <td>{{ raffle.description }}</td>
-          <td>{{ raffle.startdate | date:'mediumDate' }}</td>
-          <td>{{ raffle.endDate | date:'mediumDate' }}</td>
-          <td>{{ raffle.stateRaffle }}</td>
-          <td>${{ raffle.priceNumber }}</td>
-          <td>{{ raffle.digitLength }}</td>
-          <td>{{ raffle.minPurchase }}</td>
-          <td>
-            <button class="btn btn-sm"
-                    [ngClass]="raffle.stateRaffle === 'ACTIVO' ? 'btn-warning' : 'btn-success'"
-                    [disabled]="raffle.stateRaffle === 'FINALIZADO'"
-                    (click)="cambiarEstadoRifa(raffle.id, raffle.stateRaffle)">
-              {{ raffle.stateRaffle === 'ACTIVO' ? 'Pausar' :
-                raffle.stateRaffle === 'PAUSA' ? 'Activar' : 'Finalizado' }}
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+<!-- Vista tabla para desktop con estilo Bootstrap -->
+<div class="table-responsive d-none d-md-block">
+  <table class="table table-striped table-bordered table-hover align-middle">
+    <thead class="table-primary text-center">
+      <tr>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Inicio</th>
+        <th>Fin</th>
+        <th>Estado</th>
+        <th>Precio</th>
+        <th>Dígitos</th>
+        <th>Mínimo Compra</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let raffle of raffles" (dblclick)="abrirModalRifa(raffle)" class="text-center">
+        <td>{{ raffle.nameRaffle }}</td>
+        <td>{{ raffle.description }}</td>
+        <td>{{ raffle.startdate | date:'mediumDate' }}</td>
+        <td>{{ raffle.endDate | date:'mediumDate' }}</td>
+        <td>
+          <span class="badge bg-{{ raffle.stateRaffle === 'ACTIVO' ? 'success' : raffle.stateRaffle === 'PAUSA' ? 'warning' : 'secondary' }}">
+            {{ raffle.stateRaffle }}
+          </span>
+        </td>
+        <td>${{ raffle.priceNumber }}</td>
+        <td>{{ raffle.digitLength }}</td>
+        <td>{{ raffle.minPurchase }}</td>
+        <td>
+          <button class="btn btn-sm"
+                  [ngClass]="raffle.stateRaffle === 'ACTIVO' ? 'btn-warning' : 'btn-success'"
+                  [disabled]="raffle.stateRaffle === 'FINALIZADO'"
+                  (click)="cambiarEstadoRifa(raffle.id, raffle.stateRaffle)">
+            {{ raffle.stateRaffle === 'ACTIVO' ? 'Pausar' :
+               raffle.stateRaffle === 'PAUSA' ? 'Activar' : 'Finalizado' }}
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
   <!-- Vista tipo card para móviles -->
   <div class="d-md-none">
@@ -77,152 +81,434 @@
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
       </div>
 
-      <div class="modal-body bg-light">
-        <div class="row g-4">
+<div class="modal-body bg-light">
+<!-- Navegación de pestañas mejorada y funcional -->
+<ul class="nav admin-tabs-nav mb-3" id="adminTabs" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link admin-tab-button active" id="info-tab" data-bs-toggle="tab" data-bs-target="#infoTab" type="button" role="tab" aria-controls="infoTab" aria-selected="true">
+      <i class="bi bi-info-circle me-2"></i>
+      <span>Información General</span>
+      <div class="active-indicator"></div>
+    </button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link admin-tab-button" id="cliente-tab" data-bs-toggle="tab" data-bs-target="#clienteTab" type="button" role="tab" aria-controls="clienteTab" aria-selected="false">
+      <i class="bi bi-person-plus me-2"></i>
+      <span>Asignar Fondos</span>
+      <div class="active-indicator"></div>
+    </button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link admin-tab-button" id="operaciones-tab" data-bs-toggle="tab" data-bs-target="#operacionesTab" type="button" role="tab" aria-controls="operacionesTab" aria-selected="false">
+      <i class="bi bi-credit-card me-2"></i>
+      <span>Operaciones de Pago</span>
+      <div class="active-indicator"></div>
+    </button>
+  </li>
+</ul>
 
-          <!-- Información de la Rifa -->
-          <div class="col-md-6">
-            <div class="card border-0 shadow-sm">
-              <div class="card-body">
-                <h6 class="card-title text-primary fw-bold">Información General</h6>
-                <p><strong>Descripción:</strong> {{ rifaSeleccionada?.description }}</p>
-                <p><strong>Inicio:</strong> {{ rifaSeleccionada?.startDate | date: 'mediumDate' }}</p>
-                <p><strong>Fin:</strong> {{ rifaSeleccionada?.endDate | date: 'mediumDate' }}</p>
-                <p><strong>Estado:</strong>
+  <!-- Contenido de las pestañas -->
+  <div class="tab-content" id="adminTabsContent">
+    
+<!-- TAB 1: Información General - Versión Administración -->
+<div class="tab-pane fade show active" id="infoTab" role="tabpanel">
+  <div class="card admin-card border-0">
+    <div class="card-body p-0">
+      <div class="row g-0">
+        <!-- Columna Imagen -->
+        <div class="col-md-5 admin-image-col">
+          <div class="position-relative h-100">
+            <img [src]="rifaSeleccionada?.urlImagen" alt="{{ rifaSeleccionada?.nameRaffle }}" 
+                 class="img-fluid h-100 w-100 object-fit-cover">
+            <div class="admin-image-overlay p-4 d-flex flex-column justify-content-between">
+              <div>
+                <span class="badge bg-dark bg-opacity-75 mb-2">
+                  ID: {{ rifaSeleccionada?.id }}
+                </span>
+              </div>
+              <div class="d-flex justify-content-between align-items-end">
+                <div>
+                  <h6 class="text-white mb-1" *ngIf="raffle?.cantidadDisponibles != null">
+                    Disponibles {{ raffle.cantidadDisponibles }} Fondos
+                  </h6>
+                  <h4 class="text-white mb-0">{{ rifaSeleccionada?.availableTickets }}</h4>
+                </div>
+                <button class="btn btn-sm btn-light" >
+                  <i class="bi bi-pencil-fill"></i> Editar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Columna Detalles -->
+        <div class="col-md-7 admin-details-col">
+          <div class="p-4">
+            <!-- Header con acciones -->
+            <div class="d-flex justify-content-between align-items-start mb-3">
+              <div>
+                <h3 class="fw-bold mb-1">{{ rifaSeleccionada?.nameRaffle }}</h3>
+                <div class="d-flex align-items-center gap-2">
+                  <span class="badge bg-primary bg-opacity-10 text-primary">
+                    {{ rifaSeleccionada?.category }}
+                  </span>
                   <span class="badge bg-{{ getColorEstado(rifaSeleccionada?.stateRaffle) }}">
                     {{ rifaSeleccionada?.stateRaffle }}
                   </span>
-                </p>
-                <p><strong>Precio:</strong> <span class="text-success fw-bold">${{ rifaSeleccionada?.priceNumber }}</span></p>
-                <p><strong>Dígitos:</strong> {{ rifaSeleccionada?.digitLength }}</p>
-                <p><strong>Mínimo de compra:</strong> {{ rifaSeleccionada?.minPurchase }}</p>
+                </div>
               </div>
-            </div>
-          </div>
-
-          <!-- Consultas -->
-          <div class="col-md-6">
-            
-            <div class="card border-0 shadow-sm">
-              <div class="card-body">
-                <h6 class="card-title text-primary fw-bold">Consulta de Cliente</h6>
-
-                <div class="input-group mb-3">
-                  <input type="text" class="form-control" [(ngModel)]="numeroCliente" placeholder="Número del cliente">
-                  <button class="btn btn-outline-primary" (click)="consultarCliente(numeroCliente)">
-                    <i class="bi bi-search"></i> Buscar
-                  </button>
-                </div>
-
-                <div *ngIf="mensajeCliente" class="alert alert-warning py-2 px-3">
-                  {{ mensajeCliente }}
-                </div>
-
-                <div *ngIf="cliente">
-                  <p><strong>Nombre:</strong> {{ cliente.nombre }}</p>
-                  <p><strong>Email:</strong> {{ cliente.email }}</p>
-                  <p><strong>Teléfono:</strong> {{ cliente.telefono }}</p>
-                  <p><strong>País:</strong> {{ cliente.pais }}</p>
-                </div>
-
+              <div class="dropdown">
+                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" 
+                        type="button" data-bs-toggle="dropdown">
+                  <i class="bi bi-gear"></i> Acciones
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li><a class="dropdown-item" href="#"><i class="bi bi-pencil me-2"></i>Editar</a></li>
+                  <li><a class="dropdown-item" href="#"><i class="bi bi-graph-up me-2"></i>Estadísticas</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-trash me-2"></i>Eliminar</a></li>
+                </ul>
               </div>
             </div>
 
-                    <div class="card border-0 shadow-sm">
-              <div class="card-body">
-                <h6 class="card-title text-primary fw-bold">Consulta de Cliente</h6>
 
-                <div class="input-group mb-3">
-                  <input type="text" class="form-control" [(ngModel)]="numeroCliente" placeholder="Número del cliente">
-                  <button class="btn btn-outline-primary" (click)="consultarCliente(numeroCliente)">
-                    <i class="bi bi-search"></i> Buscar
-                  </button>
+            <!-- Progreso -->
+            <div class="mb-3">
+              <div class="d-flex justify-content-between mb-1">
+                <span class="fw-semibold text-secondary">Progreso de venta</span>
+                <span class="text-muted">{{ rifaSeleccionada?.porcentajeVendidos }}% vendido</span>
+              </div>
+
+              <div class="progress" style="height: 8px; border-radius: 4px;">
+                <div 
+                  class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                  role="progressbar"
+                  [style.width.%]="rifaSeleccionada?.porcentajeVendidos"
+                  [attr.aria-valuenow]="rifaSeleccionada?.porcentajeVendidos"
+                  aria-valuemin="0"
+                  aria-valuemax="100">
                 </div>
-
-                <div *ngIf="mensajeCliente" class="alert alert-warning py-2 px-3">
-                  {{ mensajeCliente }}
-                </div>
-
-                <div *ngIf="cliente">
-                  <p><strong>Nombre:</strong> {{ cliente.nombre }}</p>
-                  <p><strong>Email:</strong> {{ cliente.email }}</p>
-                  <p><strong>Teléfono:</strong> {{ cliente.telefono }}</p>
-                  <p><strong>País:</strong> {{ cliente.pais }}</p>
-                </div>
-
               </div>
             </div>
-          </div>
 
-                      <!-- Operaciones de Pago -->
-            <div class="card border-0 shadow-sm mt-4">
-              <div class="card-body">
-                <h6 class="card-title text-primary fw-bold">Operaciones de Pago</h6>
-
-                <!-- Spinner -->
-                <div *ngIf="cargandoOperaciones" class="text-center my-2">
-                  <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Cargando...</span>
+            <!-- Detalles clave en cards -->
+            <div class="row g-3 mb-4">
+              <div class="col-md-6">
+                <div class="admin-stat-card p-3">
+                  <div class="d-flex align-items-center">
+                    <div class="bg-primary bg-opacity-10 p-2 rounded me-3">
+                      <i class="bi bi-currency-dollar text-primary fs-5"></i>
+                    </div>
+                    <div>
+                      <small class="text-muted">Precio por fondo</small>
+                      <h6 class="mb-0">{{ rifaSeleccionada?.priceNumber | currency:'COP':'symbol':'1.0-0' }}</h6>
+                    </div>
                   </div>
                 </div>
-
-                <!-- Mensaje si no hay operaciones -->
-                <div *ngIf="!cargandoOperaciones && paymentOperations.length === 0" class="alert alert-info">
-                  No hay operaciones registradas para esta rifa.
+              </div>
+              <div class="col-md-6">
+                <div class="admin-stat-card p-3">
+                  <div class="d-flex align-items-center">
+                    <div class="bg-info bg-opacity-10 p-2 rounded me-3">
+                      <i class="bi bi-123 text-info fs-5"></i>
+                    </div>
+                    <div>
+                      <small class="text-muted">Dígitos</small>
+                      <h6 class="mb-0">{{ rifaSeleccionada?.digitLength }}</h6>
+                    </div>
+                  </div>
                 </div>
-
-                <!-- Tabla de operaciones -->
-                <div *ngIf="paymentOperations.length > 0" class="table-responsive">
-                  <table class="table table-striped table-bordered align-middle text-center">
-                    <thead class="table-primary">
-                      <tr>
-                        <th>Estado</th>
-                        <th>ID Pago</th> 
-                        <th>Monto</th>
-                        <th>Moneda</th>
-                        <th>Método</th>
-                        <th>Cliente</th>
-                        <th>Fecha</th>
-                        <th>Números</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let op of paymentOperations">
-                        <td>
-                          <span class="badge bg-{{ getColorEstadoPago(op.status) }}">{{ op.status }}</span>
-                          <i *ngIf="op.expirada" 
-                            class="bi bi-exclamation-triangle-fill text-danger ms-1" 
-                            title="Pago expirado: el usuario pagó fuera del tiempo límite y no se asignaron números.">
-                          </i>
-                        </td>
-                        <td>{{ op.paymentId }}</td> 
-                        <td>${{ op.monto }}</td>
-                        <td>{{ op.moneda }}</td>
-                        <td>{{ op.metodoPago }}</td>
-                        <td>
-                          {{ op.compradorNombre }} {{ op.compradorApellido }}<br>
-                          <small class="text-muted">{{ op.compradorEmail }}</small>
-                        </td>
-                        <td>{{ op.fechaPago | date:'short' }}</td>
-                        <td>
-                          <small>{{ op.numerosComprados?.join(', ') }}</small>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+              </div>
+              <div class="col-md-6">
+                <div class="admin-stat-card p-3">
+                  <div class="d-flex align-items-center">
+                    <div class="bg-warning bg-opacity-10 p-2 rounded me-3">
+                      <i class="bi bi-cart-plus text-warning fs-5"></i>
+                    </div>
+                    <div>
+                      <small class="text-muted">Mínimo compra</small>
+                      <h6 class="mb-0">{{ rifaSeleccionada?.minPurchase }}</h6>
+                    </div>
+                  </div>
                 </div>
-
+              </div>
+              <div class="col-md-6">
+                <div class="admin-stat-card p-3">
+                  <div class="d-flex align-items-center">
+                    <div class="bg-success bg-opacity-10 p-2 rounded me-3">
+                      <i class="bi bi-calendar-check text-success fs-5"></i>
+                    </div>
+                    <div>
+                      <small class="text-muted">Fecha fin</small>
+                      <h6 class="mb-0">{{ rifaSeleccionada?.endDate | date:'mediumDate' }}</h6>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
+            <!-- Descripción -->
+            <div class="mb-4">
+              <h6 class="fw-semibold mb-2">Descripción</h6>
+              <div class="admin-description-box p-3">
+                {{ rifaSeleccionada?.description }}
+                <button class="btn btn-sm btn-link p-0 ms-2" >
+                  <i class="bi bi-pencil small"></i>
+                </button>
+              </div>
+            </div>
+      <!-- Paquetes disponibles -->
+          <div class="mt-4">
+            <h6 class="fw-semibold mb-2">Paquetes disponibles:</h6>
+              <div class="row g-3 packages-row">
+                <div class="col-4" *ngFor="let pack of paquetes">
+                  <div class="ticket-card position-relative text-center p-3 rounded-3 hover-scale">
+                    <div class="fs-2 fw-bold text-primary">{{ pack }}</div>
+                    <div class="text-muted small">Fondos</div>
+                    <div class="mt-2 fw-bold">{{ (raffle.priceNumber * pack) | currency:'COP':'symbol':'1.0-0' }}</div>
+                  </div>
+                </div>
+              </div>
+          </div>
+          </div>
         </div>
       </div>
-
     </div>
   </div>
 </div>
 
 
+<!-- TAB 2: Venta desde Admin - Versión Minimalista Mejorada -->
+<div class="tab-pane fade" id="clienteTab" role="tabpanel">
+  <div class="card minimal-admin-card border-0 shadow-sm">
+    <div class="card-body p-4">
+      <h5 class="card-title text-dark mb-4">
+        <i class="bi bi-ticket-perforated me-2"></i>Asignación de Fondos
+      </h5>
+
+      <!-- Formulario Minimalista -->
+      <form #ventaAdminForm="ngForm" class="minimal-form" (ngSubmit)="asignarDesdeAdmin()">
+        <div class="row g-3">
+          <!-- Datos del Cliente -->
+          <div class="col-md-6">
+            <label class="form-label small text-muted">Nombre</label>
+            <input type="text" class="form-control border-0 border-bottom rounded-0" 
+                   [(ngModel)]="adminCompra.buyerName" name="buyerName" required>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label small text-muted">Apellido</label>
+            <input type="text" class="form-control border-0 border-bottom rounded-0" 
+                   [(ngModel)]="adminCompra.buyerApellido" name="buyerApellido" required>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label small text-muted">Correo</label>
+            <input type="email" class="form-control border-0 border-bottom rounded-0" 
+                   [(ngModel)]="adminCompra.buyerEmail" name="buyerEmail" required>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label small text-muted">Confirmar Correo</label>
+            <input type="email" class="form-control border-0 border-bottom rounded-0" 
+                   [(ngModel)]="adminCompra.buyerConfirmarEmail" name="buyerConfirmarEmail" required>
+          </div>
+
+          <!-- Contacto -->
+          <div class="col-md-6">
+            <label class="form-label small text-muted">País</label>
+            <select class="form-control border-0 border-bottom rounded-0" 
+                    [(ngModel)]="adminCompra.buyerPais" name="buyerPais" required (change)="actualizarPrefijo()">
+              <option value="" disabled selected>Seleccionar</option>
+              <option *ngFor="let pais of paises" [value]="pais.nombre">
+                {{ pais.nombre }} ({{ pais.prefijo }})
+              </option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label small text-muted">Teléfono</label>
+            <div class="d-flex">
+              <span class="border-bottom py-2 pe-2 text-muted">{{ adminCompra.buyerPrefix }}</span>
+              <input type="tel" class="form-control border-0 border-bottom rounded-0 flex-grow-1" 
+                     [(ngModel)]="adminCompra.buyerPhone" name="buyerPhone" required>
+            </div>
+          </div>
+
+          <!-- Asignación -->
+          <div class="col-md-6">
+            <label class="form-label small text-muted">Cantidad</label>
+            <input type="number" class="form-control border-0 border-bottom rounded-0" 
+                   [(ngModel)]="adminCompra.quantity" name="quantity" required min="1">
+            <div class="form-text text-end small">Disponibles: {{ rifaSeleccionada?.availableTickets }}</div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label small text-muted">Tipo</label>
+            <select class="form-control border-0 border-bottom rounded-0"
+                    [(ngModel)]="adminCompra.tipoAsignacion" name="tipoAsignacion" required>
+              <option value="aleatoria">Aleatoria</option>
+              <option value="manual">Manual</option>
+            </select>
+
+            <div class="col-md-6" *ngIf="adminCompra.tipoAsignacion === 'manual'">
+              <label class="form-label small text-muted">Número Manual</label>
+              <input type="text" class="form-control border-0 border-bottom rounded-0"
+                    [(ngModel)]="adminCompra.numeroManual" name="numeroManual" required>
+            </div>
+
+          </div>
+
+          <!-- Botón de envío -->
+          <div class="col-12 mt-4">
+            <button type="submit" class="btn btn-dark w-100 rounded-1" [disabled]="!ventaAdminForm.form.valid">
+              <i class="bi bi-check-circle me-2"></i> Asignar Fondos
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <!-- Mensaje de asignación -->
+      <div *ngIf="mensajeAsignacionAdmin" class="alert alert-info mt-4">
+        {{ mensajeAsignacionAdmin }}
+      </div>
+
+      <!-- Resultados con imagen - Inspirado en versión anterior -->
+      <div *ngIf="userNumbers.length > 0" class="mt-5 pt-4 border-top">
+        <h6 class="text-muted mb-3">Fondos Asignados</h6>
+
+        <div class="d-flex flex-wrap justify-content-center gap-3">
+          <div *ngFor="let num of userNumbers" class="raffle-ticket-card text-center">
+            <img [src]="rifaSeleccionada?.urlImagen" alt="Ticket {{ num }}" class="raffle-ticket-img mb-2" />
+            <div class="ticket-number fw-bold">{{ num }}</div>
+          </div>
+        </div>
+
+        <div class="mt-3 text-end">
+          <small class="text-muted">{{ userNumbers.length }} fondos asignados</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 
+<!-- TAB 3: Operaciones de Pago - Versión Minimalista Adaptada -->
+<div class="tab-pane fade" id="operacionesTab" role="tabpanel">
+  <div class="minimal-operations-container">
 
+    <!-- Tarjeta de Búsqueda de Cliente -->
+    <div class="minimal-card mb-4">
+      <div class="card-header bg-transparent border-0 pb-2">
+        <h6 class="mb-0 text-dark fw-semibold">
+          <i class="bi bi-person-search me-2"></i>Consulta de Cliente
+        </h6>
+      </div>
+      <div class="card-body pt-0">
+        <div class="minimal-search-container">
+          <input type="text" class="minimal-search-input"
+                 [(ngModel)]="numeroCliente"
+                 placeholder="Número del cliente">
+          <button class="minimal-search-btn" (click)="consultarCliente(numeroCliente)">
+            <i class="bi bi-search"></i>
+          </button>
+        </div>
+
+        <div *ngIf="mensajeCliente" class="minimal-alert minimal-alert-warning mt-3">
+          {{ mensajeCliente }}
+        </div>
+
+        <div *ngIf="cliente" class="minimal-client-info mt-3">
+          <div class="info-row">
+            <span class="info-label">Nombre:</span>
+            <span class="info-value">{{ cliente.nombre }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Email:</span>
+            <span class="info-value">{{ cliente.email }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Teléfono:</span>
+            <span class="info-value">{{ cliente.telefono }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">País:</span>
+            <span class="info-value">{{ cliente.pais }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tarjeta de Operaciones de Pago -->
+    <div class="minimal-card">
+      <div class="card-header bg-transparent border-0 pb-2">
+        <h6 class="mb-0 text-dark fw-semibold">
+          <i class="bi bi-credit-card me-2"></i>Operaciones de Pago
+        </h6>
+      </div>
+      <div class="card-body pt-0">
+
+        <!-- Cargando -->
+        <div *ngIf="cargandoOperaciones" class="minimal-loading">
+          <div class="loading-spinner"></div>
+          <span>Cargando operaciones...</span>
+        </div>
+
+        <!-- Sin operaciones -->
+        <div *ngIf="!cargandoOperaciones && paymentOperations.length === 0"
+             class="minimal-alert minimal-alert-info">
+          No hay operaciones registradas para esta rifa.
+        </div>
+
+        <!-- Tabla de operaciones -->
+        <div *ngIf="paymentOperations.length > 0" class="minimal-table-container">
+          <table class="minimal-table">
+            <thead>
+              <tr>
+                <th>Estado</th>
+                <th>ID Pago</th> 
+                <th>Monto</th>
+                <th>Moneda</th>
+                <th>Método</th>
+                <th>Cliente</th>
+                <th>Fecha</th>
+                <th>Números</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let op of paymentOperations" class="minimal-table-row">
+                <td>
+                  <span class="status-badge status-{{ op.status.toLowerCase() }}">
+                    {{ op.status }}
+                    <i *ngIf="op.expirada"
+                       class="bi bi-exclamation-triangle-fill text-danger ms-1"
+                       title="Pago expirado: el usuario pagó fuera del tiempo límite y no se asignaron números.">
+                    </i>
+                  </span>
+                </td>
+                <td>{{ op.paymentId }}</td>
+                <td>${{ op.monto }}</td>
+                <td>{{ op.moneda }}</td>
+                <td>{{ op.metodoPago }}</td>
+                <td>
+                  {{ op.compradorNombre }} {{ op.compradorApellido }}<br>
+                  <small class="text-muted">{{ op.compradorEmail }}</small>
+                </td>
+                <td>{{ op.fechaPago | date:'short' }}</td>
+                <td>
+                  <small>
+                    <span *ngFor="let numeroDto of op.numerosComprados; let last = last">
+                      {{ numeroDto.numero }}<span *ngIf="!last">, </span>
+                    </span>
+                  </small>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -32,4 +32,24 @@ subirFoto(data: any): Observable<any> {
   return this.http.post(`${this.apiUrl}/imagenes`, data, { headers });
 }
 
+compraAleatoriaDesdeAdmin(data: any): Observable<any> {
+  const token = localStorage.getItem('authToken');
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  });
+
+  return this.http.post(`${this.apiUrl}/admin/asignarAleatorio`, data, { headers });
+}
+
+compraManualDesdeAdmin(data: any, numeroManual: any): Observable<any> {
+  const token = localStorage.getItem('authToken');
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  });
+
+  return this.http.post(`${this.apiUrl}/admin/asignarNumero`, {data, numeroManual}, { headers });
+}
+
 }

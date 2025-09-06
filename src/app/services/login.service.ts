@@ -11,7 +11,7 @@ import { jwtDecode } from 'jwt-decode';
 })
 export class LoginService {
   
-  private apiUrl = enviroments.apiUrl  //url del api creada de manera global
+  private apiUrl = enviroments.apiUrl  
 
   constructor(private http: HttpClient) {}
 

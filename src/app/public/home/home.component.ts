@@ -1,9 +1,10 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, HostListener } from '@angular/core';
 import { RaffleService } from '../../services/raffle.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { enviroments } from '../../../enviroments/enviroments';
 import { countries, ICountry } from 'countries-list';
+// ...existing code...
 
 // Define una interfaz para nuestro país personalizado
 interface PaisPersonalizado {
@@ -31,6 +32,21 @@ export class HomeComponent implements OnInit, AfterViewInit {
   selectedCurrency: string = 'COP'; // Valor por defecto
 
   paquetes: number[] = [];
+
+  // Estado del dropdown de usuario
+  isDropdownOpen = false;
+
+  //Ver o debar de ver contraseña (login, register)
+  showPassword = false;
+  showConfirmPassword = false;
+  registerPassword = '';
+  registerConfirmPassword = '';
+  registerEmail = '';
+
+  //Subida de documentos
+  docFront: File | null = null;
+  docBack: File | null = null;
+
 
 
   instagramUrl = enviroments.instagramUrl;
@@ -129,7 +145,8 @@ ngOnInit(): void {
 
     this.raffleService.obtenerNumerosPorEmail(this.emailUser).subscribe({
       next: (data) => {
-        this.userNumbers = data.map((num: string) => num.padStart(4, '0'));
+        console.log("data: ", data)
+        this.userNumbers = data.map((item: any) => item.numero.padStart(4, '0'));
         this.loading = false;
       },
       error: (err) => {
@@ -160,6 +177,7 @@ ngOnInit(): void {
   }
 
 validarYRealizarPago() {
+    console.log("desde validarYRealizarPago al inicio: ",this.selectedPackage)
   if (!this.selectedPackage || !this.buyerData.buyerName || !this.buyerData.buyerApellido ||
       !this.buyerData.buyerPais || !this.buyerData.buyerPrefix || !this.buyerData.buyerPhone ||
       !this.buyerData.buyerEmail || !this.buyerData.buyerConfirmarEmail) {
@@ -185,7 +203,7 @@ validarYRealizarPago() {
       nombrePaquete = paquete.nombre || nombrePaquete;
     }
   }
-
+    console.log("precioPaquete: ",precioPaquete)
 const datosPago = {
   descripcion: nombrePaquete,
   cantidad: 1,
@@ -251,11 +269,65 @@ consultarCantidadNumerosDisponibles(): void {
 
 confirmarCompraReducida(): void {
   this.selectedPackage = this.cantidadDisponible;
+  console.log("desde confirmarCompraReducida: ",this.selectedPackage)
   const modal = new (window as any).bootstrap.Modal(document.getElementById('purchaseModal'));
   modal.show();
   const modalReducido = (window as any).bootstrap.Modal.getInstance(document.getElementById('disponibilidadModal'));
   modalReducido.hide();
 }
+
+
+// Manejo del dropdown de usuario (login, register)
+toggleDropdown(event: Event) {
+  event.preventDefault(); 
+  this.isDropdownOpen = !this.isDropdownOpen;
+}
+
+// Cierra el dropdown si se hace clic fuera de él (login, register)
+@HostListener('document:click', ['$event'])
+clickOutside(event: Event) {
+  if (!(event.target as HTMLElement).closest('.nav-item.dropdown')) {
+    this.isDropdownOpen = false;
+  }
+}
+
+// Abre el modal correspondiente y cierra el dropdown (login, register)
+openModal(type: 'login' | 'register') {
+  this.isDropdownOpen = false; 
+  const modalId = type === 'login' ? 'loginModal' : 'registerModal';
+  const modalEl = document.getElementById(modalId);
+  if (modalEl) {
+    const Modal = (window as any).bootstrap.Modal; 
+    const modal = new Modal(modalEl);
+    modal.show();
+  }
+}
+
+onFileSelected(event: Event, type: 'front' | 'back') {
+  const input = event.target as HTMLInputElement;
+  if (input.files && input.files.length > 0) {
+    if (type === 'front') {
+      this.docFront = input.files[0];
+    } else {
+      this.docBack = input.files[0];
+    }
+  }
+}
+
+registrarUsuario() {
+
+  console.log("desde registrarUsuario al inicio: ", this.registerEmail)
+  if (!this.registerEmail || !this.registerPassword || !this.registerConfirmPassword || !this.docFront || !this.docBack) {
+    this.errorMsg = 'Por favor completa todos los campos requeridos.';
+    return;
+  }
+
+  if (this.registerPassword !== this.registerConfirmPassword) {
+    this.errorMsg = 'Las contraseñas no coinciden.';
+    return;
+  }
+}
+
 
 
 
