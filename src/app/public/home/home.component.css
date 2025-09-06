@@ -211,6 +211,7 @@ header {
   position: sticky;
   top: 0;
   z-index: 1020;
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
 }
 
 .raffle-ticket-card {
@@ -373,6 +374,40 @@ header {
   transform: scale(1.2);
 }
 
+.telegram-float {
+  position: fixed;
+  bottom: 80px; /* Para que no se solape con Instagram */
+  right: 20px;
+  width: auto;
+  height: auto;
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  cursor: pointer;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.3s ease;
+  padding: 10px;
+  opacity: 0;
+  animation: fadeIn 1s 0.2s forwards; /* Un pequeño delay */
+}
+
+.telegram-float i {
+  color: #0088cc;
+  font-size: 28px;
+  text-shadow: 0 0 4px rgba(0, 136, 204, 0.5);
+  transition: transform 0.3s ease, text-shadow 0.3s ease;
+}
+
+.telegram-float:hover i {
+  transform: scale(1.2);
+  text-shadow: 0 0 6px rgba(0, 170, 255, 0.7);
+}
+
+
+
 @keyframes neon-glow-purple {
   0% {
     filter: hue-rotate(0deg);
@@ -387,6 +422,22 @@ header {
     opacity: 1;
   }
 }
+
+@keyframes neon-glow-blue {
+  0%, 100% {
+    text-shadow:
+      0 0 5px #0088cc,
+      0 0 10px #007ab8,
+      0 0 20px #007ab8;
+  }
+  50% {
+    text-shadow:
+      0 0 10px #00aaff,
+      0 0 20px #00aaff,
+      0 0 30px #00aaff;
+  }
+}
+
 
 /* Ajustes específicos para el espacio header-imagen en móviles */
 @media (max-width: 768px) {
@@ -428,9 +479,303 @@ header {
 
 
 
+/* Footer principal */
+.site-footer {
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  color: #fff;
+  padding-top: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Contenido principal */
+.footer-content {
+  max-width: 1200px;
+  margin: auto;
+  padding: 2rem 1.5rem;
+  display: grid;
+  gap: 2rem;
+}
+
+/* Branding */
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.footer-logo {
+  height: 30px;
+}
+.brand-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  background: linear-gradient(to right, #4facfe, #00f2fe);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Secciones del footer */
+.footer-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+}
+.footer-section {
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  padding-right: 1rem;
+}
+.footer-section:last-child {
+  border-right: none;
+}
+.footer-title {
+  color: #4facfe;
+  margin-bottom: 1rem;
+  position: relative;
+}
+.footer-title::after {
+  content: '';
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(to right, #4facfe, #00f2fe);
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+}
+.footer-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.footer-link {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  transition: 0.3s ease;
+}
+.footer-link:hover {
+  color: #fff;
+  transform: translateX(5px);
+}
+
+/* Redes sociales */
+.social-icons {
+  display: flex;
+  gap: 1rem;
+}
+.social-icon {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s;
+}
+.social-icon:hover {
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+  transform: scale(1.15);
+}
+
+/* Developer card */
+.developer-card {
+  max-width: 600px;
+  margin: 2rem auto 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  backdrop-filter: blur(6px);
+}
+.developer-photo {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+.developer-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.developer-info {
+  flex: 1;
+}
+.developer-name {
+  font-size: 1.2rem;
+  margin-bottom: 4px;
+  color: #fff;
+}
+.developer-title {
+  color: #4facfe;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+.developer-contacts {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.contact-link {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.3s;
+}
+.contact-link:hover {
+  color: #fff;
+}
+.developer-social {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+.social-link {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s;
+}
+.social-link:hover {
+  background: #4facfe;
+  transform: scale(1.1);
+}
+
+/* Pie inferior */
+.footer-bottom {
+  text-align: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.2);
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .footer-links {
+    grid-template-columns: 1fr;
+  }
+  .footer-section {
+    border: none;
+    padding: 0;
+    text-align: center;
+  }
+  .footer-title::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .developer-card {
+    flex-direction: column;
+    text-align: center;
+  }
+  .developer-contacts {
+    align-items: center;
+  }
+  .developer-social {
+    justify-content: center;
+  }
+}
+
+
+/* ==================== ANIMACIÓN DE ENTRADA ==================== */
+.ticket-card {
+  animation: fadeInUp 0.6s ease;
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==================== SOMBRA SUAVE EN HOVER DE BOTÓN ==================== */
+.btn-comprar-2:hover:enabled {
+  box-shadow: 0 10px 24px rgba(13, 110, 253, 0.25);
+}
+
+/* ==================== EFECTO DE RESPLANDOR EN SELECCIÓN DE PAQUETE ==================== */
+.ticket-card.selected-package {
+  box-shadow: 0 0 12px rgba(13, 110, 253, 0.5);
+  transform: scale(1.03);
+}
+
+/* ==================== BARRA DE PROGRESO CON TRANSICIÓN FLUIDA ==================== */
+.progress-bar {
+  transition: width 1s ease-out;
+}
+
+/* ==================== BOTONES DE COMPARTIR FUNCIONALES ==================== */
+.btn-whatsapp[href] {
+  text-decoration: none;
+}
+
+.btn-facebook[href] {
+  text-decoration: none;
+}
 
 
 
+/* Puedes luego usar clases como .dark-mode body { background-color: var(--bg-dark); } */
+
+.progress:hover .progress-bar {
+  filter: brightness(1.2);
+}
+
+header {
+  animation: slideDown 0.7s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
 
 
 
+.hero-section {
+  background: linear-gradient(135deg, #0d6efd, #1a1a2e);
+  padding: 4rem 0;
+  color: white;
+}
+
+.raffle-hero-img {
+  max-height: 350px;
+  object-fit: contain;
+  border: 3px solid #fff;
+}
+
+.bg-dark {
+  background-color: #1c1c1e !important;
+}
+
+.btn-comprar-2 {
+  background: linear-gradient(135deg, #0d6efd, #4a8df0);
+  color: white;
+  border: none;
+  font-size: 1.1rem;
+  padding: 0.9rem 1.4rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease-in-out;
+}

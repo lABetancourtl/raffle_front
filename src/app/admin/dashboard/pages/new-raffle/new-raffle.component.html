@@ -1,59 +1,66 @@
-<div class="container py-5">
-  <h2 class="mb-4">Crear evento</h2>
+<div class="admin-create-container">
+  <div class="admin-create-card">
+    <h2 class="admin-create-title">
+      <i class="bi bi-stars me-2"></i> Nueva Rifa
+    </h2>
+    <p class="admin-create-subtitle">Completa los campos para crear una nueva rifa</p>
 
-  <form (ngSubmit)="crearRifa()" #rifaForm="ngForm">
-    <!-- Nombre de la rifa -->
-    <div class="mb-3">
-      <label for="nombre" class="form-label">Nombre del evento</label>
-      <input type="text" class="form-control" id="nombre" name="nombre" required [(ngModel)]="nuevaRifa.nombre">
-    </div>
+    <form (ngSubmit)="crearRifa()" #rifaForm="ngForm" class="admin-create-form">
 
-    <!-- Descripción de la rifa -->
-    <div class="mb-3">
-      <label for="descripcion" class="form-label">Descripción</label>
-      <textarea class="form-control" id="descripcion" name="descripcion" rows="3" required [(ngModel)]="nuevaRifa.descripcion"></textarea>
-    </div>
-
-    <!-- Estado (enum del API) 
-    <div class="mb-3">
-      <label for="estado" class="form-label">Estado</label>
-        <select class="form-select" id="estado" name="estado" required [(ngModel)]="nuevaRifa.estado">
-        <option *ngFor="let estado of estados" [value]="estado.valor">{{ estado.texto }}</option>
-        </select>
-    </div>
-    -->
-
-    <!-- Precio por número -->
-    <div class="mb-3">
-      <label for="precio" class="form-label">Precio por número</label>
-      <div class="input-group">
-        <span class="input-group-text">$</span>
-        <input type="number" class="form-control" id="precio" name="precio" min="0" required [(ngModel)]="nuevaRifa.precio">
+      <!-- Nombre -->
+      <div class="form-group">
+        <label>Nombre de la rifa</label>
+        <input type="text" [(ngModel)]="nuevaRifa.nombre" name="nombre" required placeholder="Ej: Rifa del Día del Padre">
       </div>
-    </div>
 
-    <!-- Compra mínima -->
-    <div class="mb-3">
-      <label for="minima" class="form-label">Compra mínima</label>
-      <input type="number" class="form-control" id="minima" name="minima" min="1" required [(ngModel)]="nuevaRifa.compraMinima">
-    </div>
+      <!-- Descripción -->
+      <div class="form-group">
+        <label>Descripción</label>
+        <textarea rows="3" [(ngModel)]="nuevaRifa.descripcion" name="descripcion" required placeholder="Detalles del sorteo, premios, condiciones..."></textarea>
+      </div>
 
-    <!-- Dígitos de la rifa -->
-    <div class="mb-4">
-      <label for="digitos" class="form-label">Cantidad de dígitos del evento</label>
-      <select class="form-select" id="digitos" name="digitos" required [(ngModel)]="nuevaRifa.digitos">
-        <option *ngFor="let d of [1,2,3,4,5]" [value]="d">{{ d }}</option>
-      </select>
-    </div>
+      <!-- Configuración -->
+      <div class="form-group-row">
+        <div class="form-group">
+          <label>Precio por número</label>
+          <input type="number" min="0" [(ngModel)]="nuevaRifa.precio" name="precio" required placeholder="Ej: 10000">
+        </div>
+        <div class="form-group">
+          <label>Compra mínima</label>
+          <input type="number" min="1" [(ngModel)]="nuevaRifa.compraMinima" name="minima" required>
+        </div>
+      </div>
 
-    <!-- Subida de imagen -->
-    <div class="mb-3">
-      <label for="imagen" class="form-label">Imagen del evento</label>
-      <input type="file" class="form-control" id="imagen" name="imagen" (change)="onFileSelected($event)">
-    </div>
+      <!-- Dígitos -->
+      <div class="form-group">
+        <label>Dígitos del número</label>
+        <select [(ngModel)]="nuevaRifa.digitos" name="digitos" required>
+          <option value="" disabled selected>Seleccionar...</option>
+          <option *ngFor="let d of [1,2,3,4,5]" [value]="d">{{ d }} dígito{{ d > 1 ? 's' : '' }}</option>
+        </select>
+      </div>
 
+      <!-- Paquetes -->
+      <div class="form-group">
+        <label>Paquetes (cantidad de números)</label>
+        <div class="form-group-row">
+          <input type="number" *ngFor="let p of [0,1,2]; let i = index"
+                 [(ngModel)]="nuevaRifa.paquetes[i]" name="paquete{{ i }}"
+                 min="1" required placeholder="Paquete {{ i + 1 }}">
+        </div>
+      </div>
 
-    <!-- Botón -->
-    <button type="submit" class="btn btn-primary w-100">Crear rifa</button>
-  </form>
+      <!-- Imagen -->
+      <div class="form-group">
+        <label>Imagen del evento</label>
+        <input type="file" (change)="onFileSelected($event)">
+        <small class="hint">Formatos permitidos: JPG o PNG. Tamaño máximo 2MB.</small>
+      </div>
+
+      <!-- Botón -->
+      <button type="submit" class="btn-create">
+        <i class="bi bi-send me-2"></i> Crear Rifa
+      </button>
+    </form>
+  </div>
 </div>

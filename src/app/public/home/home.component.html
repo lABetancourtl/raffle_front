@@ -1,14 +1,22 @@
 <!-- Raffle.component.html -->
-<header class="bg-dark text-white py-3 shadow-sm">
+<header class=" text-white py-3 shadow-sm">
   <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
     <h2 class="mb-3 mb-md-0 fw-bold display-6">Raffle</h2>
     <nav class="nav nav-pills">
       <a href="#" class="nav-link text-white px-3">Inicio</a>
-<a href="#" class="nav-link text-white px-3" data-bs-toggle="modal" data-bs-target="#emailModal">
-  Mis Fondos
-</a>
-
+      <a href="#" class="nav-link text-white px-3" data-bs-toggle="modal" data-bs-target="#emailModal">Mis Fondos</a>
       <a href="#" class="nav-link text-white px-3">Metodología</a>
+
+      <div class="nav-item dropdown" [class.show]="isDropdownOpen">
+        <a href="#" class="nav-link text-white px-3" (click)="toggleDropdown($event)">
+          <i class="bi bi-person"></i>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end" [class.show]="isDropdownOpen">
+            <li><a class="dropdown-item" (click)="openModal('login')">Login</a></li>
+            <li><a class="dropdown-item" (click)="openModal('register')">Register</a></li>
+        </ul>
+      </div>
+
     </nav>
   </div>
 </header>
@@ -30,10 +38,11 @@
     <div class="col-12 col-lg-6">
       <div class="card shadow-lg border-0 rounded-4 overflow-hidden hover-scale">
         <img [src]="raffle.urlImagen" alt="{{ raffle.nameRaffle }}" class="card-img-top img-fluid raffle-img" />
-
         <div class="card-img-overlay d-flex align-items-end p-0">
-          <div class="bg-gradient-dark w-100 p-3 text-white">
-            <h5 class="mb-0 fw-light">Disponibles: {{ raffle.availableTickets }} boletas</h5>
+          <div class="w-100 p-3" style="background: linear-gradient(to top, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.1) 50%, transparent 100%)">
+            <h5 class="mb-0 fw-bold text-white" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.8); letter-spacing: 0.5px;">
+              Disponibles: {{ raffle.cantidadDisponibles }} Fondos
+            </h5>
           </div>
         </div>
       </div>
@@ -96,7 +105,7 @@
   </p>
 
   <div class="row g-3 packages-row">
-    <div class="col-4" *ngFor="let pack of [10, 20, 50]">
+    <div class="col-4" *ngFor="let pack of paquetes">
       <div class="ticket-card position-relative text-center p-3 rounded-3 hover-scale"
         (click)="selectPackage(pack)" 
         [class.selected-package]="selectedPackage === pack">
@@ -113,10 +122,12 @@
 <div class="d-grid mt-4">
   <button 
     class="btn btn-comprar-2" 
-    [disabled]="!selectedPackage">
+    [disabled]="!selectedPackage"
+    (click)="consultarCantidadNumerosDisponibles()">
     <i class="bi bi-cart3 me-2"></i> Comprar ahora
   </button>
 </div>
+
 
         
       </div>
@@ -139,8 +150,8 @@
 <div class="modal fade" id="emailModal" tabindex="-1" aria-labelledby="emailModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title" id="emailModalLabel">Mis Números</h5>
+      <div class="modal-header bg-dark text-white">
+        <h5 class="modal-title" id="emailModalLabel">Mis Fondos</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
       </div>
       <div class="modal-body">
@@ -192,14 +203,346 @@
   </div>
 </div>
 
+<!-- Modal de Visualización de Paquete -->
+<div class="modal fade " id="purchaseModal" tabindex="-1" aria-labelledby="purchaseModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered ">
+    <div class="modal-content">
+      <div class="modal-header bg-dark text-white">
+        <h5 class="modal-title" id="purchaseModalLabel">Detalles del Paquete</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="selectedPackage && raffle">
+          <div class="text-center mb-4">
+            <img [src]="raffle.urlImagen" alt="{{ raffle.nameRaffle }}" class="img-fluid rounded-3" style="max-height: 150px;">
+            <h4 class="mt-3">{{ raffle.nameRaffle }}</h4>
+          </div>
+          
+          <div class="border-bottom pb-3 mb-3">
+            <div class="d-flex justify-content-between mb-2">
+              <span class="text-muted">Paquete seleccionado:</span>
+              <span class="fw-bold">{{ selectedPackage }} fondos</span>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+              <span class="text-muted">Precio por fondo:</span>
+              <span class="fw-bold">{{ raffle.priceNumber | currency:'COP':'symbol':'1.0-0' }}</span>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span class="text-muted">Total:</span>
+              <span class="fw-bold text-primary fs-5">{{ (raffle.priceNumber * selectedPackage) | currency:'COP':'symbol':'1.0-0' }}</span>
+            </div>
+          </div>
 
 
+          <!-- Formulario de datos del comprador -->
+          <div class="mt-4 border-bottom pb-3 mb-3">
+            <h6 class="fw-bold mb-3">Información del Comprador</h6>
+            
+            <div class="row g-3">
+              <!-- Nombre -->
+              <div class="col-md-6">
+                <label for="buyerName" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="buyerName" 
+                      [(ngModel)]="buyerData.buyerName" name="buyerName"
+                      required placeholder="Ingresa tu nombre">
+              </div>
+              
+              <!-- Apellido -->
+              <div class="col-md-6">
+                <label for="buyerApellido" class="form-label">Apellido</label>
+                <input type="text" class="form-control" id="buyerApellido" 
+                      [(ngModel)]="buyerData.buyerApellido" name="buyerApellido"
+                      required placeholder="Ingresa tu apellido">
+              </div>
+              
+              <!-- País -->
+              <div class="col-md-6">
+                <label for="buyerPais" class="form-label">País</label>
+                <select class="form-select" id="buyerPais" 
+                        [(ngModel)]="buyerData.buyerPais" name="buyerPais" required
+                        (change)="actualizarPrefijo()">
+                  <option value="" disabled>Selecciona tu país</option>
+                  <option *ngFor="let pais of paises" [value]="pais.nombre">
+                    {{ pais.nombre }} ({{ pais.prefijo }})
+                  </option>
+                </select>
+              </div>
+              
+              <!-- Prefijo y Teléfono -->
+              <div class="col-md-6">
+                <label for="buyerPhone" class="form-label">Teléfono</label>
+                <div class="input-group">
+                  <input type="text" class="form-control bg-light" style="max-width: 100px;" 
+                        [value]="buyerData.buyerPrefix" disabled>
+
+                  <input type="tel" class="form-control" id="buyerPhone" 
+                        [(ngModel)]="buyerData.buyerPhone" name="buyerPhone"
+                        required placeholder="Número de teléfono">
+                </div>
+              </div>
+
+              <!-- Email -->
+              <div class="col-md-6">
+                <label for="buyerEmail" class="form-label">Email</label>
+                <input type="email" class="form-control" id="buyerEmail" 
+                      [(ngModel)]="buyerData.buyerEmail" name="buyerEmail"
+                      required placeholder="tucorreo@example.com">
+              </div>
+
+              <!-- Confirmar Email -->
+              <div class="col-md-6">
+                <label for="buyerConfirmarEmail" class="form-label">Confirmar Email</label>
+                <input type="email" class="form-control" id="buyerConfirmarEmail" 
+                      [(ngModel)]="buyerData.buyerConfirmarEmail" name="buyerConfirmarEmail"
+                      required placeholder="Confirma tu correo">
+              </div>
+            </div>
+          </div>
+
+          <!-- Selección de moneda -->
+          <div class="mt-4">
+            <h6 class="fw-bold mb-2">Pagar en moneda</h6>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" id="monedaCOP" name="moneda"
+                    [(ngModel)]="selectedCurrency" value="COP">
+              <label class="form-check-label" for="monedaCOP">COP</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" id="monedaEUR" name="moneda"
+                    [(ngModel)]="selectedCurrency" value="EUR">
+              <label class="form-check-label" for="monedaEUR">EUR</label>
+            </div>
+            <span class="fw-bold text-primary fs-5">
+            {{ (raffle.priceNumber * selectedPackage) | currency:selectedCurrency:'symbol':'1.0-0' }}
+            </span>
+          </div>
+
+          <button 
+            type="button" 
+            class="btn btn-success"
+            (click)="validarYRealizarPago()">
+            <i class="bi bi-credit-card me-2"></i> Pagar
+          </button>
+
+        </div>
+        
+        <div *ngIf="!selectedPackage" class="alert alert-warning text-center">
+          Por favor selecciona un paquete antes de continuar.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Login -->
+<div class="modal fade" id="loginModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Login</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Aquí tu formulario de login -->
+        <form>
+          <div class="mb-3">
+            <label>Email</label>
+            <input type="email" class="form-control">
+          </div>
+          <div class="mb-3">
+            <label>Password</label>
+            <input type="password" class="form-control">
+          </div>
+          <button type="submit" class="btn btn-primary">Ingresar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Register -->
+<div class="modal fade" id="registerModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Register</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="registerEmail">Email</label>
+            <input 
+              type="email" 
+              class="form-control" 
+              id="registerEmail"
+              name="registerEmail"
+              [(ngModel)]="registerEmail"
+              required
+              email
+              #emailCtrl="ngModel"
+              placeholder="tucorreo@ejemplo.com">
+            <div *ngIf="emailCtrl.invalid && (emailCtrl.touched || emailCtrl.dirty)" class="text-danger small mt-1">
+              Ingresa un correo electrónico válido.
+            </div>
+          </div>
+          <div class="mb-3">
+            <label>Password</label>
+            <div class="position-relative">
+              <input [type]="showPassword ? 'text' : 'password'" class="form-control" [(ngModel)]="registerPassword" name="registerPassword">
+              <span class="position-absolute top-50 end-0 translate-middle-y me-3" style="cursor:pointer;"
+                    (click)="showPassword = !showPassword">
+                <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'"></i>
+              </span>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label>Confirm Password</label>
+            <div class="position-relative">
+              <input [type]="showConfirmPassword ? 'text' : 'password'" class="form-control" [(ngModel)]="registerConfirmPassword" name="registerConfirmPassword">
+              <span class="position-absolute top-50 end-0 translate-middle-y me-3" style="cursor:pointer;"
+                    (click)="showConfirmPassword = !showConfirmPassword">
+                <i class="bi" [ngClass]="showConfirmPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'"></i>
+              </span>
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <label>Parte frontal de Documento</label>
+            <i class="bi bi-person-vcard ms-2"></i>
+            <input type="file" class="form-control" (change)="onFileSelected($event, 'front')" required>
+          </div> 
+
+          <div class="mb-3">
+            <label>Parte trasera de Documento</label>
+            <i class="bi bi-postcard ms-2"></i>
+            <input type="file" class="form-control" (change)="onFileSelected($event, 'back')" required>
+          </div> 
+
+          <div *ngIf="errorMsg" class="alert alert-danger py-2 small mt-2">
+            {{ errorMsg }}
+          </div>
+
+          <div class="mb-3">
+            <button type="submit" class="btn btn-comprar-2" 
+              (click)="registrarUsuario()">
+               Registrar
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
 
-<footer class="bg-dark text-white text-center py-4 mt-auto">
-  <p class="mb-1">&copy; 2025 Todos los derechos reservados. Raffle</p>
-  <p class="mb-0">Contáctanos: <a href="mailto:contacto.co" class="text-info text-decoration-none">contacto.co</a></p>
+<!-- Modal de advertencia de disponibilidad -->
+<div class="modal fade" id="disponibilidadModal" tabindex="-1" aria-labelledby="disponibilidadModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-info ">
+        <h5 class="modal-title" id="disponibilidadModalLabel">Disponibilidad limitada</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        Solo quedan <strong>{{ cantidadDisponible }}</strong> fondos disponibles. ¿Deseas continuar con la compra de <strong>{{ cantidadDisponible }}</strong> fondos?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="confirmarCompraReducida()">Sí, continuar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- OLA SUPERIOR -->
+<div class="footer-wave">
+
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-content">
+<div class="footer-brand">
+  <svg class="footer-logo" width="40" height="40" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="raffleGradient" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#4facfe"/>
+        <stop offset="1" stop-color="#00f2fe"/>
+      </linearGradient>
+    </defs>
+    <rect x="4" y="4" width="56" height="56" rx="12" fill="url(#raffleGradient)"/>
+    <path d="M20 32c0-6 4-11 9-13v-5h6v5c5 2 9 7 9 13s-4 11-9 13v5h-6v-5c-5-2-9-7-9-13z" fill="#fff"/>
+  </svg>
+  <span class="brand-name">Raffle</span>
+</div>
+
+
+    <div class="footer-links">
+      <div class="footer-section">
+        <h4 class="footer-title">Legal</h4>
+        <ul class="footer-list">
+          <li><a href="#" class="footer-link">Términos y condiciones</a></li>
+          <li><a href="#" class="footer-link">Política de privacidad</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h4 class="footer-title">Contacto</h4>
+        <ul class="footer-list">
+          <li><a href="mailto:contacto@raffle.co" class="footer-link">contactoraffle.co</a></li>
+          <li><a href="tel:+573206091952" class="footer-link">+57 320 6091952</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h4 class="footer-title">Síguenos</h4>
+        <div class="social-icons">
+          <a href="#" class="social-icon"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="social-icon"><i class="bi bi-instagram"></i></a>
+          <a href="#" class="social-icon"><i class="bi bi-twitter-x"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TARJETA DESARROLLADOR -->
+  <div class="developer-card">
+    <div class="developer-photo">
+      <img src="assets/ABA.jpeg" alt="Anderson Betancourt" class="photo">
+    </div>
+    <div class="developer-info">
+      <h4 class="developer-name">Anderson Betancourt A.</h4>
+      <p class="developer-title">Desarrollador</p>
+      <div class="developer-contacts">
+        <a href="mailto:anderson.betancourta@gmail.com" class="contact-link">
+          <i class="bi bi-envelope"></i> {{ 'anderson.betancourta@gmail.com' }}
+        </a>
+        <a href="https://wa.me/573206091952" class="contact-link">
+          <i class="bi bi-whatsapp"></i> +57 320 6091952
+        </a>
+        <div class="developer-social">
+          <a href="#" class="social-link"><i class="bi bi-linkedin"></i></a>
+          <a href="#" class="social-link"><i class="bi bi-github"></i></a>
+          <a href="#" class="social-link"><i class="bi bi-briefcase"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COPYRIGHT -->
+  <div class="footer-bottom">
+    <p class="copyright">
+      &copy;  Raffle. Todos los derechos reservados.
+    </p>
+  </div>
 </footer>
+
 
 
 
@@ -207,4 +550,9 @@
 <a [href]="instagramUrl" target="_blank" class="instagram-float" id="instagramFloat">
   <i class="bi bi-instagram"></i>
 </a>
+
+<a [href]="telegramUrl" target="_blank" class="telegram-float" id="telegramFloat">
+  <i class="bi bi-telegram"></i>
+</a>
+
 

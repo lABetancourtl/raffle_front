@@ -1,8 +1,109 @@
-form {
-  max-width: 600px;
-  margin: 0 auto;
+.admin-create-container {
+  display: flex;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background-color: #f6f7fb;
+  min-height: 100vh;
 }
 
-h2 {
-  text-align: center;
+.admin-create-card {
+  background: #ffffff;
+  padding: 2rem 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 720px;
+}
+
+.admin-create-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  display: flex;
+  align-items: center;
+}
+
+.admin-create-subtitle {
+  font-size: 0.95rem;
+  color: #6c757d;
+  margin-bottom: 1.5rem;
+}
+
+.admin-create-form .form-group {
+  margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-create-form label {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: #343a40;
+}
+
+.admin-create-form input[type="text"],
+.admin-create-form input[type="number"],
+.admin-create-form select,
+.admin-create-form textarea {
+  padding: 0.75rem;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  background: #fdfdfd;
+  transition: border-color 0.2s;
+}
+
+.admin-create-form input:focus,
+.admin-create-form select:focus,
+.admin-create-form textarea:focus {
+  outline: none;
+  border-color: #3a7bd5;
+}
+
+.admin-create-form .form-group-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.admin-create-form .form-group-row input {
+  flex: 1;
+}
+
+.hint {
+  font-size: 0.8rem;
+  color: #999;
+}
+
+.btn-create {
+  background: linear-gradient(to right, #3a7bd5, #00d2ff);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-create:hover {
+  box-shadow: 0 4px 12px rgba(58, 123, 213, 0.2);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 600px) {
+  .admin-create-card {
+    padding: 1.5rem;
+  }
+
+  .admin-create-title {
+    font-size: 1.4rem;
+  }
+
+  .admin-create-form .form-group-row {
+    flex-direction: column;
+  }
 }

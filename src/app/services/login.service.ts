@@ -2,13 +2,16 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { enviroments } from '../../enviroments/enviroments';
+import { jwtDecode } from 'jwt-decode';
+
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
   
-  private apiUrl = enviroments.apiUrl  //url del api creada de manera global
+  private apiUrl = enviroments.apiUrl  
 
   constructor(private http: HttpClient) {}
 
@@ -37,15 +40,14 @@ export class LoginService {
   
   isAuthenticated(): boolean {
     const token = localStorage.getItem('authToken');
-    if (!token) {
-      return false;
-    }
-  
+    if (!token) return false;
+
     try {
       const decoded: any = jwtDecode(token);
       const now = Date.now() / 1000;
-      return decoded.exp > now; // Solo devuelve true si el token aún es válido
+      return decoded.exp > now;
     } catch (error) {
+      console.error('Token inválido o malformado', error);
       return false;
     }
   }
@@ -64,9 +66,7 @@ export class LoginService {
 
  
 }
-function jwtDecode(token: string): any {
-  throw new Error('Function not implemented.');
-}
+
 
 
 

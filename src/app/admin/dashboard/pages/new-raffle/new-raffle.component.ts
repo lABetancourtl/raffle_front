@@ -19,17 +19,10 @@ export class NewRaffleComponent {
     precio: null,
     compraMinima: 1,
     digitos: 2,
+    paquetes: [null, null, null],
   };
 
   imagenSeleccionada: File | null = null;
-
-
- // estados = [
- //   { valor: 'PAUSA', texto: 'Pausa' },
- //   { valor: 'ACTIVO', texto: 'Activa' },
-  //  { valor: 'FINALIZADO', texto: 'Finalizada' }
- // ];
- 
 
   constructor(
     private adminService: AdminService,
@@ -50,7 +43,7 @@ crearRifa() {
   const formData = new FormData();
   formData.append('imagen', this.imagenSeleccionada);
 
-  // ✅ Subimos la imagen usando el servicio
+  //Subimos la imagen usando el servicio
   this.adminService.subirFoto(formData).subscribe({
     next: (res) => {
       const urlImagen = res.url;
@@ -61,23 +54,24 @@ crearRifa() {
         priceNumber: this.nuevaRifa.precio,
         minPurchase: this.nuevaRifa.compraMinima,
         digitLength: this.nuevaRifa.digitos,
+        paquetes: this.nuevaRifa.paquetes, 
       };
 
 
       this.adminService.crearRifa(payload).subscribe({
         next: (res) => {
-          console.log('✅ Rifa creada:', res);
+          console.log('Rifa creada:', res);
           alert('Rifa creada exitosamente');
-          this.router.navigate(['/dashboard/inicio']);
+          this.router.navigate(['/dashboard/raffles']);
         },
         error: (err) => {
-          console.error('❌ Error al crear rifa:', err);
+          console.error('Error al crear rifa:', err);
           alert('Error al crear la rifa');
         }
       });
     },
     error: (err) => {
-      console.error('❌ Error al subir imagen:', err);
+      console.error('Error al subir imagen:', err);
       alert('Error al subir la imagen');
     }
   });
