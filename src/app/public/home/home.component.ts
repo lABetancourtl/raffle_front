@@ -47,6 +47,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
   docFront: File | null = null;
   docBack: File | null = null;
 
+  //Datos crear usuario no validaado (proceso 1)
+  newUserNotValidated = {
+    email: '',
+    password: '',
+  }
 
 
   instagramUrl = enviroments.instagramUrl;
@@ -316,7 +321,6 @@ onFileSelected(event: Event, type: 'front' | 'back') {
 
 registrarUsuario() {
 
-  console.log("desde registrarUsuario al inicio: ", this.registerEmail)
   if (!this.registerEmail || !this.registerPassword || !this.registerConfirmPassword || !this.docFront || !this.docBack) {
     this.errorMsg = 'Por favor completa todos los campos requeridos.';
     return;
@@ -326,6 +330,18 @@ registrarUsuario() {
     this.errorMsg = 'Las contraseñas no coinciden.';
     return;
   }
+
+  const formData = new FormData();
+  formData.append('docFront', this.docFront);
+  formData.append('docBack', this.docBack);
+
+  console.log("Fotos: ",this.docFront, this.docBack)
+
+  const payload = {
+    email: this.registerEmail,
+    password: this.registerPassword,
+  };
+
 }
 
 
