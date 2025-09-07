@@ -12,7 +12,9 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './new-raffle.component.html',
   styleUrl: './new-raffle.component.css'
 })
+
 export class NewRaffleComponent {
+  
   nuevaRifa = {
     nombre: '',
     descripcion: '',

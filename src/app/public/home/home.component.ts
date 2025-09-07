@@ -4,7 +4,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { enviroments } from '../../../enviroments/enviroments';
 import { countries, ICountry } from 'countries-list';
-// ...existing code...
+import { RegisterService } from '../../services/register.service';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+
 
 // Define una interfaz para nuestro país personalizado
 interface PaisPersonalizado {
@@ -84,7 +87,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   @ViewChild('emailForm') emailForm!: NgForm;
 
-  constructor(private raffleService: RaffleService) {
+  constructor(
+    private raffleService: RaffleService,
+    private registerService: RegisterService,
+    private router: Router,
+    private http: HttpClient
+
+  ) {
     // Convertir el objeto countries a array y ordenar
   this.paises = Object.entries(countries)
     .map(([code, c]) => ({
@@ -321,6 +330,7 @@ onFileSelected(event: Event, type: 'front' | 'back') {
 
 registrarUsuario() {
 
+
   if (!this.registerEmail || !this.registerPassword || !this.registerConfirmPassword || !this.docFront || !this.docBack) {
     this.errorMsg = 'Por favor completa todos los campos requeridos.';
     return;
@@ -335,7 +345,8 @@ registrarUsuario() {
   formData.append('docFront', this.docFront);
   formData.append('docBack', this.docBack);
 
-  console.log("Fotos: ",this.docFront, this.docBack)
+  this
+
 
   const payload = {
     email: this.registerEmail,
