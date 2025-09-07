@@ -4,7 +4,9 @@ import { LoginComponent } from './admin/login/login.component';
 import { DashboardComponent } from './admin/dashboard/dashboard.component';
 import { NewRaffleComponent } from './admin/dashboard/pages/new-raffle/new-raffle.component';
 import { RafflesComponent } from './admin/dashboard/pages/raffles/raffles.component';
+import { DocumentValidationComponent } from './admin/dashboard/pages/document-validation/document-validation.component';
 import { AuthGuard } from './guards/auth.guard';
+
 
 
 export const routes: Routes = [
@@ -15,6 +17,7 @@ export const routes: Routes = [
         { path: '', redirectTo: 'newraffle', pathMatch: 'full' },
         { path: 'newraffle', component: NewRaffleComponent }, 
         { path: 'raffles', component: RafflesComponent }, 
+        { path: 'documentvalidation', component: DocumentValidationComponent }, 
     ] },
     { path: '**', redirectTo: 'home' }
 ];
