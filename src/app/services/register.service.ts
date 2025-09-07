@@ -15,16 +15,18 @@ export class RegisterService {
 
   constructor(private http: HttpClient) {}
 
-  subirDocumentos(data: any): Observable<any> {
-    const token = localStorage.getItem('authToken');
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
+subirFotos(data: any): Observable<any> {
+//  const token = localStorage.getItem('authToken');
+//  const headers = new HttpHeaders({
+//    Authorization: `Bearer ${token}`,
+//  });
+  return this.http.post(`${this.apiUrl}/imagenes`, data);
+}
 
-    return this.http.post(`${this.apiUrl}/usuarios/subirDocumentos`, data, { headers });
-     
-  }
+registrarUsuario(data: any): Observable<any> { 
 
+  return this.http.post(`${this.apiUrl}/admin/crearUsuarioHome`, data);
+}
 
 
 }
