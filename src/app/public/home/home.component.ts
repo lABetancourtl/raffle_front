@@ -342,16 +342,39 @@ registrarUsuario() {
   }
 
   const formData = new FormData();
-  formData.append('docFront', this.docFront);
-  formData.append('docBack', this.docBack);
+  formData.append('imagenes', this.docFront);
+  formData.append('imagenes', this.docBack);
 
-  this
+  this.registerService.subirFotos(formData).subscribe({
+    next: (res) => {
+      const urlImagDocFront = res.urls[0];
+      const urlImagDocBack = res.urls[1];
+      const payload = {
+        urlImagDocFront,
+        urlImagDocBack,
+        email: this.registerEmail,
+        password: this.registerPassword,
+      };
 
 
-  const payload = {
-    email: this.registerEmail,
-    password: this.registerPassword,
-  };
+      this.registerService.registrarUsuario(payload).subscribe({
+        next: (res) => {
+          console.log('Usuario registrado:', res);
+          alert('Registro exitoso. Por favor verifica tu email antes de iniciar sesión.');
+          this.router.navigate(['/']);
+        },
+        error: (err) => {
+          console.error('Error al registrar usuario:', err);
+          this.errorMsg = err.error?.message || 'Error al registrar usuario.';
+        }
+      });
+    },
+    error: (err) => {
+      console.error('Error al subir documentos:', err);
+      this.errorMsg = 'Error al subir los documentos.';
+    }
+  });
+
 
 }
 
