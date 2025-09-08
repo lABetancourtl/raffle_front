@@ -9,6 +9,16 @@ import { enviroments } from '../../enviroments/enviroments';
 export class AdminService {
 
 
+// En admin.service.ts
+activarUsuario(datosUsuario: any): Observable<any> {
+    const token = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+  return this.http.patch<any>(`${this.apiUrl}/admin/validarDocumento`, datosUsuario, { headers });
+}
+
   private apiUrl = enviroments.apiUrl;
 
   constructor(private http: HttpClient) {}

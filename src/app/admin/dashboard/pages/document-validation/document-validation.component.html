@@ -1,29 +1,25 @@
 <div class="p-3">
   <h2 class="mb-4">Listado de Registros pendientes por revisar documentacion</h2>
 
-<button class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#miModal">
-  <i class="bi bi-arrow-clockwise"></i> Recargar
-</button>
-
-
-<!-- Vista tabla para desktop con estilo Bootstrap -->
-<div class="table-responsive d-none d-md-block">
-  <table class="table table-striped table-bordered table-hover align-middle">
-    <thead class="table-primary text-center">
-      <tr>
-        <th>Email</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let user of usersEmailVerificado" (dblclick)="abrirModalConEmail(user.email)">
-        <td class="text-center">{{ user.email }}</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+  <!-- Vista tabla para desktop con estilo Bootstrap -->
+  <div class="table-responsive d-none d-md-block">
+    <table class="table table-striped table-bordered table-hover align-middle">
+      <thead class="table-primary text-center">
+        <tr>
+          <th>Email</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of usersEmailVerificado" (dblclick)="abrirModalConEmail(user)">
+          <td class="text-center">{{ user.email }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
   <!-- Vista tipo card para móviles -->
   <div class="d-md-none">
+    <!-- Aquí puedes agregar la vista para móviles si es necesario -->
   </div>
 </div>
 
@@ -46,41 +42,70 @@
             <!-- Email -->
             <div class="col-md-6">
               <label for="email" class="form-label">Email</label>
-              <input type="email" id="email" class="form-control" name="email" [(ngModel)]="selectedEmail" readonly>
+              <input type="email" id="email" class="form-control" name="email" 
+                     [value]="selectedUser?.email" readonly>
             </div>
 
             <!-- Nombre -->
             <div class="col-md-6">
               <label for="name" class="form-label">Nombre</label>
-              <input type="text" id="name" class="form-control"  name="name">
+              <input type="text" id="name" class="form-control" name="name" 
+                     [(ngModel)]="userFormData.name" required>
             </div>
 
             <!-- Apellido -->
             <div class="col-md-6">
               <label for="surName" class="form-label">Apellido</label>
-              <input type="text" id="surName" class="form-control"  name="surName">
+              <input type="text" id="surName" class="form-control" name="surName" 
+                     [(ngModel)]="userFormData.surName" required>
             </div>
 
             <!-- Número de Documento -->
             <div class="col-md-6">
               <label for="docNumber" class="form-label">Número de Documento</label>
-              <input type="text" id="docNumber" class="form-control"  name="docNumber">
+              <input type="text" id="docNumber" class="form-control" name="docNumber" 
+                     [(ngModel)]="userFormData.docNumber" required>
             </div>
 
             <!-- Fecha de nacimiento -->
             <div class="col-md-6">
               <label for="dateOfBirth" class="form-label">Fecha de Nacimiento</label>
-              <input type="date" id="dateOfBirth" class="form-control" name="dateOfBirth">
+              <input type="date" id="dateOfBirth" class="form-control" name="dateOfBirth" 
+                     [(ngModel)]="userFormData.dateOfBirth" required>
             </div>
 
-            <!-- Imagen -->
-            <div class="col-12">
-              <label for="imagen" class="form-label">Imagen</label>
-              <div class="text-center">
-           <img src="assets/rlx.jpeg" alt="Imagen documento" class="img-fluid rounded border mb-2" style="max-height: 200px;">
+            <div class="col-12" *ngIf="selectedUser?.urlImagDocFront || selectedUser?.urlImagDocBack">
+              <label class="form-label">Imágenes del Documento</label>
+              <div id="carouselImagenes" class="carousel slide" data-bs-ride="carousel">
+                
+                <div class="carousel-inner text-center">
+                  <!-- Imagen Frontal -->
+                  <div class="carousel-item active" *ngIf="selectedUser?.urlImagDocFront">
+                    <img [src]="selectedUser.urlImagDocFront"
+                         alt="Imagen Frontal"
+                         class="img-fluid rounded border mb-2"
+                         style="max-height: 200px;">
+                    <p class="mt-2">Frontal</p>
+                  </div>
 
+                  <!-- Imagen Reverso -->
+                  <div class="carousel-item" *ngIf="selectedUser?.urlImagDocBack">
+                    <img [src]="selectedUser.urlImagDocBack"
+                         alt="Imagen Reverso"
+                         class="img-fluid rounded border mb-2"
+                         style="max-height: 200px;">
+                    <p class="mt-2">Reverso</p>
+                  </div>
+                </div>
+
+                <!-- Controles -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselImagenes" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselImagenes" data-bs-slide="next">
+                  <span class="carousel-control-next-icon"></span>
+                </button>
               </div>
-  
             </div>
 
           </div>
@@ -89,13 +114,10 @@
 
       <!-- Footer -->
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-        <button type="button" class="btn btn-primary" >Guardar</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Rechazar</button>
+        <button type="button" class="btn btn-primary" (click)="activarUsuario()">Activar</button>
       </div>
 
     </div>
   </div>
 </div>
-
-
-
