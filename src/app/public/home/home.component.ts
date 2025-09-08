@@ -7,6 +7,7 @@ import { countries, ICountry } from 'countries-list';
 import { RegisterService } from '../../services/register.service';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { LoginService } from '../../services/login.service';
 
 
 // Define una interfaz para nuestro país personalizado
@@ -90,6 +91,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   constructor(
     private raffleService: RaffleService,
     private registerService: RegisterService,
+    private loginService: LoginService,
     private router: Router,
     private http: HttpClient
 
@@ -329,8 +331,6 @@ onFileSelected(event: Event, type: 'front' | 'back') {
 }
 
 registrarUsuario() {
-
-
   if (!this.registerEmail || !this.registerPassword || !this.registerConfirmPassword || !this.docFront || !this.docBack) {
     this.errorMsg = 'Por favor completa todos los campos requeridos.';
     return;
@@ -374,10 +374,34 @@ registrarUsuario() {
       this.errorMsg = 'Error al subir los documentos.';
     }
   });
-
-
 }
 
+
+loginUser() {
+  if (!this.registerEmail || !this.registerPassword) {
+    this.errorMsg = 'Por favor completa todos los campos requeridos.';
+    return;
+  }
+
+  const payload = {
+    email: this.registerEmail,
+    password: this.registerPassword,
+  };
+
+  this.loginService.loginUser(payload).subscribe({
+    next: (res) => {
+      console.log('Usuario logueado:', res);
+      localStorage.setItem('token', res.token);
+      alert('Inicio de sesión exitoso.');
+      this.router.navigate(['/']);
+      window.location.reload();
+    },
+    error: (err) => {
+      console.error('Error al iniciar sesión:', err);
+      this.errorMsg = err.error?.message || 'Error al iniciar sesión.';
+    }
+  }); 
+}
 
 
 

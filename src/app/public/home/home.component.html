@@ -343,18 +343,41 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Login</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+       
       </div>
       <div class="modal-body">
-        <form>
+        <!-- Agregar ngForm y (ngSubmit) -->
+        <form #loginForm="ngForm" (ngSubmit)="loginUser()">
           <div class="mb-3">
-            <label>Email</label>
-            <input type="email" class="form-control">
+            <label for="email">Email</label>
+            <!-- Agregar ngModel y name -->
+            <input 
+              type="email" 
+              class="form-control" 
+              id="email"
+              [(ngModel)]="registerEmail" 
+              name="email"
+              required
+              [class.is-invalid]="errorMsg">
           </div>
           <div class="mb-3">
-            <label>Password</label>
-            <input type="password" class="form-control">
+            <label for="password">Password</label>
+            <!-- Agregar ngModel y name -->
+            <input 
+              type="password" 
+              class="form-control" 
+              id="password"
+              [(ngModel)]="registerPassword" 
+              name="password"
+              required
+              [class.is-invalid]="errorMsg">
           </div>
+          
+          <!-- Mostrar mensaje de error -->
+          <div *ngIf="errorMsg" class="alert alert-danger mt-3">
+            {{ errorMsg }}
+          </div>
+          
           <button type="submit" class="btn btn-primary">Ingresar</button>
         </form>
       </div>
