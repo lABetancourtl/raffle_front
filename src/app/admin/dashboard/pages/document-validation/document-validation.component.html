@@ -12,10 +12,12 @@
     <thead class="table-primary text-center">
       <tr>
         <th>Email</th>
-        <th>Fecha registro</th>
       </tr>
     </thead>
     <tbody>
+      <tr *ngFor="let user of usersEmailVerificado" (dblclick)="abrirModalConEmail(user.email)">
+        <td class="text-center">{{ user.email }}</td>
+      </tr>
     </tbody>
   </table>
 </div>
@@ -44,7 +46,7 @@
             <!-- Email -->
             <div class="col-md-6">
               <label for="email" class="form-label">Email</label>
-              <input type="email" id="email" class="form-control"  name="email">
+              <input type="email" id="email" class="form-control" name="email" [(ngModel)]="selectedEmail" readonly>
             </div>
 
             <!-- Nombre -->

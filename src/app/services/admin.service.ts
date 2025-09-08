@@ -8,6 +8,7 @@ import { enviroments } from '../../enviroments/enviroments';
 })
 export class AdminService {
 
+
   private apiUrl = enviroments.apiUrl;
 
   constructor(private http: HttpClient) {}
@@ -50,6 +51,11 @@ compraManualDesdeAdmin(data: any, numeroManual: any): Observable<any> {
   });
 
   return this.http.post(`${this.apiUrl}/admin/asignarNumero`, {data, numeroManual}, { headers });
+}
+
+getUsuarioEmailVerificado() {
+
+ return this.http.get<any[]>(`${this.apiUrl}/admin/usuarioEmailVerificado`);
 }
 
 }

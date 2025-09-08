@@ -64,6 +64,12 @@ export class LoginService {
     window.location.href = '/login';
   }
 
+
+  validarEmail(data: any): Observable<any> {
+
+    console.log('Enviando datos a la API:', data);
+    return this.http.patch(`${this.apiUrl}/admin/validarEmail`, data); 
+  }
  
 }
 

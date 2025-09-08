@@ -6,12 +6,14 @@ import { NewRaffleComponent } from './admin/dashboard/pages/new-raffle/new-raffl
 import { RafflesComponent } from './admin/dashboard/pages/raffles/raffles.component';
 import { DocumentValidationComponent } from './admin/dashboard/pages/document-validation/document-validation.component';
 import { AuthGuard } from './guards/auth.guard';
+import { ValidationEmailComponent } from './public/validation-email/validation-email.component';
 
 
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' }, 
     { path: 'home', component: HomeComponent },
+    { path: 'validationEmail', component: ValidationEmailComponent },
     { path: 'login', component: LoginComponent },
     { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard], children: [
         { path: '', redirectTo: 'newraffle', pathMatch: 'full' },

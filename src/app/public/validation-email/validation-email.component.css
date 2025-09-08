@@ -1,0 +1,62 @@
+/* Contenedor centrado */
+.validation-card-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(to right, #0d6efd, #6610f2);
+  font-family: 'Segoe UI', sans-serif;
+  padding: 1rem;
+}
+
+/* Tarjeta de validación */
+.validation-card {
+  background-color: #fff;
+  border-radius: 1.5rem;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  padding: 2.5rem 2rem;
+  max-width: 400px;
+  width: 100%;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Icono principal */
+.brand-icon {
+  font-size: 3rem;
+  color: #0d6efd;
+  margin-bottom: 1rem;
+}
+
+/* Inputs */
+.validation-card .form-control {
+  border-radius: 0.75rem;
+}
+
+/* Botón principal */
+.validation-card .btn-primary {
+  border-radius: 0.75rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+.validation-card .btn-primary:hover {
+  transform: scale(1.03);
+}
+
+/* Alertas */
+.alert {
+  border-radius: 0.75rem;
+  font-size: 0.9rem;
+  padding: 0.6rem 1rem;
+}
+
+/* Animación de fadeIn */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
