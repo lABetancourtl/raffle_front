@@ -97,39 +97,37 @@
           </div>
         </div>
 
-<!-- En tu archivo Raffle.component.html -->
-<section class="mt-4">
-  <h5 class="fw-bold mb-3">Selecciona tu paquete</h5>
-  <p class="text-muted small mb-4">
-    <i class="bi bi-info-circle me-2"></i> Tus números serán seleccionados aleatoriamente.
-  </p>
-
-  <div class="row g-3 packages-row">
-    <div class="col-4" *ngFor="let pack of paquetes">
-      <div class="ticket-card position-relative text-center p-3 rounded-3 hover-scale"
-        (click)="selectPackage(pack)" 
-        [class.selected-package]="selectedPackage === pack">
-        <div class="selection-indicator" [class.selected]="selectedPackage === pack"></div>
-        <div class="fs-2 fw-bold text-primary">{{ pack }}</div>
-        <div class="text-muted small">Fondos</div>
-        <div class="mt-2 fw-bold">{{ (raffle.priceNumber * pack) | currency:'COP':'symbol':'1.0-0' }}</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-        <!-- Botón de compra -->
-<div class="d-grid mt-4">
-  <button 
-    class="btn btn-comprar-2" 
-    [disabled]="!selectedPackage"
-    (click)="consultarCantidadNumerosDisponibles()">
-    <i class="bi bi-cart3 me-2"></i> Comprar ahora
-  </button>
-</div>
 
 
-        
+        <section class="mt-4">
+          <h5 class="fw-bold mb-3">Selecciona tu paquete</h5>
+          <p class="text-muted small mb-4">
+            <i class="bi bi-info-circle me-2"></i> Tus números serán seleccionados aleatoriamente.
+          </p>
+
+          <div class="row g-3 packages-row">
+            <div class="col-4" *ngFor="let pack of paquetes">
+              <div class="ticket-card position-relative text-center p-3 rounded-3 hover-scale"
+                (click)="selectPackage(pack)" 
+                [class.selected-package]="selectedPackage === pack">
+                <div class="selection-indicator" [class.selected]="selectedPackage === pack"></div>
+                <div class="fs-2 fw-bold text-primary">{{ pack }}</div>
+                <div class="text-muted small">Fondos</div>
+                <div class="mt-2 fw-bold">{{ (raffle.priceNumber * pack) | currency:'COP':'symbol':'1.0-0' }}</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+                <!-- Botón de compra -->
+        <div class="d-grid mt-4">
+          <button 
+            class="btn btn-comprar-2" 
+            [disabled]="!selectedPackage"
+            (click)="consultarCantidadNumerosDisponibles()">
+            <i class="bi bi-cart3 me-2"></i> Comprar ahora
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -244,7 +242,7 @@
                 <label for="buyerName" class="form-label">Nombre</label>
                 <input type="text" class="form-control" id="buyerName" 
                       [(ngModel)]="buyerData.buyerName" name="buyerName"
-                      required placeholder="Ingresa tu nombre">
+                      required placeholder="Ingresa tu nombre" readonly>
               </div>
               
               <!-- Apellido -->
@@ -252,7 +250,7 @@
                 <label for="buyerApellido" class="form-label">Apellido</label>
                 <input type="text" class="form-control" id="buyerApellido" 
                       [(ngModel)]="buyerData.buyerApellido" name="buyerApellido"
-                      required placeholder="Ingresa tu apellido">
+                      required placeholder="Ingresa tu apellido" readonly>
               </div>
               
               <!-- País -->
@@ -286,7 +284,7 @@
                 <label for="buyerEmail" class="form-label">Email</label>
                 <input type="email" class="form-control" id="buyerEmail" 
                       [(ngModel)]="buyerData.buyerEmail" name="buyerEmail"
-                      required placeholder="tucorreo@example.com">
+                      required placeholder="tucorreo@example.com" readonly>
               </div>
 
               <!-- Confirmar Email -->
@@ -294,7 +292,7 @@
                 <label for="buyerConfirmarEmail" class="form-label">Confirmar Email</label>
                 <input type="email" class="form-control" id="buyerConfirmarEmail" 
                       [(ngModel)]="buyerData.buyerConfirmarEmail" name="buyerConfirmarEmail"
-                      required placeholder="Confirma tu correo">
+                      required placeholder="Confirma tu correo" readonly>
               </div>
             </div>
           </div>

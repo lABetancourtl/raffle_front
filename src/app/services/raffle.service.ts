@@ -66,7 +66,10 @@ obtenerCantidadNumerosDisponibles(idRaffle: string): Observable<{ error: boolean
 }
 
   crearPreferenciaPago(datosPago: any): Observable<any> {
+
+   // console.log("Datos para crear preferencia de pago: ", datosPago);
     return this.http.post(`${this.apiUrl}/mercadopago/crear-preferencia`, datosPago);
+
   }
 
   procesarPago(formData: any): Observable<any> {

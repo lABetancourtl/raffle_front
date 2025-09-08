@@ -258,6 +258,14 @@ const datosPago = {
 
 
 consultarCantidadNumerosDisponibles(): void {
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    alert('Debes iniciar sesión para poder comprar.');
+    this.openModal('login'); 
+    return;
+  }
+
   if (!this.raffle || !this.raffle.id || !this.selectedPackage) {
     return;
   }
@@ -267,10 +275,15 @@ consultarCantidadNumerosDisponibles(): void {
       this.cantidadDisponible = respuesta.respuesta;
 
       if (this.cantidadDisponible >= this.selectedPackage!) {
-        const modal = new (window as any).bootstrap.Modal(document.getElementById('purchaseModal'));
+        this.cargarDatosUsuario(); 
+        const modal = new (window as any).bootstrap.Modal(
+          document.getElementById('purchaseModal')
+        );
         modal.show();
       } else if (this.cantidadDisponible > 0) {
-        const modalReducido = new (window as any).bootstrap.Modal(document.getElementById('disponibilidadModal'));
+        const modalReducido = new (window as any).bootstrap.Modal(
+          document.getElementById('disponibilidadModal')
+        );
         modalReducido.show();
       } else {
         alert('Lo sentimos, ya no hay números disponibles para esta rifa.');
@@ -282,6 +295,7 @@ consultarCantidadNumerosDisponibles(): void {
     }
   });
 }
+
 
 confirmarCompraReducida(): void {
   this.selectedPackage = this.cantidadDisponible;
@@ -390,17 +404,48 @@ loginUser() {
 
   this.loginService.loginUser(payload).subscribe({
     next: (res) => {
-      console.log('Usuario logueado:', res);
-      localStorage.setItem('token', res.token);
-      alert('Inicio de sesión exitoso.');
-      this.router.navigate(['/']);
-      window.location.reload();
+      // Ahora backend devuelve: { error: false, respuesta: { token, refreshToken, name, surName, email } }
+      if (res?.error === false && res.respuesta?.token) {
+        // Guardar token
+        localStorage.setItem('token', res.respuesta.token);
+
+        // Guardar datos de usuario
+        const userData = {
+          name: res.respuesta.name,
+          surName: res.respuesta.surName,
+          email: res.respuesta.email
+        };
+        localStorage.setItem('user', JSON.stringify(userData));
+
+        alert('Inicio de sesión exitoso.');
+        this.router.navigate(['/']);
+      } else {
+        this.errorMsg = 'No se pudo obtener el token.';
+      }
     },
     error: (err) => {
       console.error('Error al iniciar sesión:', err);
       this.errorMsg = err.error?.message || 'Error al iniciar sesión.';
     }
-  }); 
+  });
+}
+
+
+cargarDatosUsuario() {
+  const userData = localStorage.getItem('user');
+  if (userData) {
+    const usuario = JSON.parse(userData);
+
+    this.buyerData = {
+      buyerName: usuario.name || '',
+      buyerApellido: usuario.surName || '',
+      buyerPais: this.buyerData?.buyerPais || '',   // país lo dejas vacío hasta que seleccione
+      buyerPrefix: this.buyerData?.buyerPrefix || '',
+      buyerPhone: this.buyerData?.buyerPhone || '',
+      buyerEmail: usuario.email || '',
+      buyerConfirmarEmail: usuario.email || ''
+    };
+  }
 }
 
 
