@@ -375,7 +375,12 @@
           <div *ngIf="errorMsg" class="alert alert-danger mt-3">
             {{ errorMsg }}
           </div>
-          
+
+          <!-- Mensaje de éxito -->
+          <div *ngIf="successMsg" class="alert alert-success mt-2">
+            {{ successMsg }}
+          </div>
+
           <button type="submit" class="btn btn-primary">Ingresar</button>
         </form>
       </div>
