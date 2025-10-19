@@ -192,6 +192,7 @@ ngOnInit(): void {
     }
   }
 
+  /* Mercado Pago - ya no se usa
 validarYRealizarPago() {
     console.log("desde validarYRealizarPago al inicio: ",this.selectedPackage)
   if (!this.selectedPackage || !this.buyerData.buyerName || !this.buyerData.buyerApellido ||
@@ -254,6 +255,96 @@ const datosPago = {
     }
   });
 }
+
+*/
+
+validarYRealizarPago() {
+  console.log("desde validarYRealizarPago al inicio: ", this.selectedPackage);
+
+  // 🔹 Validaciones de campos
+  if (!this.selectedPackage || !this.buyerData.buyerName || !this.buyerData.buyerApellido ||
+      !this.buyerData.buyerPais || !this.buyerData.buyerPrefix || !this.buyerData.buyerPhone ||
+      !this.buyerData.buyerEmail || !this.buyerData.buyerConfirmarEmail) {
+    alert('Por favor completa todos los campos requeridos antes de pagar.');
+    return;
+  }
+
+  if (!this.raffle) {
+    alert('No se ha cargado la información de la rifa. Por favor intenta nuevamente.');
+    return;
+  }
+
+  // 🔹 Calcular precio
+  let precioPaquete = 0;
+  let nombrePaquete = `Paquete de ${this.selectedPackage} números`;
+
+  if (this.raffle.priceNumber) {
+    precioPaquete = this.selectedPackage * this.raffle.priceNumber;
+    this.precioFinal = precioPaquete;
+  } else if (this.raffle.packages) {
+    const paquete = this.raffle.packages.find((p: any) => p.cantidad === this.selectedPackage);
+    if (paquete) {
+      precioPaquete = paquete.precio;
+      nombrePaquete = paquete.nombre || nombrePaquete;
+    }
+  }
+
+  console.log("precioPaquete: ", precioPaquete);
+
+  // 🔹 Construir objeto PagoRequestDTO compatible con backend
+  const datosPago = {
+    descripcion: nombrePaquete,
+    cantidad: this.selectedPackage,
+    precio: precioPaquete,
+    email: this.buyerData.buyerEmail,
+    buyer: {
+      raffleId: this.raffle.id,
+      quantity: this.selectedPackage,
+      buyerName: this.buyerData.buyerName,
+      buyerApellido: this.buyerData.buyerApellido,
+      buyerPais: this.buyerData.buyerPais,
+      buyerEmail: this.buyerData.buyerEmail,
+      buyerConfirmarEmail: this.buyerData.buyerConfirmarEmail,
+      buyerPrefix: this.buyerData.buyerPrefix,
+      buyerPhone: this.buyerData.buyerPhone
+    }
+  };
+
+  // 🔹 Llamada al backend para generar transacción Wompi
+  this.raffleService.crearTransaccionWompi(datosPago).subscribe({
+    next: (response: any) => {
+      if (response && response.publicKey) {
+        // 🔹 Generar botón Wompi con datos devueltos por backend
+        this.generarBotonWompi(response);
+      } else {
+        alert('Error al obtener datos de pago de Wompi.');
+      }
+    },
+    error: (err) => {
+      console.error('Error al crear transacción Wompi:', err);
+      alert('Ocurrió un error al procesar el pago.');
+    }
+  });
+}
+
+generarBotonWompi(data: any) {
+  const script = document.createElement('script');
+  script.src = 'https://checkout.wompi.co/widget.js';
+  script.setAttribute('data-render', 'button');
+  script.setAttribute('data-public-key', data.publicKey);
+  script.setAttribute('data-currency', data.currency);
+  script.setAttribute('data-amount-in-cents', data.amountInCents);
+  script.setAttribute('data-reference', data.reference);
+  script.setAttribute('data-signature:integrity', data.signatureIntegrity);
+  script.setAttribute('data-customer-email', data.customerEmail);
+
+  const container = document.getElementById('wompi-button-container');
+  if (container) {
+    container.innerHTML = '';
+    container.appendChild(script);
+  }
+}
+
 
 
 

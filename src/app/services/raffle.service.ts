@@ -7,7 +7,9 @@ import { enviroments } from '../../enviroments/enviroments';
   providedIn: 'root'
 })
 export class RaffleService {
-    private apiUrl = enviroments.apiUrl  //url del api creada de manera global
+
+
+  private apiUrl = enviroments.apiUrl  //url del api creada de manera global
 
   constructor(private http: HttpClient) {}
 
@@ -84,5 +86,13 @@ obtenerCantidadNumerosDisponibles(idRaffle: string): Observable<{ error: boolean
   });
   return this.http.get<any>(`${this.apiUrl}/raffle/operaciones/${raffleId}`, { headers });
 }
+
+crearTransaccionWompi(datosPago: any): Observable<any> {
+  return this.http.post(`${this.apiUrl}/wompi/crear-transaccion`, datosPago);
+}
+
+
+  
+
 
 }
