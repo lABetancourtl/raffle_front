@@ -83,6 +83,11 @@ export class RaffleService {
     return this.http.get<any>(`${this.apiUrl}/raffle/operaciones/${raffleId}`, { headers });
   }
 
+  crearTransaccionWompi(datosPago: any): Observable<any> {
+  return this.http.post(`${this.apiUrl}/wompi/crear-transaccion`, datosPago);
+}
+
+
   // ✅ NUEVO MÉTODO para ejecutar el sorteo
   ejecutarSorteo(raffleId: string, numeroGanadores: number): Observable<any> {
     const token = localStorage.getItem('authToken');

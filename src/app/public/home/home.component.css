@@ -779,3 +779,147 @@ header {
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease-in-out;
 }
+
+
+
+
+
+/* ==========================================================
+   MODO OSCURO - ESTILO SUAVE Y LEGIBLE
+   ========================================================== */
+body.theme-dark {
+  background-color: #1e1e2e; /* Fondo principal */
+  color: #e0e0e6;
+}
+
+/* ====== HEADER ====== */
+body.theme-dark header {
+  background-color: #2a2a3b !important;
+  color: #ffffff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+body.theme-dark .nav-link {
+  color: #e0e0e6 !important;
+}
+
+body.theme-dark .nav-link:hover {
+  color: #5c6eff !important;
+}
+
+/* ====== CONTENEDORES ====== */
+body.theme-dark main.container {
+  background-color: transparent;
+}
+
+body.theme-dark .card {
+  background-color: #2b2b3d !important;
+  color: #e0e0e6 !important;
+  border: 1px solid #3a3a4b !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4) !important;
+}
+
+body.theme-dark .bg-light {
+  background-color: #2f2f42 !important;
+  color: #e0e0e6 !important;
+}
+
+/* ====== TEXTOS ====== */
+body.theme-dark .text-muted {
+  color: #a0a0b0 !important;
+}
+
+body.theme-dark h1,
+body.theme-dark h2,
+body.theme-dark h3,
+body.theme-dark h4,
+body.theme-dark h5 {
+  color: #ffffff !important;
+}
+
+/* ====== BADGE ====== */
+body.theme-dark .badge.bg-primary {
+  background-color: rgba(92, 110, 255, 0.15) !important;
+  color: #8ea2ff !important;
+}
+
+/* ====== BOTONES ====== */
+body.theme-dark .btn-comprar-2 {
+  background-color: #3d5afe !important;
+  border-color: #3d5afe !important;
+  color: #ffffff !important;
+  transition: all 0.2s ease-in-out;
+}
+
+body.theme-dark .btn-comprar-2:hover {
+  background-color: #5c6eff !important;
+}
+
+body.theme-dark .btn-facebook {
+  background-color: #3b5998 !important;
+  color: #fff;
+}
+
+body.theme-dark .btn-whatsapp {
+  background-color: #25d366 !important;
+  color: #fff;
+}
+
+/* ====== DROPDOWN ====== */
+body.theme-dark .dropdown-menu {
+  background-color: #2a2a3b !important;
+  border: 1px solid #3a3a4b !important;
+}
+
+body.theme-dark .dropdown-item {
+  color: #e0e0e6 !important;
+}
+
+body.theme-dark .dropdown-item:hover {
+  background-color: #3a3a4b !important;
+  color: #ffffff !important;
+}
+
+/* ====== PROGRESS ====== */
+body.theme-dark .progress {
+  background-color: #3a3a4b !important;
+}
+
+body.theme-dark .progress-bar {
+  background-color: #5c6eff !important;
+}
+
+/* ====== TARJETAS DE PAQUETES ====== */
+body.theme-dark .ticket-card {
+  background-color: #2b2b3d !important;
+  border: 1px solid #3a3a4b;
+  color: #e0e0e6;
+  cursor: pointer;
+}
+
+body.theme-dark .ticket-card:hover {
+  background-color: #3a3a4b !important;
+}
+
+body.theme-dark .selected-package {
+  border: 2px solid #5c6eff !important;
+  background-color: #32324b !important;
+}
+
+/* ====== SOMBRAS Y DETALLES ====== */
+body.theme-dark .hover-scale:hover {
+  transform: scale(1.03);
+  transition: transform 0.2s ease;
+}
+
+/* ====== SCROLLBAR PERSONALIZADA ====== */
+body.theme-dark ::-webkit-scrollbar {
+  width: 8px;
+}
+body.theme-dark ::-webkit-scrollbar-thumb {
+  background-color: #44445a;
+  border-radius: 4px;
+}
+body.theme-dark ::-webkit-scrollbar-thumb:hover {
+  background-color: #5c6eff;
+}
