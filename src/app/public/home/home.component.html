@@ -1,25 +1,44 @@
 <!-- Raffle.component.html -->
-<header class=" text-white py-3 shadow-sm">
+<header class="text-white py-3 shadow-sm bg-primary">
   <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
     <h2 class="mb-3 mb-md-0 fw-bold display-6">Raffle</h2>
-    <nav class="nav nav-pills">
+
+    <nav class="nav nav-pills align-items-center gap-2">
       <a href="#" class="nav-link text-white px-3">Inicio</a>
       <a href="#" class="nav-link text-white px-3" data-bs-toggle="modal" data-bs-target="#emailModal">Mis Fondos</a>
       <a href="#" class="nav-link text-white px-3">Metodología</a>
 
-      <div class="nav-item dropdown" [class.show]="isDropdownOpen">
-        <a href="#" class="nav-link text-white px-3" (click)="toggleDropdown($event)">
-          <i class="bi bi-person"></i>
-        </a>
-        <ul class="dropdown-menu dropdown-menu-end" [class.show]="isDropdownOpen">
-            <li><a class="dropdown-item" (click)="openModal('login')">Login</a></li>
-            <li><a class="dropdown-item" (click)="openModal('register')">Register</a></li>
-        </ul>
+      <!-- Dropdown de configuración (separado por línea) -->
+      <div class="border-start ps-3 ms-2">
+        <div class="nav-item dropdown" [class.show]="isSettingsDropdownOpen">
+          <a href="#" class="nav-link text-white px-3" (click)="toggleSettingsDropdown($event)">
+            <i class="bi bi-sliders2"></i>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" [class.show]="isSettingsDropdownOpen">
+            <li><a class="dropdown-item" style="cursor: pointer;" (click)="setFontSize('large')">Texto grande</a></li>
+            <li><a class="dropdown-item" style="cursor: pointer;" (click)="setFontSize('normal')">Texto normal</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" style="cursor: pointer;" (click)="setTheme('dark')">Modo oscuro</a></li>
+            <li><a class="dropdown-item" style="cursor: pointer;" (click)="setTheme('light')">Modo claro</a></li>
+          </ul>
+        </div>
       </div>
 
+
+      <!-- Dropdown de usuario -->
+      <div class="nav-item dropdown" [class.show]="isUserDropdownOpen">
+        <a href="#" class="nav-link text-white px-3" (click)="toggleUserDropdown($event)">
+          <i class="bi bi-person"></i>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end" [class.show]="isUserDropdownOpen">
+            <li><a class="dropdown-item" style="cursor: pointer;" (click)="openModal('login')">Iniciar Sesión</a></li>
+            <li><a class="dropdown-item" style="cursor: pointer;" (click)="openModal('register')">Registrarse</a></li>
+        </ul>
+      </div>
     </nav>
   </div>
 </header>
+
 
 <main class="container my-5" *ngIf="raffle; else loading">
   
@@ -339,52 +358,98 @@
 </div>
 
 <!-- Modal Login -->
-<div class="modal fade" id="loginModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Login</h5>
-       
+<div
+  class="modal fade"
+  id="loginModal"
+  tabindex="-1"
+  aria-labelledby="loginModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content border-0 shadow-lg rounded-4">
+      <!-- Header -->
+      <div
+        class="modal-header border-0 bg-primary text-white rounded-top-4 d-flex align-items-center justify-content-between"
+      >
+        <h5 class="modal-title fw-semibold d-flex align-items-center" id="loginModalLabel">
+          <i class="bi bi-person-circle me-2"></i> Iniciar sesión
+        </h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
-      <div class="modal-body">
-        <!-- Agregar ngForm y (ngSubmit) -->
+
+      <!-- Body -->
+      <div class="modal-body p-4">
         <form #loginForm="ngForm" (ngSubmit)="loginUser()">
           <div class="mb-3">
-            <label for="email">Email</label>
-            <!-- Agregar ngModel y name -->
-            <input 
-              type="email" 
-              class="form-control" 
+            <label for="email" class="form-label fw-semibold">Correo electrónico</label>
+            <input
+              type="email"
+              class="form-control rounded-3 py-2"
               id="email"
-              [(ngModel)]="registerEmail" 
+              [(ngModel)]="registerEmail"
               name="email"
+              placeholder="ejemplo@correo.com"
               required
-              [class.is-invalid]="errorMsg">
+              [class.is-invalid]="errorMsg"
+            />
           </div>
+
           <div class="mb-3">
-            <label for="password">Password</label>
-            <!-- Agregar ngModel y name -->
-            <input 
-              type="password" 
-              class="form-control" 
+            <label for="password" class="form-label fw-semibold">Contraseña</label>
+            <input
+              type="password"
+              class="form-control rounded-3 py-2"
               id="password"
-              [(ngModel)]="registerPassword" 
+              [(ngModel)]="registerPassword"
               name="password"
+              placeholder="••••••••"
               required
-              [class.is-invalid]="errorMsg">
+              [class.is-invalid]="errorMsg"
+            />
           </div>
-          
-          <!-- Mostrar mensaje de error -->
-          <div *ngIf="errorMsg" class="alert alert-danger mt-3">
-            {{ errorMsg }}
+
+          <!-- contenedor invisible para Turnstile -->
+          <div id="turnstile-container" hidden></div>
+
+          <!-- Mensaje de error -->
+          <div *ngIf="errorMsg" class="alert alert-danger py-2 px-3 text-center rounded-3">
+            <i class="bi bi-exclamation-triangle me-2"></i> {{ errorMsg }}
           </div>
-          
-          <button type="submit" class="btn btn-primary">Ingresar</button>
+
+          <!-- Mensaje de éxito -->
+          <div *ngIf="successMsg" class="alert alert-success py-2 px-3 text-center rounded-3 fade show">
+            <i class="bi bi-check-circle me-2"></i> {{ successMsg }}
+          </div>
+
+          <button
+            type="submit"
+            class="btn btn-primary w-100 mt-3 py-2 fw-semibold rounded-3"
+          >
+            <i class="bi bi-box-arrow-in-right me-1"></i> Ingresar
+          </button>
         </form>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer border-0 text-center d-block">
+        <small class="text-muted">
+          ¿No tienes cuenta?
+          <a href="#" class="text-primary text-decoration-none fw-semibold"
+            >Regístrate aquí</a
+          >
+        </small>
       </div>
     </div>
   </div>
 </div>
+
+
+
 
 <!-- Modal Register -->
 <div class="modal fade" id="registerModal" tabindex="-1">

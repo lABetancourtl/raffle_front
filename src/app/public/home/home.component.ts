@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, HostListener, ElementRef, NgZone } from '@angular/core';
 import { RaffleService } from '../../services/raffle.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
@@ -8,7 +8,10 @@ import { RegisterService } from '../../services/register.service';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { LoginService } from '../../services/login.service';
-
+import Swal from 'sweetalert2';
+import { Modal } from 'bootstrap';
+import * as bootstrap from 'bootstrap';
+declare const turnstile: any;
 
 // Define una interfaz para nuestro país personalizado
 interface PaisPersonalizado {
@@ -31,6 +34,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
   cantidadDisponible: number = 0;
   mostrarModalReducido: boolean = false;
   precioFinal: number = 0;
+  token: string | null = null;
+  isUserDropdownOpen = false;
+  isSettingsDropdownOpen = false;
+
 
 
   selectedCurrency: string = 'COP'; // Valor por defecto
@@ -68,6 +75,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   emailUser: string = '';
   userNumbers: string[] = []; 
   errorMsg: string = '';
+  successMsg: string = '';
   loading: boolean = false;
   formSubmitted: boolean = false;
 
@@ -93,7 +101,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     private registerService: RegisterService,
     private loginService: LoginService,
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private zone: NgZone
 
   ) {
     // Convertir el objeto countries a array y ordenar
@@ -117,13 +126,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
   }
 
+  
 ngOnInit(): void {
   this.raffleService.getRaffleActiva().subscribe({
     next: (data) => {
       this.raffle = data;
-      console.log('Rifa activa recibida:', this.raffle);
+    //  console.log('Rifa activa recibida:', this.raffle);
 
-      // ✅ Extraer paquetes si vienen en la respuesta
+      //Extraer paquetes si vienen en la respuesta
       if (this.raffle && this.raffle.paquetes) {
         this.paquetes = this.raffle.paquetes;
       } else {
@@ -346,14 +356,20 @@ generarBotonWompi(data: any) {
 }
 
 
-
-
 consultarCantidadNumerosDisponibles(): void {
   const token = localStorage.getItem('token');
 
   if (!token) {
-    alert('Debes iniciar sesión para poder comprar.');
-    this.openModal('login'); 
+    Swal.fire({
+      title: 'Inicia sesión primero',
+      text: 'Debes iniciar sesión para poder comprar.',
+      icon: 'warning',
+      confirmButtonText: 'Ir al login',
+      confirmButtonColor: '#3085d6',
+      backdrop: `rgba(0,0,0,0.4)`
+    }).then(() => {
+      this.openModal('login');
+    });
     return;
   }
 
@@ -397,20 +413,45 @@ confirmarCompraReducida(): void {
   modalReducido.hide();
 }
 
-
-// Manejo del dropdown de usuario (login, register)
-toggleDropdown(event: Event) {
-  event.preventDefault(); 
-  this.isDropdownOpen = !this.isDropdownOpen;
-}
-
-// Cierra el dropdown si se hace clic fuera de él (login, register)
-@HostListener('document:click', ['$event'])
-clickOutside(event: Event) {
-  if (!(event.target as HTMLElement).closest('.nav-item.dropdown')) {
-    this.isDropdownOpen = false;
+  // --- Dropdown de usuario ---
+  toggleUserDropdown(event: Event) {
+    event.preventDefault();
+    this.isUserDropdownOpen = !this.isUserDropdownOpen;
+    this.isSettingsDropdownOpen = false; // Cierra el otro
   }
+
+  // --- Dropdown de configuración ---
+  toggleSettingsDropdown(event: Event) {
+    event.preventDefault();
+    this.isSettingsDropdownOpen = !this.isSettingsDropdownOpen;
+    this.isUserDropdownOpen = false; // Cierra el otro
+  }
+
+  // Cierra ambos dropdowns si se hace clic fuera
+  @HostListener('document:click', ['$event'])
+  clickOutside(event: Event) {
+    if (!(event.target as HTMLElement).closest('.nav-item.dropdown')) {
+      this.isUserDropdownOpen = false;
+      this.isSettingsDropdownOpen = false;
+    }
+  }
+
+  // Ejemplo: función para cambiar el tamaño de texto
+setFontSize(size: 'large' | 'normal') {
+  const main = document.querySelector('main');
+  if (!main) return;
+
+  main.classList.remove('font-large', 'font-normal');
+  main.classList.add(size === 'large' ? 'font-large' : 'font-normal');
 }
+
+// ✅ Cambia entre modo oscuro / claro
+setTheme(theme: 'dark' | 'light') {
+  const body = document.body;
+  body.classList.remove('theme-dark', 'theme-light');
+  body.classList.add(theme === 'dark' ? 'theme-dark' : 'theme-light');
+}
+
 
 // Abre el modal correspondiente y cierra el dropdown (login, register)
 openModal(type: 'login' | 'register') {
@@ -482,44 +523,106 @@ registrarUsuario() {
 }
 
 
-loginUser() {
-  if (!this.registerEmail || !this.registerPassword) {
-    this.errorMsg = 'Por favor completa todos los campos requeridos.';
-    return;
+  loginUser() {
+    this.errorMsg = '';
+    this.successMsg = '';
+
+    if (!this.registerEmail || !this.registerPassword) {
+      this.errorMsg = 'Por favor completa todos los campos requeridos.';
+      return;
+    }
+
+    const container = document.getElementById('turnstile-container');
+    if (!container) {
+      console.error('No se encontró el contenedor Turnstile.');
+      return;
+    }
+
+    // Limpiar widgets previos
+    container.innerHTML = '';
+
+    // Ejecutar el Turnstile Invisible
+    turnstile.render(container, {
+      sitekey: '0x4AAAAAAB7v3McSup1sl1Fj',
+      size: 'invisible',
+      callback: (token: string) => {
+        this.zone.run(() => {
+          this.token = token;
+          this.enviarLogin(); 
+        });
+      },
+      'error-callback': () => {
+        this.zone.run(() => {
+          this.errorMsg = 'Error al verificar que eres humano. Intenta de nuevo.';
+        });
+      },
+    });
   }
 
-  const payload = {
-    email: this.registerEmail,
-    password: this.registerPassword,
-  };
+  enviarLogin() {
+    if (!this.token) {
+      this.errorMsg = 'No se pudo verificar que eres humano.';
 
-  this.loginService.loginUser(payload).subscribe({
-    next: (res) => {
-      // Ahora backend devuelve: { error: false, respuesta: { token, refreshToken, name, surName, email } }
-      if (res?.error === false && res.respuesta?.token) {
-        // Guardar token
-        localStorage.setItem('token', res.respuesta.token);
-
-        // Guardar datos de usuario
-        const userData = {
-          name: res.respuesta.name,
-          surName: res.respuesta.surName,
-          email: res.respuesta.email
-        };
-        localStorage.setItem('user', JSON.stringify(userData));
-
-        alert('Inicio de sesión exitoso.');
-        this.router.navigate(['/']);
-      } else {
-        this.errorMsg = 'No se pudo obtener el token.';
-      }
-    },
-    error: (err) => {
-      console.error('Error al iniciar sesión:', err);
-      this.errorMsg = err.error?.message || 'Error al iniciar sesión.';
+      return;
     }
-  });
+
+    const payload = {
+      email: this.registerEmail,
+      password: this.registerPassword,
+      token: this.token, 
+    };
+
+    this.loginService.loginUser(payload).subscribe({
+      next: (res) => {
+        if (res?.error === false && res.respuesta?.token) {
+          // Guardar token JWT
+          localStorage.setItem('token', res.respuesta.token);
+
+          // Guardar datos de usuario
+          const userData = {
+            name: res.respuesta.name,
+            surName: res.respuesta.surName,
+            email: res.respuesta.email,
+          };
+          localStorage.setItem('user', JSON.stringify(userData));
+
+          this.successMsg = 'Inicio de sesión exitoso.';
+
+          setTimeout(() => {
+            this.cerrarModalLogin();
+            this.router.navigate(['/']);
+          }, 2000);
+        } else {
+          this.errorMsg = 'No se pudo obtener el token de sesión.';
+        }
+      },
+      error: (err) => {
+        console.error('Error al iniciar sesión:', err);
+        this.errorMsg = err.error?.message || 'Error al iniciar sesión.';
+      },
+    });
+  }
+
+
+private cerrarModalLogin() {
+  const modalElement = document.getElementById('loginModal');
+  if (modalElement) {
+    // La forma más directa - usar data-bs-dismiss programáticamente
+    const modalInstance = bootstrap.Modal.getInstance(modalElement);
+    if (modalInstance) {
+      modalInstance.hide();
+    } else {
+      // Forzar cierre removiendo clases
+      modalElement.classList.remove('show');
+      modalElement.style.display = 'none';
+      document.body.classList.remove('modal-open');
+      
+      const backdrops = document.querySelectorAll('.modal-backdrop');
+      backdrops.forEach(backdrop => backdrop.remove());
+    }
+  }
 }
+
 
 
 cargarDatosUsuario() {
@@ -538,8 +641,5 @@ cargarDatosUsuario() {
     };
   }
 }
-
-
-
 
 }
