@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild, HostListener, ElementRef, NgZone } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, HostListener } from '@angular/core';
 import { RaffleService } from '../../services/raffle.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
@@ -7,11 +7,7 @@ import { countries, ICountry } from 'countries-list';
 import { RegisterService } from '../../services/register.service';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { LoginService } from '../../services/login.service';
-import Swal from 'sweetalert2';
-import { Modal } from 'bootstrap';
-import * as bootstrap from 'bootstrap';
-declare const turnstile: any;
+
 
 // Define una interfaz para nuestro país personalizado
 interface PaisPersonalizado {
@@ -34,10 +30,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   cantidadDisponible: number = 0;
   mostrarModalReducido: boolean = false;
   precioFinal: number = 0;
-  token: string | null = null;
-  isUserDropdownOpen = false;
-  isSettingsDropdownOpen = false;
-
 
 
   selectedCurrency: string = 'COP'; // Valor por defecto
@@ -75,7 +67,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   emailUser: string = '';
   userNumbers: string[] = []; 
   errorMsg: string = '';
-  successMsg: string = '';
   loading: boolean = false;
   formSubmitted: boolean = false;
 
@@ -99,10 +90,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   constructor(
     private raffleService: RaffleService,
     private registerService: RegisterService,
-    private loginService: LoginService,
     private router: Router,
-    private http: HttpClient,
-    private zone: NgZone
+    private http: HttpClient
 
   ) {
     // Convertir el objeto countries a array y ordenar
@@ -126,14 +115,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
   }
 
-  
 ngOnInit(): void {
   this.raffleService.getRaffleActiva().subscribe({
     next: (data) => {
       this.raffle = data;
-    //  console.log('Rifa activa recibida:', this.raffle);
+      console.log('Rifa activa recibida:', this.raffle);
 
-      //Extraer paquetes si vienen en la respuesta
+      // ✅ Extraer paquetes si vienen en la respuesta
       if (this.raffle && this.raffle.paquetes) {
         this.paquetes = this.raffle.paquetes;
       } else {
@@ -202,7 +190,6 @@ ngOnInit(): void {
     }
   }
 
-  /* Mercado Pago - ya no se usa
 validarYRealizarPago() {
     console.log("desde validarYRealizarPago al inicio: ",this.selectedPackage)
   if (!this.selectedPackage || !this.buyerData.buyerName || !this.buyerData.buyerApellido ||
@@ -266,113 +253,9 @@ const datosPago = {
   });
 }
 
-*/
-
-validarYRealizarPago() {
-  console.log("desde validarYRealizarPago al inicio: ", this.selectedPackage);
-
-  // 🔹 Validaciones de campos
-  if (!this.selectedPackage || !this.buyerData.buyerName || !this.buyerData.buyerApellido ||
-      !this.buyerData.buyerPais || !this.buyerData.buyerPrefix || !this.buyerData.buyerPhone ||
-      !this.buyerData.buyerEmail || !this.buyerData.buyerConfirmarEmail) {
-    alert('Por favor completa todos los campos requeridos antes de pagar.');
-    return;
-  }
-
-  if (!this.raffle) {
-    alert('No se ha cargado la información de la rifa. Por favor intenta nuevamente.');
-    return;
-  }
-
-  // 🔹 Calcular precio
-  let precioPaquete = 0;
-  let nombrePaquete = `Paquete de ${this.selectedPackage} números`;
-
-  if (this.raffle.priceNumber) {
-    precioPaquete = this.selectedPackage * this.raffle.priceNumber;
-    this.precioFinal = precioPaquete;
-  } else if (this.raffle.packages) {
-    const paquete = this.raffle.packages.find((p: any) => p.cantidad === this.selectedPackage);
-    if (paquete) {
-      precioPaquete = paquete.precio;
-      nombrePaquete = paquete.nombre || nombrePaquete;
-    }
-  }
-
-  console.log("precioPaquete: ", precioPaquete);
-
-  // 🔹 Construir objeto PagoRequestDTO compatible con backend
-  const datosPago = {
-    descripcion: nombrePaquete,
-    cantidad: this.selectedPackage,
-    precio: precioPaquete,
-    email: this.buyerData.buyerEmail,
-    buyer: {
-      raffleId: this.raffle.id,
-      quantity: this.selectedPackage,
-      buyerName: this.buyerData.buyerName,
-      buyerApellido: this.buyerData.buyerApellido,
-      buyerPais: this.buyerData.buyerPais,
-      buyerEmail: this.buyerData.buyerEmail,
-      buyerConfirmarEmail: this.buyerData.buyerConfirmarEmail,
-      buyerPrefix: this.buyerData.buyerPrefix,
-      buyerPhone: this.buyerData.buyerPhone
-    }
-  };
-
-  // 🔹 Llamada al backend para generar transacción Wompi
-  this.raffleService.crearTransaccionWompi(datosPago).subscribe({
-    next: (response: any) => {
-      if (response && response.publicKey) {
-        // 🔹 Generar botón Wompi con datos devueltos por backend
-        this.generarBotonWompi(response);
-      } else {
-        alert('Error al obtener datos de pago de Wompi.');
-      }
-    },
-    error: (err) => {
-      console.error('Error al crear transacción Wompi:', err);
-      alert('Ocurrió un error al procesar el pago.');
-    }
-  });
-}
-
-generarBotonWompi(data: any) {
-  const script = document.createElement('script');
-  script.src = 'https://checkout.wompi.co/widget.js';
-  script.setAttribute('data-render', 'button');
-  script.setAttribute('data-public-key', data.publicKey);
-  script.setAttribute('data-currency', data.currency);
-  script.setAttribute('data-amount-in-cents', data.amountInCents);
-  script.setAttribute('data-reference', data.reference);
-  script.setAttribute('data-signature:integrity', data.signatureIntegrity);
-  script.setAttribute('data-customer-email', data.customerEmail);
-
-  const container = document.getElementById('wompi-button-container');
-  if (container) {
-    container.innerHTML = '';
-    container.appendChild(script);
-  }
-}
 
 
 consultarCantidadNumerosDisponibles(): void {
-  const token = localStorage.getItem('token');
-
-  if (!token) {
-    Swal.fire({
-      title: 'Inicia sesión primero',
-      text: 'Debes iniciar sesión para poder comprar.',
-      icon: 'warning',
-      confirmButtonText: 'Ir al login',
-      confirmButtonColor: '#3085d6',
-      backdrop: `rgba(0,0,0,0.4)`
-    }).then(() => {
-      this.openModal('login');
-    });
-    return;
-  }
-
   if (!this.raffle || !this.raffle.id || !this.selectedPackage) {
     return;
   }
@@ -382,15 +265,10 @@ consultarCantidadNumerosDisponibles(): void {
       this.cantidadDisponible = respuesta.respuesta;
 
       if (this.cantidadDisponible >= this.selectedPackage!) {
-        this.cargarDatosUsuario(); 
-        const modal = new (window as any).bootstrap.Modal(
-          document.getElementById('purchaseModal')
-        );
+        const modal = new (window as any).bootstrap.Modal(document.getElementById('purchaseModal'));
         modal.show();
       } else if (this.cantidadDisponible > 0) {
-        const modalReducido = new (window as any).bootstrap.Modal(
-          document.getElementById('disponibilidadModal')
-        );
+        const modalReducido = new (window as any).bootstrap.Modal(document.getElementById('disponibilidadModal'));
         modalReducido.show();
       } else {
         alert('Lo sentimos, ya no hay números disponibles para esta rifa.');
@@ -403,7 +281,6 @@ consultarCantidadNumerosDisponibles(): void {
   });
 }
 
-
 confirmarCompraReducida(): void {
   this.selectedPackage = this.cantidadDisponible;
   console.log("desde confirmarCompraReducida: ",this.selectedPackage)
@@ -413,45 +290,20 @@ confirmarCompraReducida(): void {
   modalReducido.hide();
 }
 
-  // --- Dropdown de usuario ---
-  toggleUserDropdown(event: Event) {
-    event.preventDefault();
-    this.isUserDropdownOpen = !this.isUserDropdownOpen;
-    this.isSettingsDropdownOpen = false; // Cierra el otro
-  }
 
-  // --- Dropdown de configuración ---
-  toggleSettingsDropdown(event: Event) {
-    event.preventDefault();
-    this.isSettingsDropdownOpen = !this.isSettingsDropdownOpen;
-    this.isUserDropdownOpen = false; // Cierra el otro
-  }
-
-  // Cierra ambos dropdowns si se hace clic fuera
-  @HostListener('document:click', ['$event'])
-  clickOutside(event: Event) {
-    if (!(event.target as HTMLElement).closest('.nav-item.dropdown')) {
-      this.isUserDropdownOpen = false;
-      this.isSettingsDropdownOpen = false;
-    }
-  }
-
-  // Ejemplo: función para cambiar el tamaño de texto
-setFontSize(size: 'large' | 'normal') {
-  const main = document.querySelector('main');
-  if (!main) return;
-
-  main.classList.remove('font-large', 'font-normal');
-  main.classList.add(size === 'large' ? 'font-large' : 'font-normal');
+// Manejo del dropdown de usuario (login, register)
+toggleDropdown(event: Event) {
+  event.preventDefault(); 
+  this.isDropdownOpen = !this.isDropdownOpen;
 }
 
-// ✅ Cambia entre modo oscuro / claro
-setTheme(theme: 'dark' | 'light') {
-  const body = document.body;
-  body.classList.remove('theme-dark', 'theme-light');
-  body.classList.add(theme === 'dark' ? 'theme-dark' : 'theme-light');
+// Cierra el dropdown si se hace clic fuera de él (login, register)
+@HostListener('document:click', ['$event'])
+clickOutside(event: Event) {
+  if (!(event.target as HTMLElement).closest('.nav-item.dropdown')) {
+    this.isDropdownOpen = false;
+  }
 }
-
 
 // Abre el modal correspondiente y cierra el dropdown (login, register)
 openModal(type: 'login' | 'register') {
@@ -477,6 +329,8 @@ onFileSelected(event: Event, type: 'front' | 'back') {
 }
 
 registrarUsuario() {
+
+
   if (!this.registerEmail || !this.registerPassword || !this.registerConfirmPassword || !this.docFront || !this.docBack) {
     this.errorMsg = 'Por favor completa todos los campos requeridos.';
     return;
@@ -520,125 +374,12 @@ registrarUsuario() {
       this.errorMsg = 'Error al subir los documentos.';
     }
   });
+
+
 }
 
 
-  loginUser() {
-    this.errorMsg = '';
-    this.successMsg = '';
-
-    if (!this.registerEmail || !this.registerPassword) {
-      this.errorMsg = 'Por favor completa todos los campos requeridos.';
-      return;
-    }
-
-    const container = document.getElementById('turnstile-container');
-    if (!container) {
-      console.error('No se encontró el contenedor Turnstile.');
-      return;
-    }
-
-    // Limpiar widgets previos
-    container.innerHTML = '';
-
-    // Ejecutar el Turnstile Invisible
-    turnstile.render(container, {
-      sitekey: '0x4AAAAAAB7v3McSup1sl1Fj',
-      size: 'invisible',
-      callback: (token: string) => {
-        this.zone.run(() => {
-          this.token = token;
-          this.enviarLogin(); 
-        });
-      },
-      'error-callback': () => {
-        this.zone.run(() => {
-          this.errorMsg = 'Error al verificar que eres humano. Intenta de nuevo.';
-        });
-      },
-    });
-  }
-
-  enviarLogin() {
-    if (!this.token) {
-      this.errorMsg = 'No se pudo verificar que eres humano.';
-
-      return;
-    }
-
-    const payload = {
-      email: this.registerEmail,
-      password: this.registerPassword,
-      token: this.token, 
-    };
-
-    this.loginService.loginUser(payload).subscribe({
-      next: (res) => {
-        if (res?.error === false && res.respuesta?.token) {
-          // Guardar token JWT
-          localStorage.setItem('token', res.respuesta.token);
-
-          // Guardar datos de usuario
-          const userData = {
-            name: res.respuesta.name,
-            surName: res.respuesta.surName,
-            email: res.respuesta.email,
-          };
-          localStorage.setItem('user', JSON.stringify(userData));
-
-          this.successMsg = 'Inicio de sesión exitoso.';
-
-          setTimeout(() => {
-            this.cerrarModalLogin();
-            this.router.navigate(['/']);
-          }, 2000);
-        } else {
-          this.errorMsg = 'No se pudo obtener el token de sesión.';
-        }
-      },
-      error: (err) => {
-        console.error('Error al iniciar sesión:', err);
-        this.errorMsg = err.error?.message || 'Error al iniciar sesión.';
-      },
-    });
-  }
 
 
-private cerrarModalLogin() {
-  const modalElement = document.getElementById('loginModal');
-  if (modalElement) {
-    // La forma más directa - usar data-bs-dismiss programáticamente
-    const modalInstance = bootstrap.Modal.getInstance(modalElement);
-    if (modalInstance) {
-      modalInstance.hide();
-    } else {
-      // Forzar cierre removiendo clases
-      modalElement.classList.remove('show');
-      modalElement.style.display = 'none';
-      document.body.classList.remove('modal-open');
-      
-      const backdrops = document.querySelectorAll('.modal-backdrop');
-      backdrops.forEach(backdrop => backdrop.remove());
-    }
-  }
-}
-
-
-cargarDatosUsuario() {
-  const userData = localStorage.getItem('user');
-  if (userData) {
-    const usuario = JSON.parse(userData);
-
-    this.buyerData = {
-      buyerName: usuario.name || '',
-      buyerApellido: usuario.surName || '',
-      buyerPais: this.buyerData?.buyerPais || '',   // país lo dejas vacío hasta que seleccione
-      buyerPrefix: this.buyerData?.buyerPrefix || '',
-      buyerPhone: this.buyerData?.buyerPhone || '',
-      buyerEmail: usuario.email || '',
-      buyerConfirmarEmail: usuario.email || ''
-    };
-  }
-}
 
 }

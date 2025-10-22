@@ -8,20 +8,8 @@ import { enviroments } from '../../enviroments/enviroments';
 })
 export class AdminService {
 
+
   private apiUrl = enviroments.apiUrl;
-
-  
-// En admin.service.ts
-activarUsuario(datosUsuario: any): Observable<any> {
-    const token = localStorage.getItem('authToken');
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    });
-  return this.http.patch<any>(`${this.apiUrl}/admin/validarDocumento`, datosUsuario, { headers });
-}
-
-
 
   constructor(private http: HttpClient) {}
 
@@ -42,11 +30,8 @@ subirFoto(data: any): Observable<any> {
     Authorization: `Bearer ${token}`,
   });
 
-  return this.http.post(`${this.apiUrl}/imagenes/una`, data, { headers });
+  return this.http.post(`${this.apiUrl}/imagenes`, data, { headers });
 }
-
-
-
 
 compraAleatoriaDesdeAdmin(data: any): Observable<any> {
   const token = localStorage.getItem('authToken');

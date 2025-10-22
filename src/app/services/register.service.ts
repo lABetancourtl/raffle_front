@@ -20,7 +20,7 @@ subirFotos(data: any): Observable<any> {
 //  const headers = new HttpHeaders({
 //    Authorization: `Bearer ${token}`,
 //  });
-  return this.http.post(`${this.apiUrl}/imagenes/varias`, data);
+  return this.http.post(`${this.apiUrl}/imagenes`, data);
 }
 
 registrarUsuario(data: any): Observable<any> { 
