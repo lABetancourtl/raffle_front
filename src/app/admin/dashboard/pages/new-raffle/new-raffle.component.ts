@@ -4,8 +4,6 @@ import { AdminService } from '../../../../services/admin.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import Swal from 'sweetalert2';
-
 
 @Component({
   selector: 'app-new-raffle',
@@ -40,18 +38,14 @@ export class NewRaffleComponent {
 
 crearRifa() {
   if (!this.imagenSeleccionada) {
-    Swal.fire({
-      icon: 'warning',
-      title: 'Falta la imagen',
-      text: 'Debes seleccionar una imagen antes de crear la rifa.',
-      confirmButtonColor: '#0d6efd'
-    });
+    alert('Debes seleccionar una imagen');
     return;
   }
 
   const formData = new FormData();
   formData.append('imagen', this.imagenSeleccionada);
 
+  //Subimos la imagen usando el servicio
   this.adminService.subirFoto(formData).subscribe({
     next: (res) => {
       const urlImagen = res.url;
@@ -62,42 +56,26 @@ crearRifa() {
         priceNumber: this.nuevaRifa.precio,
         minPurchase: this.nuevaRifa.compraMinima,
         digitLength: this.nuevaRifa.digitos,
-        paquetes: this.nuevaRifa.paquetes,
+        paquetes: this.nuevaRifa.paquetes, 
       };
+
 
       this.adminService.crearRifa(payload).subscribe({
         next: (res) => {
-          Swal.fire({
-            icon: 'success',
-            title: '¡Rifa creada!',
-            text: 'La rifa se ha creado exitosamente.',
-            showConfirmButton: false,
-            timer: 2000,
-          }).then(() => {
-            this.router.navigate(['/dashboard/raffles']);
-          });
+          console.log('Rifa creada:', res);
+          alert('Rifa creada exitosamente');
+          this.router.navigate(['/dashboard/raffles']);
         },
         error: (err) => {
           console.error('Error al crear rifa:', err);
-          Swal.fire({
-            icon: 'error',
-            title: 'Error al crear la rifa',
-            text: err.error?.message || 'Ocurrió un problema al crear la rifa.',
-            confirmButtonColor: '#dc3545'
-          });
+          alert('Error al crear la rifa');
         }
       });
     },
     error: (err) => {
       console.error('Error al subir imagen:', err);
-      Swal.fire({
-        icon: 'error',
-        title: 'Error al subir la imagen',
-        text: err.error?.message || 'Verifica el archivo e inténtalo nuevamente.',
-        confirmButtonColor: '#dc3545'
-      });
+      alert('Error al subir la imagen');
     }
   });
 }
-
 }

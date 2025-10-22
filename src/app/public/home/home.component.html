@@ -1,44 +1,25 @@
 <!-- Raffle.component.html -->
-<header class="text-white py-3 shadow-sm bg-primary">
+<header class=" text-white py-3 shadow-sm">
   <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
     <h2 class="mb-3 mb-md-0 fw-bold display-6">Raffle</h2>
-
-    <nav class="nav nav-pills align-items-center gap-2">
+    <nav class="nav nav-pills">
       <a href="#" class="nav-link text-white px-3">Inicio</a>
       <a href="#" class="nav-link text-white px-3" data-bs-toggle="modal" data-bs-target="#emailModal">Mis Fondos</a>
       <a href="#" class="nav-link text-white px-3">Metodología</a>
 
-      <!-- Dropdown de configuración (separado por línea) -->
-      <div class="border-start ps-3 ms-2">
-        <div class="nav-item dropdown" [class.show]="isSettingsDropdownOpen">
-          <a href="#" class="nav-link text-white px-3" (click)="toggleSettingsDropdown($event)">
-            <i class="bi bi-sliders2"></i>
-          </a>
-          <ul class="dropdown-menu dropdown-menu-end" [class.show]="isSettingsDropdownOpen">
-            <li><a class="dropdown-item" style="cursor: pointer;" (click)="setFontSize('large')">Texto grande</a></li>
-            <li><a class="dropdown-item" style="cursor: pointer;" (click)="setFontSize('normal')">Texto normal</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" style="cursor: pointer;" (click)="setTheme('dark')">Modo oscuro</a></li>
-            <li><a class="dropdown-item" style="cursor: pointer;" (click)="setTheme('light')">Modo claro</a></li>
-          </ul>
-        </div>
-      </div>
-
-
-      <!-- Dropdown de usuario -->
-      <div class="nav-item dropdown" [class.show]="isUserDropdownOpen">
-        <a href="#" class="nav-link text-white px-3" (click)="toggleUserDropdown($event)">
+      <div class="nav-item dropdown" [class.show]="isDropdownOpen">
+        <a href="#" class="nav-link text-white px-3" (click)="toggleDropdown($event)">
           <i class="bi bi-person"></i>
         </a>
-        <ul class="dropdown-menu dropdown-menu-end" [class.show]="isUserDropdownOpen">
-            <li><a class="dropdown-item" style="cursor: pointer;" (click)="openModal('login')">Iniciar Sesión</a></li>
-            <li><a class="dropdown-item" style="cursor: pointer;" (click)="openModal('register')">Registrarse</a></li>
+        <ul class="dropdown-menu dropdown-menu-end" [class.show]="isDropdownOpen">
+            <li><a class="dropdown-item" (click)="openModal('login')">Login</a></li>
+            <li><a class="dropdown-item" (click)="openModal('register')">Register</a></li>
         </ul>
       </div>
+
     </nav>
   </div>
 </header>
-
 
 <main class="container my-5" *ngIf="raffle; else loading">
   
@@ -116,37 +97,39 @@
           </div>
         </div>
 
+<!-- En tu archivo Raffle.component.html -->
+<section class="mt-4">
+  <h5 class="fw-bold mb-3">Selecciona tu paquete</h5>
+  <p class="text-muted small mb-4">
+    <i class="bi bi-info-circle me-2"></i> Tus números serán seleccionados aleatoriamente.
+  </p>
+
+  <div class="row g-3 packages-row">
+    <div class="col-4" *ngFor="let pack of paquetes">
+      <div class="ticket-card position-relative text-center p-3 rounded-3 hover-scale"
+        (click)="selectPackage(pack)" 
+        [class.selected-package]="selectedPackage === pack">
+        <div class="selection-indicator" [class.selected]="selectedPackage === pack"></div>
+        <div class="fs-2 fw-bold text-primary">{{ pack }}</div>
+        <div class="text-muted small">Fondos</div>
+        <div class="mt-2 fw-bold">{{ (raffle.priceNumber * pack) | currency:'COP':'symbol':'1.0-0' }}</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+        <!-- Botón de compra -->
+<div class="d-grid mt-4">
+  <button 
+    class="btn btn-comprar-2" 
+    [disabled]="!selectedPackage"
+    (click)="consultarCantidadNumerosDisponibles()">
+    <i class="bi bi-cart3 me-2"></i> Comprar ahora
+  </button>
+</div>
 
 
-        <section class="mt-4">
-          <h5 class="fw-bold mb-3">Selecciona tu paquete</h5>
-          <p class="text-muted small mb-4">
-            <i class="bi bi-info-circle me-2"></i> Tus números serán seleccionados aleatoriamente.
-          </p>
-
-          <div class="row g-3 packages-row">
-            <div class="col-4" *ngFor="let pack of paquetes">
-              <div class="ticket-card position-relative text-center p-3 rounded-3 hover-scale"
-                (click)="selectPackage(pack)" 
-                [class.selected-package]="selectedPackage === pack">
-                <div class="selection-indicator" [class.selected]="selectedPackage === pack"></div>
-                <div class="fs-2 fw-bold text-primary">{{ pack }}</div>
-                <div class="text-muted small">Fondos</div>
-                <div class="mt-2 fw-bold">{{ (raffle.priceNumber * pack) | currency:'COP':'symbol':'1.0-0' }}</div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-                <!-- Botón de compra -->
-        <div class="d-grid mt-4">
-          <button 
-            class="btn btn-comprar-2" 
-            [disabled]="!selectedPackage"
-            (click)="consultarCantidadNumerosDisponibles()">
-            <i class="bi bi-cart3 me-2"></i> Comprar ahora
-          </button>
-        </div>
+        
       </div>
     </div>
   </div>
@@ -261,7 +244,7 @@
                 <label for="buyerName" class="form-label">Nombre</label>
                 <input type="text" class="form-control" id="buyerName" 
                       [(ngModel)]="buyerData.buyerName" name="buyerName"
-                      required placeholder="Ingresa tu nombre" readonly>
+                      required placeholder="Ingresa tu nombre">
               </div>
               
               <!-- Apellido -->
@@ -269,7 +252,7 @@
                 <label for="buyerApellido" class="form-label">Apellido</label>
                 <input type="text" class="form-control" id="buyerApellido" 
                       [(ngModel)]="buyerData.buyerApellido" name="buyerApellido"
-                      required placeholder="Ingresa tu apellido" readonly>
+                      required placeholder="Ingresa tu apellido">
               </div>
               
               <!-- País -->
@@ -303,7 +286,7 @@
                 <label for="buyerEmail" class="form-label">Email</label>
                 <input type="email" class="form-control" id="buyerEmail" 
                       [(ngModel)]="buyerData.buyerEmail" name="buyerEmail"
-                      required placeholder="tucorreo@example.com" readonly>
+                      required placeholder="tucorreo@example.com">
               </div>
 
               <!-- Confirmar Email -->
@@ -311,7 +294,7 @@
                 <label for="buyerConfirmarEmail" class="form-label">Confirmar Email</label>
                 <input type="email" class="form-control" id="buyerConfirmarEmail" 
                       [(ngModel)]="buyerData.buyerConfirmarEmail" name="buyerConfirmarEmail"
-                      required placeholder="Confirma tu correo" readonly>
+                      required placeholder="Confirma tu correo">
               </div>
             </div>
           </div>
@@ -341,9 +324,6 @@
             <i class="bi bi-credit-card me-2"></i> Pagar
           </button>
 
-          <!-- Aquí se insertará el botón de Wompi dinámicamente -->
-          <div id="wompi-button-container" class="mt-3"></div>
-
         </div>
         
         <div *ngIf="!selectedPackage" class="alert alert-warning text-center">
@@ -358,98 +338,29 @@
 </div>
 
 <!-- Modal Login -->
-<div
-  class="modal fade"
-  id="loginModal"
-  tabindex="-1"
-  aria-labelledby="loginModalLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog modal-dialog-centered modal-sm">
-    <div class="modal-content border-0 shadow-lg rounded-4">
-      <!-- Header -->
-      <div
-        class="modal-header border-0 bg-primary text-white rounded-top-4 d-flex align-items-center justify-content-between"
-      >
-        <h5 class="modal-title fw-semibold d-flex align-items-center" id="loginModalLabel">
-          <i class="bi bi-person-circle me-2"></i> Iniciar sesión
-        </h5>
-        <button
-          type="button"
-          class="btn-close btn-close-white"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
+<div class="modal fade" id="loginModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Login</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-
-      <!-- Body -->
-      <div class="modal-body p-4">
-        <form #loginForm="ngForm" (ngSubmit)="loginUser()">
+      <div class="modal-body">
+        <form>
           <div class="mb-3">
-            <label for="email" class="form-label fw-semibold">Correo electrónico</label>
-            <input
-              type="email"
-              class="form-control rounded-3 py-2"
-              id="email"
-              [(ngModel)]="registerEmail"
-              name="email"
-              placeholder="ejemplo@correo.com"
-              required
-              [class.is-invalid]="errorMsg"
-            />
+            <label>Email</label>
+            <input type="email" class="form-control">
           </div>
-
           <div class="mb-3">
-            <label for="password" class="form-label fw-semibold">Contraseña</label>
-            <input
-              type="password"
-              class="form-control rounded-3 py-2"
-              id="password"
-              [(ngModel)]="registerPassword"
-              name="password"
-              placeholder="••••••••"
-              required
-              [class.is-invalid]="errorMsg"
-            />
+            <label>Password</label>
+            <input type="password" class="form-control">
           </div>
-
-          <!-- contenedor invisible para Turnstile -->
-          <div id="turnstile-container" hidden></div>
-
-          <!-- Mensaje de error -->
-          <div *ngIf="errorMsg" class="alert alert-danger py-2 px-3 text-center rounded-3">
-            <i class="bi bi-exclamation-triangle me-2"></i> {{ errorMsg }}
-          </div>
-
-          <!-- Mensaje de éxito -->
-          <div *ngIf="successMsg" class="alert alert-success py-2 px-3 text-center rounded-3 fade show">
-            <i class="bi bi-check-circle me-2"></i> {{ successMsg }}
-          </div>
-
-          <button
-            type="submit"
-            class="btn btn-primary w-100 mt-3 py-2 fw-semibold rounded-3"
-          >
-            <i class="bi bi-box-arrow-in-right me-1"></i> Ingresar
-          </button>
+          <button type="submit" class="btn btn-primary">Ingresar</button>
         </form>
-      </div>
-
-      <!-- Footer -->
-      <div class="modal-footer border-0 text-center d-block">
-        <small class="text-muted">
-          ¿No tienes cuenta?
-          <a href="#" class="text-primary text-decoration-none fw-semibold"
-            >Regístrate aquí</a
-          >
-        </small>
       </div>
     </div>
   </div>
 </div>
-
-
-
 
 <!-- Modal Register -->
 <div class="modal fade" id="registerModal" tabindex="-1">

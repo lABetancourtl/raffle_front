@@ -33,6 +33,8 @@ export class ValidationEmailComponent {
       email: this.email
     };
 
+
+
     this.loginService.validarEmail(datosActivacion).subscribe({
       next: (response) => {
 
