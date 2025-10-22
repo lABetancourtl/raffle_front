@@ -25,16 +25,12 @@ interface PaisPersonalizado {
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
+    FormsModule
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit, AfterViewInit {
-
-  successMsg: string | null = null;
-  errorMsg: string | null = null;
-
   cantidadDisponible: number = 0;
   mostrarModalReducido: boolean = false;
   precioFinal: number = 0;
@@ -101,7 +97,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild('emailForm') emailForm!: NgForm;
 
   constructor(
-    private snackBar: MatSnackBar,
     private raffleService: RaffleService,
     private registerService: RegisterService,
     private loginService: LoginService,
@@ -259,7 +254,7 @@ const datosPago = {
   this.raffleService.crearPreferenciaPago(datosPago).subscribe({
     next: (response) => {
       if (response && response.init_point) {
-        window.location.href = response.init_point; 
+        window.location.href = response.init_point; // 🔁 Redirige al Checkout Pro
       } else {
         alert('Error al obtener enlace de pago.');
       }
@@ -569,7 +564,6 @@ registrarUsuario() {
       this.errorMsg = 'No se pudo verificar que eres humano.';
 
       return;
-
     }
 
     const payload = {
@@ -628,7 +622,6 @@ private cerrarModalLogin() {
     }
   }
 }
-
 
 
 cargarDatosUsuario() {
