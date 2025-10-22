@@ -30,7 +30,7 @@ subirFoto(data: any): Observable<any> {
     Authorization: `Bearer ${token}`,
   });
 
-  return this.http.post(`${this.apiUrl}/imagenes`, data, { headers });
+  return this.http.post(`${this.apiUrl}/imagenes/una`, data, { headers });
 }
 
 compraAleatoriaDesdeAdmin(data: any): Observable<any> {

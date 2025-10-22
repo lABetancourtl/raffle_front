@@ -88,7 +88,7 @@ export class RaffleService {
 }
 
 
-  // ✅ NUEVO MÉTODO para ejecutar el sorteo
+  //NUEVO MÉTODO para ejecutar el sorteo
   ejecutarSorteo(raffleId: string, numeroGanadores: number): Observable<any> {
     const token = localStorage.getItem('authToken');
     const headers = new HttpHeaders({
