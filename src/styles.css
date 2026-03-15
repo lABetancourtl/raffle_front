@@ -28,145 +28,181 @@ main.font-large .badge {
   font-size: 1.25em !important;
 }
 
-
+body {
+  transition: background-color 0.8s ease, color 0.8s ease;
+}
 /* ==========================================================
-   MODO OSCURO - ESTILO SUAVE Y LEGIBLE
+   🌙 MODO DARK OPTIMIZADO — Contraste suave pero legible
    ========================================================== */
 body.theme-dark {
-  background-color: #1e1e2e; /* Fondo principal */
-  color: #e0e0e6;
+  background-color: #1e2230; /* Fondo principal oscuro, pero no negro */
+  color: #e4e6eb;
+  transition: all 0.3s ease;
 }
 
-/* ====== HEADER ====== */
+/* ===== HEADER ===== */
 body.theme-dark header {
-  background-color: #2a2a3b !important;
+  background: linear-gradient(135deg, #222a3a, #2c3447);
   color: #ffffff;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
 }
 
 body.theme-dark .nav-link {
-  color: #e0e0e6 !important;
+  color: #d7dae0 !important;
 }
-
 body.theme-dark .nav-link:hover {
-  color: #5c6eff !important;
+  color: #7aa2ff !important;
 }
 
-/* ====== CONTENEDORES ====== */
-body.theme-dark main.container {
-  background-color: transparent;
+/* ===== TARJETAS / CONTENEDORES ===== */
+body.theme-dark .card,
+body.theme-dark .ticket-card {
+  background-color: #2b3042 !important;
+  color: #f0f0f5 !important;
+  border: 1px solid #3a3f54;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-body.theme-dark .card {
-  background-color: #2b2b3d !important;
-  color: #e0e0e6 !important;
-  border: 1px solid #3a3a4b !important;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4) !important;
+body.theme-dark .ticket-card:hover {
+  background-color: #33394d !important;
 }
 
-body.theme-dark .bg-light {
-  background-color: #2f2f42 !important;
-  color: #e0e0e6 !important;
+body.theme-dark .selected-package {
+  border: 2px solid #5c7cff !important;
+  background-color: #343b52 !important;
 }
 
-/* ====== TEXTOS ====== */
-body.theme-dark .text-muted {
-  color: #a0a0b0 !important;
+/* ===== BOTONES ===== */
+body.theme-dark .btn-comprar-2 {
+  background: linear-gradient(135deg, #406aff, #5c83ff);
+  border: none;
+  color: white;
+  transition: all 0.3s ease-in-out;
+}
+body.theme-dark .btn-comprar-2:hover {
+  background: linear-gradient(135deg, #3156d8, #5476ff);
+  box-shadow: 0 0 12px rgba(64, 106, 255, 0.4);
 }
 
+/* ===== TEXTOS ===== */
 body.theme-dark h1,
 body.theme-dark h2,
 body.theme-dark h3,
 body.theme-dark h4,
 body.theme-dark h5 {
-  color: #ffffff !important;
+  color: #f1f3f6;
 }
 
-/* ====== BADGE ====== */
-body.theme-dark .badge.bg-primary {
-  background-color: rgba(92, 110, 255, 0.15) !important;
-  color: #8ea2ff !important;
+body.theme-dark .text-muted {
+  color: #a0a4b8 !important;
 }
 
-/* ====== BOTONES ====== */
-body.theme-dark .btn-comprar-2 {
-  background-color: #3d5afe !important;
-  border-color: #3d5afe !important;
-  color: #ffffff !important;
-  transition: all 0.2s ease-in-out;
+body.theme-dark p,
+body.theme-dark span,
+body.theme-dark li {
+  color: #d8dbe3 !important;
 }
 
-body.theme-dark .btn-comprar-2:hover {
-  background-color: #5c6eff !important;
+/* ===== INPUTS / FORMULARIOS ===== */
+body.theme-dark input,
+body.theme-dark textarea,
+body.theme-dark select {
+  background-color: #2a2f42;
+  border: 1px solid #3d4560;
+  color: #f0f2fa;
+}
+body.theme-dark input:focus,
+body.theme-dark textarea:focus,
+body.theme-dark select:focus {
+  border-color: #5c7cff;
+  box-shadow: 0 0 0 0.2rem rgba(92, 124, 255, 0.3);
 }
 
-body.theme-dark .btn-facebook {
-  background-color: #3b5998 !important;
-  color: #fff;
-}
-
-body.theme-dark .btn-whatsapp {
-  background-color: #25d366 !important;
-  color: #fff;
-}
-
-/* ====== DROPDOWN ====== */
+/* ===== DROPDOWNS ===== */
 body.theme-dark .dropdown-menu {
-  background-color: #2a2a3b !important;
-  border: 1px solid #3a3a4b !important;
+  background-color: #2b3042 !important;
+  border: 1px solid #3a3f54 !important;
 }
-
 body.theme-dark .dropdown-item {
-  color: #e0e0e6 !important;
+  color: #e2e4eb !important;
 }
-
 body.theme-dark .dropdown-item:hover {
-  background-color: #3a3a4b !important;
+  background-color: #39405a !important;
   color: #ffffff !important;
 }
 
-/* ====== PROGRESS ====== */
+/* ===== PROGRESS BAR ===== */
 body.theme-dark .progress {
-  background-color: #3a3a4b !important;
+  background-color: #3a3f54 !important;
 }
-
 body.theme-dark .progress-bar {
-  background-color: #5c6eff !important;
+  background: linear-gradient(90deg, #4a6cff, #6e8dff);
 }
 
-/* ====== TARJETAS DE PAQUETES ====== */
-body.theme-dark .ticket-card {
-  background-color: #2b2b3d !important;
-  border: 1px solid #3a3a4b;
-  color: #e0e0e6;
-  cursor: pointer;
+/* ===== FOOTER ===== */
+body.theme-dark .site-footer {
+  background: linear-gradient(135deg, #232a39, #2f364a);
+  color: #d5d8e3;
+}
+body.theme-dark .footer-title {
+  color: #8da0ff;
+}
+body.theme-dark .footer-link {
+  color: #b5b9c6;
+}
+body.theme-dark .footer-link:hover {
+  color: #ffffff;
 }
 
-body.theme-dark .ticket-card:hover {
-  background-color: #3a3a4b !important;
+/* ===== MODALS ===== */
+body.theme-dark .modal-content {
+  background-color: #2a3044;
+  color: #f0f1f7;
+  border: 1px solid #3c425c;
+}
+body.theme-dark .modal-header {
+  background: linear-gradient(135deg, #2e3750, #3a4563);
+  color: #fff;
 }
 
-body.theme-dark .selected-package {
-  border: 2px solid #5c6eff !important;
-  background-color: #32324b !important;
-}
-
-/* ====== SOMBRAS Y DETALLES ====== */
-body.theme-dark .hover-scale:hover {
-  transform: scale(1.03);
-  transition: transform 0.2s ease;
-}
-
-/* ====== SCROLLBAR PERSONALIZADA ====== */
-body.theme-dark ::-webkit-scrollbar {
-  width: 8px;
-}
+/* ===== SCROLLBAR ===== */
 body.theme-dark ::-webkit-scrollbar-thumb {
-  background-color: #44445a;
+  background-color: #4b5065;
   border-radius: 4px;
 }
 body.theme-dark ::-webkit-scrollbar-thumb:hover {
-  background-color: #5c6eff;
+  background-color: #6a73a1;
 }
 
 
+
+
+
+/* Transición suave para el cambio de tamaño */
+main {
+  transition: font-size 0.5s ease, line-height 0.5s ease;
+}
+
+/* Tamaño normal (por defecto) */
+.font-normal {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* Tamaño grande con mejor legibilidad y espaciado */
+.font-large {
+  font-size: 1.15rem;
+  line-height: 1.75;
+}
+
+/* Si quieres, puedes ajustar también botones y encabezados */
+.font-large h1,
+.font-large h2,
+.font-large h3 {
+  font-size: 1.1em; /* un poco más grande que lo normal */
+}
+
+.font-large button,
+.font-large .nav-link {
+  font-size: 1.05rem;
+}

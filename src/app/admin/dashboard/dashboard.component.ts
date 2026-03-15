@@ -39,7 +39,8 @@ export class DashboardComponent {
   menuItems = [
     { iconClass: 'bi bi-file-earmark-plus', nombre: 'Nuevo evento', ruta: '/dashboard/newraffle' },
     { iconClass: 'bi bi-star', nombre: 'Eventos', ruta: '/dashboard/raffles' },
-    { iconClass: 'bi bi-person-plus', nombre: 'Validacion de Documento', ruta: '/dashboard/documentvalidation' }
+    { iconClass: 'bi bi-person-plus', nombre: 'Validacion de Documento', ruta: '/dashboard/documentvalidation' },
+    { iconClass: 'bi bi-dice-3', nombre: 'Sorteo', ruta: '/dashboard/sorteo' }
   ];
 
 

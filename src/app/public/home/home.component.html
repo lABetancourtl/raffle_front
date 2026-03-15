@@ -4,11 +4,10 @@
     <h2 class="mb-3 mb-md-0 fw-bold display-6">Raffle</h2>
 
     <nav class="nav nav-pills align-items-center gap-2">
-      <a href="#" class="nav-link text-white px-3">Inicio</a>
       <a href="#" class="nav-link text-white px-3" data-bs-toggle="modal" data-bs-target="#emailModal">Mis Fondos</a>
       <a href="#" class="nav-link text-white px-3">Metodología</a>
 
-      <!-- Dropdown de configuración (separado por línea) -->
+      <!-- 🔧 Dropdown de configuración (con separador) -->
       <div class="border-start ps-3 ms-2">
         <div class="nav-item dropdown" [class.show]="isSettingsDropdownOpen">
           <a href="#" class="nav-link text-white px-3" (click)="toggleSettingsDropdown($event)">
@@ -17,27 +16,32 @@
           <ul class="dropdown-menu dropdown-menu-end" [class.show]="isSettingsDropdownOpen">
             <li><a class="dropdown-item" style="cursor: pointer;" (click)="setFontSize('large')">Texto grande</a></li>
             <li><a class="dropdown-item" style="cursor: pointer;" (click)="setFontSize('normal')">Texto normal</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" style="cursor: pointer;" (click)="setTheme('dark')">Modo oscuro</a></li>
-            <li><a class="dropdown-item" style="cursor: pointer;" (click)="setTheme('light')">Modo claro</a></li>
           </ul>
         </div>
       </div>
 
+      <!-- 🌙 Botón de cambio de tema (separado por línea) -->
+      <div class="">
+        <button (click)="toggleTheme()" class="btn btn-sm nav-link text-white px-3" title="Cambiar tema">
+          <i class="bi" [ngClass]="isDarkMode ? 'bi-sun' : 'bi-moon'"></i>
+        </button>
+      </div>
 
-      <!-- Dropdown de usuario -->
+      <!-- 👤 Dropdown de usuario -->
       <div class="nav-item dropdown" [class.show]="isUserDropdownOpen">
         <a href="#" class="nav-link text-white px-3" (click)="toggleUserDropdown($event)">
           <i class="bi bi-person"></i>
         </a>
         <ul class="dropdown-menu dropdown-menu-end" [class.show]="isUserDropdownOpen">
-            <li><a class="dropdown-item" style="cursor: pointer;" (click)="openModal('login')">Iniciar Sesión</a></li>
-            <li><a class="dropdown-item" style="cursor: pointer;" (click)="openModal('register')">Registrarse</a></li>
+          <li><a class="dropdown-item" style="cursor: pointer;" (click)="openModal('login')">Iniciar Sesión</a></li>
+          <li><a class="dropdown-item" style="cursor: pointer;" (click)="openModal('register')">Registrarse</a></li>
         </ul>
       </div>
     </nav>
   </div>
 </header>
+
+
 
 
 <main class="container my-5" *ngIf="raffle; else loading">
@@ -630,7 +634,6 @@
     </p>
   </div>
 </footer>
-
 
 
 

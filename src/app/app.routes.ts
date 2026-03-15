@@ -7,6 +7,7 @@ import { RafflesComponent } from './admin/dashboard/pages/raffles/raffles.compon
 import { DocumentValidationComponent } from './admin/dashboard/pages/document-validation/document-validation.component';
 import { AuthGuard } from './guards/auth.guard';
 import { ValidationEmailComponent } from './public/validation-email/validation-email.component';
+import { SorteoComponent } from './admin/dashboard/pages/sorteo/sorteo.component';
 
 
 
@@ -20,6 +21,7 @@ export const routes: Routes = [
         { path: 'newraffle', component: NewRaffleComponent }, 
         { path: 'raffles', component: RafflesComponent }, 
         { path: 'documentvalidation', component: DocumentValidationComponent }, 
+        { path: 'sorteo', component: SorteoComponent }, 
     ] },
     { path: '**', redirectTo: 'home' }
 ];

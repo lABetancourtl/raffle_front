@@ -539,3 +539,48 @@ input.form-control {
   .admin-tab-button.active .active-indicator {
     background-color: #0d6efd;
   }
+
+
+
+
+
+  /* componente .css / .scss */
+.ruleta-container {
+  width: 600px;
+  height: 600px;
+  max-width: 100%;
+  position: relative;
+}
+
+.ruleta-container canvas {
+  display: block;
+  margin: 0 auto;
+  background: white;
+}
+
+.pointer {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 28px;
+  color: #dc3545;
+  pointer-events: none;
+  z-index: 5;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+}
+
+.ruleta-overlay {
+  position: absolute;
+  inset: 0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: rgba(255,255,255,0.6);
+  z-index: 4;
+}
+
+.spinner-text {
+  font-weight: 700;
+  font-size: 22px;
+}

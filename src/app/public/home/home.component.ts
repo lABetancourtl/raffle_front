@@ -37,6 +37,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   token: string | null = null;
   isUserDropdownOpen = false;
   isSettingsDropdownOpen = false;
+  isDarkMode = false;
 
 
 
@@ -436,20 +437,32 @@ confirmarCompraReducida(): void {
     }
   }
 
-  // Ejemplo: función para cambiar el tamaño de texto
 setFontSize(size: 'large' | 'normal') {
   const main = document.querySelector('main');
   if (!main) return;
 
+  // Guardar preferencia en localStorage
+  localStorage.setItem('font-size', size);
+
+  // Transición suave
   main.classList.remove('font-large', 'font-normal');
   main.classList.add(size === 'large' ? 'font-large' : 'font-normal');
 }
 
-// Cambia entre modo oscuro / claro
+//Mantienes tu método actual
 setTheme(theme: 'dark' | 'light') {
   const body = document.body;
   body.classList.remove('theme-dark', 'theme-light');
   body.classList.add(theme === 'dark' ? 'theme-dark' : 'theme-light');
+  this.isDarkMode = theme === 'dark';
+  localStorage.setItem('theme', theme);
+}
+
+//Nuevo método que alterna entre claro y oscuro
+toggleTheme() {
+  this.isDarkMode = !this.isDarkMode;
+  const newTheme = this.isDarkMode ? 'dark' : 'light';
+  this.setTheme(newTheme);
 }
 
 
@@ -640,5 +653,8 @@ cargarDatosUsuario() {
     };
   }
 }
+
+
+
 
 }

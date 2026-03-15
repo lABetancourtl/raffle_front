@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, OnInit } from '@angular/core';
+import { Component, AfterViewInit, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -15,6 +15,10 @@ import { countries } from 'countries-list';
   styleUrls: ['./raffles.component.css']
 })
 export class RafflesComponent implements AfterViewInit, OnInit {
+
+
+  @ViewChild('ruletaCanvas', { static: false }) ruletaCanvas!: ElementRef<HTMLCanvasElement>;
+
 
   paquetes: number[] = [];
   raffle: any = null;
@@ -49,6 +53,13 @@ export class RafflesComponent implements AfterViewInit, OnInit {
 
   paymentOperations: any[] = [];
   cargandoOperaciones: boolean = false;
+
+
+  // nuevas propiedades
+  allNumbers: string[] = []; // lista completa para la ruleta
+  isSpinning = false;
+  private ctx!: CanvasRenderingContext2D | null;
+  private canvasSize = 600;
 
   // Propiedades para el sorteo
   sorteoEjecutado: boolean = false;
@@ -173,6 +184,7 @@ export class RafflesComponent implements AfterViewInit, OnInit {
     );
   }
 
+  // ---------- Reemplaza tu ejecutarSorteo() por esta versión -------------
   ejecutarSorteo(): void {
     if (!this.puedeEjecutarSorteo()) return;
 
@@ -184,31 +196,63 @@ export class RafflesComponent implements AfterViewInit, OnInit {
         ? this.configuracionSorteo.numeroGanadores
         : 1;
 
-    // Llamar al backend real
     this.raffleService.ejecutarSorteo(this.rifaSeleccionada.id, ganadoresSolicitados).subscribe({
       next: (res) => {
         const resultado = res?.respuesta;
         if (!resultado) {
           console.error('⚠️ No se recibió resultado válido:', res);
+          this.ejecutandoSorteo = false;
+          this.mensajeSorteo = 'Respuesta inválida del servidor.';
           return;
         }
 
+        // guardamos ganadores (pero no declaramos ganador hasta terminar la animación)
         this.ganadores = resultado.ganadores || [];
 
+        // guardamos acta
         this.actaSorteo = {
-          id: resultado.actaId, // 👈 corregido
+          id: resultado.actaId,
           fechaEjecucion: new Date(),
           semilla: resultado.semilla,
           hash: resultado.hash
         };
 
-        console.log('✅ Acta registrada:', this.actaSorteo);
+        // lista completa de tickets (para la ruleta)
+        this.allNumbers = resultado.allNumbers || [];
+
+        // renderizamos la ruleta con los números
+        setTimeout(() => { // espera a que ViewChild esté disponible
+          this.setupCanvas();
+          this.drawWheel(this.allNumbers);
+          // iniciamos la animación hacia el primer ganador
+          if (this.ganadores.length > 0 && this.allNumbers.length > 0) {
+            // hacemos girar por el primer ganador, luego podemos mostrar los demás
+            this.isSpinning = true;
+            const target = this.ganadores[0].numero;
+            this.spinToNumber(target).then(() => {
+              // al terminar
+              this.isSpinning = false;
+              this.sorteoEjecutado = true;
+              this.ganadorSeleccionado = true;
+              this.ejecutandoSorteo = false;
+              this.mensajeSorteo = '¡Sorteo ejecutado exitosamente!';
+              // si hay más ganadores (multiple), podrías animar de nuevo o simplemente listarlos
+            }).catch(err => {
+              console.error('Error en animación:', err);
+              this.isSpinning = false;
+              this.ejecutandoSorteo = false;
+              this.mensajeSorteo = 'Error al animar la ruleta.';
+            });
+          } else {
+            // no hay números: marcar como ejecutado igual
+            this.sorteoEjecutado = true;
+            this.ganadorSeleccionado = true;
+            this.ejecutandoSorteo = false;
+            this.mensajeSorteo = '¡Sorteo ejecutado (sin números)!';
+          }
+        }, 50);
 
 
-        this.sorteoEjecutado = true;
-        this.ganadorSeleccionado = true;
-        this.ejecutandoSorteo = false;
-        this.mensajeSorteo = '¡Sorteo ejecutado exitosamente!';
       },
       error: (err) => {
         console.error(err);
@@ -218,6 +262,188 @@ export class RafflesComponent implements AfterViewInit, OnInit {
     });
 
   }
+
+  // ---------------- Canvas / Ruleta ----------------
+
+  private setupCanvas() {
+    if (!this.ruletaCanvas) return;
+    const canvas = this.ruletaCanvas.nativeElement;
+    canvas.width = this.canvasSize;
+    canvas.height = this.canvasSize;
+    this.ctx = canvas.getContext('2d');
+  }
+
+  private drawWheel(numbers: string[]) {
+    if (!this.ctx) return;
+    const ctx = this.ctx;
+    const size = this.canvasSize;
+    const cx = size / 2;
+    const cy = size / 2;
+    const radius = Math.min(cx, cy) - 10;
+    ctx.clearRect(0, 0, size, size);
+
+    const count = numbers.length;
+    if (count === 0) {
+      // texto cuando no hay números
+      ctx.fillStyle = '#333';
+      ctx.font = '18px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText('No hay boletos vendidos', cx, cy);
+      return;
+    }
+
+    const degPer = 2 * Math.PI / count;
+    ctx.save();
+    ctx.translate(cx, cy);
+
+    // dibuja segmentos
+    for (let i = 0; i < count; i++) {
+      const start = i * degPer;
+      const end = start + degPer;
+
+      // alterna colores para que se distingan (usar tonos grises)
+      const shade = (i % 2 === 0) ? 230 : 205;
+      ctx.fillStyle = `rgb(${shade}, ${shade}, ${shade})`;
+
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.arc(0, 0, radius, start, end);
+      ctx.closePath();
+      ctx.fill();
+
+      // texto en segmento
+      ctx.save();
+      ctx.rotate(start + degPer / 2);
+      ctx.translate(radius * 0.6, 0);
+      ctx.rotate(Math.PI / 2);
+      ctx.fillStyle = '#111';
+      ctx.font = '12px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText(numbers[i], 0, 0);
+      ctx.restore();
+    }
+
+    // círculo central
+    ctx.beginPath();
+    ctx.fillStyle = '#ffffff';
+    ctx.arc(0, 0, radius * 0.22, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore();
+  }
+
+  /**
+   * Anima la ruleta para que termine en targetNumber (string)
+   * Devuelve una promesa que se resuelve cuando termina la animación.
+   */
+  private spinToNumber(targetNumber: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if (!this.ctx || !this.ruletaCanvas) return reject('Canvas no inicializado');
+      const canvas = this.ruletaCanvas.nativeElement;
+      const ctx = this.ctx!;
+      const numbers = this.allNumbers;
+      const count = numbers.length;
+      if (count === 0) return reject('Sin números');
+
+      const targetIndex = numbers.indexOf(targetNumber);
+      if (targetIndex === -1) {
+        console.warn('target no encontrado en la lista de números; se escogerá aleatorio');
+      }
+
+      const degreesPer = 360 / count;
+      // calcular ángulo final donde el centro de segmento quede en el pointer (0°)
+      const idx = Math.max(0, targetIndex === -1 ? Math.floor(Math.random()*count) : targetIndex);
+
+      // cantidad de vueltas extra (aleatorio para "emoción")
+      const extraTurns = 5 + Math.floor(Math.random() * 3); // entre 5 y 7 vueltas
+      // calculo de rotación final en grados: hacemos que el segmento idx quede en el tope (pointer)
+      // hacemos corrección para centrar en la mitad del segmento
+      const finalAngleDeg = extraTurns * 360 + (360 - (idx * degreesPer) - degreesPer / 2);
+
+      // animación con easing
+      const duration = 5000 + Math.floor(Math.random() * 1500); // 5-6.5s
+      const start = performance.now();
+      const initialRotation = 0; // asumimos dibujo inicial sin rotación
+      const animate = (now: number) => {
+        const elapsed = now - start;
+        let t = Math.min(1, elapsed / duration);
+        // cubic easing out sin modificar t
+        const eased = 1 - Math.pow(1 - t, 3);
+        const currentDeg = initialRotation + eased * finalAngleDeg;
+        this.drawWheelRotated(currentDeg % 360);
+        if (elapsed < duration) {
+          requestAnimationFrame(animate);
+        } else {
+          // draw final (asegurar posición exacta)
+          this.drawWheelRotated(finalAngleDeg % 360);
+          resolve();
+        }
+      };
+      requestAnimationFrame(animate);
+    });
+  }
+
+  /**
+   * Dibuja la ruleta rotada en grados (0 = la ruleta sin rotación, pointer en top)
+   */
+  private drawWheelRotated(rotationDeg: number) {
+    if (!this.ctx) return;
+    const ctx = this.ctx;
+    const size = this.canvasSize;
+    const cx = size / 2;
+    const cy = size / 2;
+    const radius = Math.min(cx, cy) - 10;
+    ctx.clearRect(0, 0, size, size);
+
+    const numbers = this.allNumbers;
+    const count = numbers.length;
+    if (count === 0) return;
+
+    const degPer = 2 * Math.PI / count;
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate((rotationDeg * Math.PI) / 180); // rotamos todo
+
+    // dibuja segmentos (misma lógica que drawWheel pero con la rotación aplicada)
+    for (let i = 0; i < count; i++) {
+      const start = i * degPer;
+      const end = start + degPer;
+
+      const shade = (i % 2 === 0) ? 230 : 205;
+      ctx.fillStyle = `rgb(${shade}, ${shade}, ${shade})`;
+
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.arc(0, 0, radius, start, end);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.save();
+      ctx.rotate(start + degPer / 2);
+      ctx.translate(radius * 0.6, 0);
+      ctx.rotate(Math.PI / 2);
+      ctx.fillStyle = '#111';
+      ctx.font = '12px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText(numbers[i], 0, 0);
+      ctx.restore();
+    }
+
+    // círculo central
+    ctx.beginPath();
+    ctx.fillStyle = '#ffffff';
+    ctx.arc(0, 0, radius * 0.22, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore();
+  }
+
+
+  get mostrarRuleta(): boolean {
+  return this.ejecutandoSorteo || this.isSpinning ||
+         (this.sorteoEjecutado && this.allNumbers && this.allNumbers.length > 0);
+}
+
 
   generarHash(): string {
     return 'SHA256:' + Math.random().toString(36).substr(2, 32).toUpperCase();

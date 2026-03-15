@@ -1,0 +1,46 @@
+<div class="container">
+  <div class="header">
+    <h2>Sorteo – Generador Visual</h2>
+  </div>
+
+  <div class="digits-selector">
+    <label for="digits-input">Cantidad de dígitos:</label>
+    <select id="digits-input" [(ngModel)]="selectedDigits" (change)="onDigitsChange(selectedDigits)" [disabled]="isSpinning">
+      <option [value]="1">1 dígito</option>
+      <option [value]="2">2 dígitos</option>
+      <option [value]="3">3 dígitos</option>
+      <option [value]="4">4 dígitos</option>
+      <option [value]="5">5 dígitos</option>
+    </select>
+  </div>
+
+  <div class="slot-machine">
+    <div class="wheel-container" *ngFor="let w of wheels; let i = index">
+      <div class="wheel" [class.disabled]="i >= selectedDigits">
+        <div class="number">{{ currentNumbers[i] }}</div>
+      </div>
+      <div class="wheel-shadow" [class.disabled]="i >= selectedDigits"></div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="btn" (click)="startSpin()" [disabled]="isSpinning">
+      <span class="btn-text">{{ isSpinning ? "Girando..." : "Iniciar Sorteo" }}</span>
+      <div class="btn-shine"></div>
+    </button>
+  </div>
+
+  <div *ngIf="finalNumber !== ''" class="result">
+    <div class="result-content">
+      <span class="result-label">¡Número Ganador!</span>
+      <strong class="final-number">{{ finalNumber }}</strong>
+    </div>
+    <div class="confetti"></div>
+  </div>
+
+  <div class="decoration">
+    <div class="decoration-item"></div>
+    <div class="decoration-item"></div>
+    <div class="decoration-item"></div>
+  </div>
+</div>

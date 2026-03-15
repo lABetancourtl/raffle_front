@@ -525,6 +525,8 @@
 
             </div>
           </div>
+
+
           <!-- TAB 4: Ejecutar Sorteo -->
           <div class="tab-pane fade" id="sorteoTab" role="tabpanel">
             <div class="card border-0 shadow-sm">
@@ -535,10 +537,10 @@
 
                 <!-- Estado del sorteo -->
                 <div class="alert" [ngClass]="{
-        'alert-info': !sorteoEjecutado,
-        'alert-success': sorteoEjecutado && ganadorSeleccionado,
-        'alert-warning': validandoSorteo
-      }">
+                    'alert-info': !sorteoEjecutado,
+                    'alert-success': sorteoEjecutado && ganadorSeleccionado,
+                    'alert-warning': validandoSorteo
+                  }">
                   <i class="bi bi-info-circle me-2" *ngIf="!sorteoEjecutado"></i>
                   <i class="bi bi-check-circle me-2" *ngIf="sorteoEjecutado"></i>
                   <i class="bi bi-hourglass-split me-2" *ngIf="validandoSorteo"></i>
@@ -597,9 +599,29 @@
                   </button>
                 </div>
 
+                <!-- Ruleta: canvas -->
+                <div *ngIf="mostrarRuleta" class="mt-4">
+
+                  <h6 class="mb-2">Ruleta del Sorteo</h6>
+                  <div class="ruleta-container position-relative d-flex justify-content-center align-items-center">
+                    <canvas #ruletaCanvas width="600" height="600" class="border rounded"></canvas>
+
+                    <!-- Puntero superior -->
+                    <div class="pointer">▼</div>
+
+                    <!-- Overlay de estado -->
+                    <div class="ruleta-overlay" *ngIf="isSpinning">
+                      <div class="spinner-text">
+                        Girando...
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
                 <!-- Resultados del sorteo -->
                 <div *ngIf="sorteoEjecutado && ganadores.length > 0" class="mt-4">
-                  <h6 class="mb-3">🎉 Resultados del Sorteo</h6>
+                  <h6 class="mb-3">Resultados del Sorteo</h6>
 
                   <div class="table-responsive">
                     <table class="table table-bordered">
